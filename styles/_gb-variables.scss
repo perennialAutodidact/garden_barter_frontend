@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@200;400;600&display=swap');
+
+$general-font: "Montserrat", sans-serif;
+$header-font: "Fredoka One", cursive;
+
+/* SCSS HSL */
+$honeydew: hsla(150, 41%, 91%, 1);
+$silver-pink: hsla(22, 28%, 73%, 1);
+$beaver: hsla(19, 22%, 53%, 1);
+$steel-teal: hsla(178, 15%, 42%, 1);
+$celadon-green: hsla(172, 39%, 38%, 1);
+$flame: hsla(14, 77%, 54%, 1);
+$laser-lemon: hsla(60, 96%, 69%, 1);
+$apple-green: hsla(79, 100%, 36%, 1);
+$lavendar-floral: hsla(261, 100%, 79%, 1);
+$rich-black: hsla(171, 39%, 16%, 1);
+
+$custom-primary: $celadon-green;
+$custom-primary-light: adjust-color($custom-primary, $lightness: 10%);
+$custom-primary-dark: adjust-color($custom-primary, $lightness: -10%);
+$custom-secondary: $beaver;
+$custom-success: $apple-green;
+$custom-success-dark: adjust-color($custom-success, $lightness: -10%);
+$custom-info: $lavendar-floral;
+$custom-warning: $laser-lemon;
+$custom-warning-dark: adjust-color($custom-warning, $lightness: -15%, $hue: -10%);
+$custom-danger: $flame;
+$custom-light: $honeydew;
+$custom-light-light: adjust-color($custom-light, $lightness: 10%);
+$custom-light-dark: adjust-color($custom-light, $lightness: -10%);
+$custom-dark: $rich-black;
+$custom-dark-light: adjust-color($custom-dark, $lightness: 10%);

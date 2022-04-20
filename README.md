@@ -1,4 +1,9 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Garden Barter Frontend
+
+## Novel Concepts
+- React Bootstrap
+- Typescript in React
+- NextJS
 
 ## Getting Started
 
