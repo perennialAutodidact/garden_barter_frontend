@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import Link from "next/link";
-interface AuthFormProps {
-  formMode: string;
-  formTitle: string;
-}
-
-interface FormData {
-  username: string;
-  password1: string;
-  password2: string;
-}
+import { AuthFormProps, AuthFormData } from "../../ts/interfaces/auth";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { signup } from "../../store/authSlice/actions";
 
 export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
-  const [formData, setFormData] = useState<FormData>({
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
+  const [formData, setFormData] = useState<AuthFormData>({
     username: "",
     password1: "",
     password2: ""
@@ -31,6 +33,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
               action=""
               method="POST"
               className="p-3 d-flex flex-column gap-3"
+              onSubmit={handleSubmit}
             >
               {/* USERNAME FIELD */}
               <div className="field-group d-flex flex-column">
