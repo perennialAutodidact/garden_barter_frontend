@@ -3,7 +3,6 @@ import { AuthForm } from "../components/Auth/AuthForm";
 
 function Signup({}) {
   
-
   return (
     <div className="container-fluid">
       <AuthForm

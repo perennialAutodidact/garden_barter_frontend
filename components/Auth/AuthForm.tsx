@@ -2,23 +2,45 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { AuthFormProps, AuthFormData } from "../../ts/interfaces/auth";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { signup } from "../../store/authSlice/actions";
-
+import { signup, login } from "../../store/authSlice/actions";
+import Router from "next/router";
+import { RootState } from "../../store/store";
 export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   const dispatch = useAppDispatch();
-
-  const handleSubmit = (
-    e: React.FormEvent<HTMLFormElement>,
-  ) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+  const { isAuthenticated } = useAppSelector(state => state.auth);
 
   const [formData, setFormData] = useState<AuthFormData>({
-    username: "",
-    password1: "",
+    email: "",
+    password: "",
     password2: ""
   });
+
+  const { email, password, password2 } = formData;
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+
+    if (formMode === "sign up") {
+      dispatch(signup(formData))
+        .then(res => {
+          Router.push("/");
+        })
+        .catch(err => console.log(err));
+    } else {
+      dispatch(login(formData))
+        .then(res => {
+          Router.push("/");
+        })
+        .catch(err => console.log(err));
+    }
+  };
 
   return (
     <div className="row py-5">
@@ -35,29 +57,33 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
               className="p-3 d-flex flex-column gap-3"
               onSubmit={handleSubmit}
             >
-              {/* USERNAME FIELD */}
+              {/* EMAIL FIELD */}
               <div className="field-group d-flex flex-column">
-                <label htmlFor="username" className="form-label">
-                  Username
+                <label htmlFor="email" className="form-label">
+                  Email
                 </label>
                 <input
                   type="text"
-                  name="username"
-                  id="username"
+                  name="email"
+                  id="email"
                   className="form-control"
+                  value={email}
+                  onChange={handleChange}
                 />
               </div>
 
               {/* PASSWORD 1 */}
               <div className="field-group d-flex flex-column">
-                <label htmlFor="password1" className="form-label">
+                <label htmlFor="password" className="form-label">
                   Password
                 </label>
                 <input
-                  type="text"
-                  name="password1"
-                  id="password1"
+                  type="password"
+                  name="password"
+                  id="password"
                   className="form-control"
+                  value={password}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -68,10 +94,12 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
                     Confirm Password
                   </label>
                   <input
-                    type="text"
+                    type="password"
                     name="password2"
                     id="password2"
                     className="form-control"
+                    value={password2}
+                    onChange={handleChange}
                   />
                 </div>}
 

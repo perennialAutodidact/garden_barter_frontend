@@ -10,7 +10,15 @@ export interface AuthFormProps {
 }
 
 export interface AuthFormData {
-  username: string;
-  password1: string;
+  email: string;
+  password: string;
   password2?: string;
 }
+
+export interface AuthState {
+    user: User | null;
+    isAuthenticated: boolean;
+    authLoadingStatus: "PENDING" | "IDLE";
+    accessToken: string | null;
+  };
+  
