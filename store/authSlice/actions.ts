@@ -16,9 +16,7 @@ export const signup = createAsyncThunk(
   async (formData: AuthFormData, { rejectWithValue }) => {
     const url = BASE_URL + "/register/";
     const response = await axios
-      .post(url, formData, {
-        
-      })
+      .post(url, formData, {})
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err));
     return response;
@@ -29,15 +27,11 @@ export const login = createAsyncThunk(
   "auth/login",
   async (formData: AuthFormData, { rejectWithValue }) => {
     const url = BASE_URL + "/login/";
-    const response = await axios
+    return await axios
       .post(url, formData, {
         headers: headers
       })
       .then((res) => res.data)
-      .catch((error) => {
-        return rejectWithValue(error.msg);
-      });
-
-    return response;
+      .catch((error) => rejectWithValue(error.response.data.msg));
   }
 );

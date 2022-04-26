@@ -6,11 +6,11 @@ function GBNavbar() {
   return (
     
 <nav className="navbar navbar-expand-lg navbar-light bg-light shadow">
-    <div className="container-fluid ps-3 pe-5">
+    <div className="container-fluid ps-lg-3 pe-lg-5">
 
         {/* LOGO */}
-        <a className="navbar-brand d-flex align-items-center" href="#">
-            <img src='/images/garden_barter_logo.svg' className="navbar-logo px-3" alt="Garden Barter Logo"/>
+        <a className="navbar-brand d-flex align-items-center gap-3" href="#">
+            <img src='/images/garden_barter_logo.svg' className="navbar-logo px-lg-3" alt="Garden Barter Logo"/>
             <h1 className="navbar-brand-heading text-success m-0">Garden Barter</h1>
         </a>
 
@@ -21,7 +21,7 @@ function GBNavbar() {
         </button>
 
         {/* NAV LINKS */}
-        <div className="collapse navbar-collapse d-lg-flex justify-content-end align-items-end" id="navbarNav">
+        <div className="collapse navbar-collapse d-lg-flex justify-content-lg-end align-items-lg-end" id="navbarNav">
             {/* <AuthLinks/> */}
             <GuestLinks />
         </div>

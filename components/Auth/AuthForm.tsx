@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AuthFormProps, AuthFormData } from "../../ts/interfaces/auth";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { signup, login } from "../../store/authSlice/actions";
+import { createMessage, deleteMessage} from "../../store/messageSlice";
 import Router from "next/router";
-import { RootState } from "../../store/store";
+import { unwrapResult } from "@reduxjs/toolkit";
 export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector(state => state.auth);
+  const { messages } = useAppSelector(state => state.messages);
 
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
@@ -32,15 +34,43 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
         .then(res => {
           Router.push("/");
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          err.msg.forEach(message => {
+            dispatch(
+              createMessage({
+                id: messages.length,
+                text: message,
+                level: "danger"
+              })
+            );
+          });
+        });
     } else {
       dispatch(login(formData))
-        .then(res => {
-          Router.push("/");
-        })
-        .catch(err => console.log(err));
+        .then(unwrapResult)
+        .then(res => console.log("res", res))
+        .catch(errorMessages => {
+          errorMessages.forEach(message => {
+            dispatch(
+              createMessage({
+                id: messages.length,
+                text: message,
+                level: "danger"
+              })
+            );
+          });
+        });
     }
   };
+
+  useEffect(
+    () => {
+      if (isAuthenticated) {
+        Router.push("/");
+      }
+    },
+    [isAuthenticated]
+  );
 
   return (
     <div className="row py-5">

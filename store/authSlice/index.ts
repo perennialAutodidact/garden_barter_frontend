@@ -1,7 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState, AppThunk } from "../store";
-import { User, AuthState } from "../../ts/interfaces/auth";
-import axios from "axios";
+import { createSlice } from "@reduxjs/toolkit";
+import { AuthState } from "../../ts/interfaces/auth";
 import { signup, login } from "./actions";
 
 const initialState: AuthState = {
