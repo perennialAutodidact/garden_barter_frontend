@@ -1,12 +1,25 @@
-import { FormEventHandler } from "react";
+import { FormEventHandler, ReactDOM } from "react";
 
 export interface User {
+  id: number;
+  email: string;
   username: string;
+  lastLogin: Date;
+  firstName: string;
+  lastName: string;
+  isStaff: boolean;
+  dateJoined: Date;
+  isActive?: boolean;
+  isSuperuser?: boolean;
 }
 
 export interface AuthFormProps {
   formMode: string;
   formTitle: string;
+}
+
+export interface AuthLinksProps {
+    handleLogout: React.MouseEventHandler
 }
 
 export interface AuthFormData {
@@ -16,9 +29,8 @@ export interface AuthFormData {
 }
 
 export interface AuthState {
-    user: User | null;
-    isAuthenticated: boolean;
-    authLoadingStatus: "PENDING" | "IDLE";
-    accessToken: string | null;
-  };
-  
+  user: User | null;
+  isAuthenticated: boolean;
+  authLoadingStatus: "PENDING" | "IDLE";
+  accessToken: string | null;
+}

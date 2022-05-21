@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AuthState } from "../../ts/interfaces/auth";
-import { signup, login } from "./actions";
+import { signup, login, logout, requestToken } from "./actions";
 
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
-  authLoadingStatus: "IDLE",
+  authLoadingStatus: "PENDING",
   accessToken: null
 };
 
@@ -52,6 +52,43 @@ export const authSlice = createSlice({
         state.accessToken = null;
         state.user = null;
         state.isAuthenticated = false;
+        state.authLoadingStatus = "IDLE";
+      })
+
+      .addCase(requestToken.pending, (state) => {
+        state.accessToken = null;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.authLoadingStatus = "PENDING";
+      })
+      .addCase(requestToken.fulfilled, (state, action) => {
+        const { accessToken, user } = action.payload;
+        state.accessToken = accessToken;
+        state.user = user;
+        state.isAuthenticated = true;
+        state.authLoadingStatus = "IDLE";
+      })
+      .addCase(requestToken.rejected, (state) => {
+        state.accessToken = null;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.authLoadingStatus = "IDLE";
+      })
+
+      // LOGOUT
+      .addCase(logout.pending, (state) => {
+        state.accessToken = null;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.authLoadingStatus = "PENDING";
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.accessToken = null;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.authLoadingStatus = "IDLE";
+      })
+      .addCase(logout.rejected, (state) => {
         state.authLoadingStatus = "IDLE";
       });
   }

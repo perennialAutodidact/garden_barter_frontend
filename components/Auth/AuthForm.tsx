@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AuthFormProps, AuthFormData } from "../../ts/interfaces/auth";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { signup, login } from "../../store/authSlice/actions";
-import { createMessage, deleteMessage} from "../../store/messageSlice";
+import { createMessage, deleteMessage } from "../../store/messageSlice";
 import Router from "next/router";
 import { unwrapResult } from "@reduxjs/toolkit";
 export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
@@ -31,11 +31,11 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
 
     if (formMode === "sign up") {
       dispatch(signup(formData))
-        .then(res => {
-          Router.push("/");
-        })
-        .catch(err => {
-          err.msg.forEach(message => {
+        .then(unwrapResult)
+        .then(res => console.log("res", res))
+        .catch(errorMessages => {
+          console.log(errorMessages);
+          errorMessages.forEach(message => {
             dispatch(
               createMessage({
                 id: messages.length,
@@ -50,6 +50,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
         .then(unwrapResult)
         .then(res => console.log("res", res))
         .catch(errorMessages => {
+            console.log(errorMessages)
           errorMessages.forEach(message => {
             dispatch(
               createMessage({
@@ -66,7 +67,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   useEffect(
     () => {
       if (isAuthenticated) {
-        Router.push("/");
+        Router.push("/barters");
       }
     },
     [isAuthenticated]
@@ -75,7 +76,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   return (
     <div className="row py-5">
       <div className="col-10 offset-1 col-lg-4 offset-lg-4">
-        <h1 className="text-light-light mb-3 display-2">
+        <h1 className="text-light-light mb-3 display-2" role="heading">
           {formTitle}
         </h1>
 

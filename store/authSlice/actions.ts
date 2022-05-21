@@ -1,6 +1,6 @@
 import { createAsyncThunk, ThunkAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { AuthFormData } from "../../ts/interfaces/auth";
+import { AuthFormData, User } from "../../ts/interfaces/auth";
 import { AppThunk } from "../../store/store";
 import Router from "next/router";
 
@@ -15,11 +15,15 @@ export const signup = createAsyncThunk(
   "auth/signup",
   async (formData: AuthFormData, { rejectWithValue }) => {
     const url = BASE_URL + "/register/";
-    const response = await axios
-      .post(url, formData, {})
+    return await axios
+      .post(url, formData, {
+        headers: headers
+      })
       .then((res) => res.data)
-      .catch((err) => rejectWithValue(err));
-    return response;
+      .catch((err) => {
+        console.log("err", err.response);
+        return rejectWithValue(err.response.data.msg);
+      });
   }
 );
 
@@ -33,5 +37,34 @@ export const login = createAsyncThunk(
       })
       .then((res) => res.data)
       .catch((error) => rejectWithValue(error.response.data.msg));
+  }
+);
+
+export const requestToken = createAsyncThunk(
+  "auth/requestToken",
+  async ({}, { rejectWithValue }) => {
+    const url = BASE_URL + "/token/";
+    return await axios
+      .get(url, {
+        headers: headers
+      })
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.response.data.msg));
+  }
+);
+
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (user: User, { rejectWithValue }) => {
+    const url = BASE_URL + "/logout/";
+    return await axios.post(
+      url,
+      {
+          user
+      },
+      {
+        headers: headers
+      }
+    );
   }
 );

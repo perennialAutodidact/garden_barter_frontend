@@ -1,5 +1,6 @@
 import React from 'react'
-function AuthLinks () {
+import { AuthLinksProps } from '../../../ts/interfaces/auth'
+function AuthLinks ({handleLogout}:AuthLinksProps) {
   return (
     <ul className='navbar-nav ps-lg-0 text-end'>
       <li className='nav-item active'>
@@ -41,7 +42,7 @@ function AuthLinks () {
                     '
             ></i>
           </a>
-          <a className='dropdown-item text-end' href='#'>
+          <a className='dropdown-item text-end' href='#' onClick={handleLogout}>
             {/* <i className="bi bi-door-closed-fill text-primary pe-3 d-lg-none"></i> */}
             Log Out
             <i

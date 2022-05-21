@@ -29,7 +29,7 @@ const TEST_MESSAGES = [
 ];
 
 const initialState: MessageState = {
-  messages: TEST_MESSAGES as Message[]
+  messages: [] as Message[]
 };
 
 const messageSlice = createSlice({
