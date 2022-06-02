@@ -4,11 +4,11 @@ export interface User {
   id: number;
   email: string;
   username: string;
-  lastLogin: Date;
+  lastLogin: Date | string;
   firstName: string;
   lastName: string;
   isStaff: boolean;
-  dateJoined: Date;
+  dateJoined: Date | string;
   isActive?: boolean;
   isSuperuser?: boolean;
 }

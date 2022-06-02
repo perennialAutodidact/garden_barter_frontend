@@ -1,0 +1,21 @@
+
+
+.arrow-button {
+    height: 50px !important;
+    width: 50px !important;
+
+    &:hover{
+        cursor: pointer;
+    }
+
+    @media screen and (min-width:992px){
+        height: 100px !important;
+        width: 100px !important;
+        
+    }
+}
+
+.barter-icon {
+    height:60px !important;
+    width: 60px !important;
+}

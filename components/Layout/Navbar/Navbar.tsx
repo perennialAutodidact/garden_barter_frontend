@@ -16,7 +16,7 @@ function GBNavbar() {
     dispatch(logout(user))
       .then(unwrapResult)
       .then(res => {
-          console.log('res',res)
+        console.log("res", res);
       })
       .catch(err => console.log(err));
   };
@@ -35,33 +35,42 @@ function GBNavbar() {
             Garden Barter
           </h1>
         </a>
-
-        {/* HAMBURGER */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
-
-        {/* NAV LINKS */}
         {(!isAuthenticated && authLoadingStatus) === "PENDING"
-          ? <div className="spinner-border text-success" role="status">
+          ? <div
+              className="navbar-nav spinner-border text-success d-lg-none"
+              role="status"
+            >
               <span className="visually-hidden">Loading...</span>
             </div>
-          : <div
-              className="collapse navbar-collapse d-lg-flex justify-content-lg-end align-items-lg-end"
-              id="navbarNav"
+          : // HAMBURGER
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
             >
-              {isAuthenticated
-                ? <AuthLinks handleLogout={handleLogout} />
-                : <GuestLinks />}
-            </div>}
+              <span className="navbar-toggler-icon" />
+            </button>}
+
+        {/* NAV LINKS */}
+        <div
+          className="collapse navbar-collapse d-lg-flex justify-content-lg-end align-items-lg-end"
+          id="navbarNav"
+        >
+          {(!isAuthenticated && authLoadingStatus) === "PENDING"
+            ? <div
+                className="navbar-nav spinner-border text-success"
+                role="status"
+              >
+               {''}
+              </div>
+            : isAuthenticated
+              ? <AuthLinks handleLogout={handleLogout} />
+              : <GuestLinks />}
+        </div>
       </div>
     </nav>
   );

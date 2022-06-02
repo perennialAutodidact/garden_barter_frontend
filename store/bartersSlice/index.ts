@@ -9,7 +9,7 @@ import {
   ToolBarter
 } from "../../ts/interfaces/barters";
 
-const initialState: BarterState = {
+export const initialState: BarterState = {
   barters: [],
   barterLoadingStatus: "IDLE",
   page: 1

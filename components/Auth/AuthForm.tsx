@@ -50,7 +50,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
         .then(unwrapResult)
         .then(res => console.log("res", res))
         .catch(errorMessages => {
-            console.log(errorMessages)
+          console.log(errorMessages);
           errorMessages.forEach(message => {
             dispatch(
               createMessage({
@@ -83,10 +83,10 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
         <div className="row bg-light rounded shadow">
           <div className="col-12 border border-bottom-1 rounded">
             <form
-              action=""
-              method="POST"
+              id={`${formMode === "sign up" ? "signup" : "login"}-form`}
               className="p-3 d-flex flex-column gap-3"
               onSubmit={handleSubmit}
+              data-testid='auth-form'
             >
               {/* EMAIL FIELD */}
               <div className="field-group d-flex flex-column">
@@ -94,9 +94,10 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
                   Email
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   name="email"
                   id="email"
+                  data-testid="email-input"
                   className="form-control"
                   value={email}
                   onChange={handleChange}
@@ -105,13 +106,13 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
 
               {/* PASSWORD 1 */}
               <div className="field-group d-flex flex-column">
-                <label htmlFor="password" className="form-label">
-                  Password
+                <label htmlFor="password" className="form-label">Password
                 </label>
                 <input
                   type="password"
                   name="password"
                   id="password"
+                  data-testid="password1-input"
                   className="form-control"
                   value={password}
                   onChange={handleChange}
@@ -128,13 +129,18 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
                     type="password"
                     name="password2"
                     id="password2"
+                    data-testid="password2-input"
                     className="form-control"
                     value={password2}
                     onChange={handleChange}
                   />
                 </div>}
 
-              <button className="btn btn-warning-dark my-3 text-dark fw-bold shadow">
+              <button
+                type="submit"
+                className="btn btn-warning-dark my-3 text-dark fw-bold shadow"
+                data-testid="submit-button"
+              >
                 {formTitle}
               </button>
             </form>

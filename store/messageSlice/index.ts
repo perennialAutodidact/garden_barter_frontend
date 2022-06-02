@@ -28,7 +28,7 @@ const TEST_MESSAGES = [
   }
 ];
 
-const initialState: MessageState = {
+export const initialState: MessageState = {
   messages: [] as Message[]
 };
 

@@ -6,11 +6,16 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')]
   },
-
+  // redirects: [
+  // ],
   rewrites: [
     {
+      source: '/',
+      destination: '/barters'
+    },
+    {
       source: '/auth/login',
-      destination: '/login',
+      destination: '/login'
     },
     {
       source: '/auth/signup',

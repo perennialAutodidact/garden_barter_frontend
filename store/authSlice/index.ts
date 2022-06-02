@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AuthState } from "../../ts/interfaces/auth";
 import { signup, login, logout, requestToken } from "./actions";
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
   authLoadingStatus: "PENDING",

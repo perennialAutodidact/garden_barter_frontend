@@ -1,6 +1,7 @@
 @import '~bootstrap-icons/font/bootstrap-icons.scss';
 
 @import './_gb-variables';
+@import './barters.scss';
 
 // change default font
 $font-family-sans-serif: $general-font;
@@ -37,6 +38,11 @@ $theme-colors: (
 #app-container {
     min-height: 100vh;
 }
+
+.h-100-percent {
+    min-height: 100%;
+}
+
 
 h1,
 h2,

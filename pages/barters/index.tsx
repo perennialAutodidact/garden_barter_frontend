@@ -3,6 +3,8 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { GetServerSideProps, GetServerSidePropsResult } from "next";
 import { BartersHomePageProps } from "../../ts/interfaces/barters";
 import axios, { AxiosResponse } from "axios";
+import BarterList from "../../components/Barters/BarterList";
+
 
 const BartersHome = ({ barters }: BartersHomePageProps) => {
   const dispatch = useAppDispatch();
@@ -13,38 +15,12 @@ const BartersHome = ({ barters }: BartersHomePageProps) => {
     // dispatch(createBarter({...TEST_DATA, accessToken}))
   }, []);
 
-  return <div>BartersHome</div>;
+  return (
+    <main className="container-fluid h-100-percent">
+      <BarterList barters={barters} />
+    </main>
+  );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-  context
-): Promise<GetServerSidePropsResult<BartersHomePageProps>> => {
-  //   const res = await fetch({
-  //       url: 'http://localhost:8000'
-  //   })
-  const BASE_URL: string =
-    process.env.NODE_ENV === "development"
-      ? process.env.BASE_URL_DEVELOPMENT
-      : process.env.BASE_URL_PRODUCTION;
-
-
-    try {
-        const res:AxiosResponse = await axios.get(BASE_URL + '/barters', {
-
-        })
-        console.log(res.data)
-    } catch(err){
-        console.log(err.response.data);
-
-    }
-
-  const barters = [];
-
-  return {
-    props: {
-      barters: barters
-    }
-  };
-};
 
 export default BartersHome;
