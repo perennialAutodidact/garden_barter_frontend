@@ -14,6 +14,10 @@ const nextConfig = {
       destination: '/barters'
     },
     {
+      source: '/create',
+      destination: '/barters/create'
+    },
+    {
       source: '/auth/login',
       destination: '/login'
     },

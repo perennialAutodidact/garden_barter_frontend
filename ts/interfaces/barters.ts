@@ -90,5 +90,33 @@ export interface BarterItemHeaderProps {
 }
 
 export interface ArrowButtonProps {
-    ref: RefObject<HTMLElement[]>
+    ref: RefObject<HTMLElement[]>;
+}
+export interface BarterTypeRadioChoice {
+    value: string;
+    label: string;
+}
+
+export interface BarterTypeCheckboxOption {
+    label: string;
+    value: string;
+}
+
+export interface BarterFormSectionField {
+    name: string;
+    type: string;
+    required: boolean;
+    errors: [] | string[];
+    label?: string;
+    columnClasses?: string;
+    choices?: BarterTypeRadioChoice[] | undefined;
+    options?: object | object[] | undefined;
+}
+
+export interface BarterFormSectionProps {
+    sectionData: {
+        sectionName: string;
+        sectionNumber: string;
+        fields: BarterFormSectionField[]
+    }
 }

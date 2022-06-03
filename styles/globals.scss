@@ -9,11 +9,20 @@ $font-family-sans-serif: $general-font;
 $navbar-light-color: $custom-dark;
 $navbar-light-toggler-border-color: $custom-dark-light;
 
-
 // set dropdown link hover bg color
 $dropdown-link-hover-bg: $custom-warning;
 $dropdown-link-active-bg: $custom-warning-dark;
 $dropdown-link-active-color: $navbar-light-color;
+
+$form-input-check-bg: $custom-light;
+$input-focus-border-color: $custom-success;
+$input-btn-focus-color: $custom-success;
+
+$form-check-input-focus-border: $custom-success;
+$form-check-input-focus-box-shadow: $custom-success;
+
+$form-check-input-checked-bg-color: $custom-success;
+$form-check-input-checked-border-color: $custom-success;
 
 // override default theme colors
 $theme-colors: (
@@ -36,13 +45,12 @@ $theme-colors: (
 @import '~bootstrap/scss/bootstrap';
 
 #app-container {
-    min-height: 100vh;
+  min-height: 100vh;
 }
 
 .h-100-percent {
-    min-height: 100%;
+  min-height: 100%;
 }
-
 
 h1,
 h2,
@@ -62,5 +70,9 @@ h5,
 }
 
 .navbar-brand-heading {
-    letter-spacing: 1.5px;
+  letter-spacing: 1.5px;
+}
+
+textarea {
+    resize: none;
 }

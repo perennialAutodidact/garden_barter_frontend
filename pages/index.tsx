@@ -1,5 +1,4 @@
 import React from "react";
-import AuthForm from "../components/Auth/AuthForm";
 import BartersHome from "./barters";
 import { GetServerSideProps, GetServerSidePropsResult } from "next";
 import axios, { AxiosResponse } from "axios";
