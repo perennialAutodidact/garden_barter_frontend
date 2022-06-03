@@ -104,6 +104,7 @@ const FormSection = ({ sectionData }: BarterFormSectionProps) => {
                   {field.label}
                 </label>
                 <select className="form-select" id={field.name}>
+                  {/* SELECT OPTIONS ARE PASSED AS OBJECTS */}
                   {Object.keys(field.options).map(key =>
                     <option value={key}>
                       {titleize(field.options[key])}
@@ -115,6 +116,7 @@ const FormSection = ({ sectionData }: BarterFormSectionProps) => {
         }
       })}
 
+      {/* REQUIRED LEGEND */}
       <p className="d-flex align-items-center mt-5">
         Required<span className="text-danger ms-2">*</span>
       </p>
