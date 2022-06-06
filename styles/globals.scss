@@ -30,6 +30,7 @@ $theme-colors: (
   'primary': $custom-primary,
   'primary-dark': $custom-primary-dark,
   'secondary': $custom-secondary,
+  'secondary-dark': $custom-secondary-dark,
   'success': $custom-success,
   'success-dark': $custom-success-dark,
   'info': $custom-info,
@@ -75,4 +76,8 @@ h5,
 
 textarea {
     resize: none;
+}
+
+a:hover {
+    cursor: pointer;
 }

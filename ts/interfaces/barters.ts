@@ -1,4 +1,4 @@
-import React, { RefObject, ReactNode } from "react";
+import React, { RefObject, ReactNode, FormEventHandler, SyntheticEvent } from "react";
 import { User } from "./auth";
 
 export interface Barter {
@@ -56,67 +56,83 @@ export interface BarterState {
 }
 
 export interface BarterFormData {
-  creator: User;
   title: string;
   description: string;
   postalCode: string;
   willTradeFor: string;
   isFree: boolean;
-  
+  quantity: number;
+  quantityUnits: string;
+  barterType: string;
+
   // optional fields
-  accessToken?: string;
   datePackaged?: Date | string;
   genus?: string;
   species?: string;
   commonName?: string;
   age?: string;
   dateHarvested?: Date | string;
+  latitude?: string;
+  longitude?: string;
+  crossStreet1?: string;
+  crossStreet2?: string;
 }
 
 export interface BartersHomePageProps {
-    barters: Barter[]
+  barters: Barter[];
 }
 
 export interface BarterListProps {
-    barters: Barter[]
+  barters: Barter[];
 }
 export interface BarterItemProps {
-    barter: Barter
+  barter: Barter;
 }
 
 export interface BarterItemHeaderProps {
-    icon: ReactNode;
-    barterType: string;
+  icon: ReactNode;
+  barterType: string;
 }
 
 export interface ArrowButtonProps {
-    ref: RefObject<HTMLElement[]>;
+  ref: RefObject<HTMLElement[]>;
 }
 export interface BarterTypeRadioChoice {
-    value: string;
-    label: string;
+  value: string;
+  label: string;
 }
 
 export interface BarterTypeCheckboxOption {
-    label: string;
-    value: string;
+  label: string;
+  value: string;
 }
 
 export interface BarterFormSectionField {
-    name: string;
-    type: string;
-    required: boolean;
-    errors: [] | string[];
-    label?: string;
-    columnClasses?: string;
-    choices?: BarterTypeRadioChoice[] | undefined;
-    options?: object | object[] | undefined;
+  name: string;
+  type: string;
+  required: boolean;
+  errors: [] | string[];
+  additionalProps: {
+      defaultValue?: string | number 
+      min?: number
+  },
+  label?: string;
+  columnClasses?: string;
+  choices?: BarterTypeRadioChoice[] | undefined;
+  options?: object | object[] | undefined;
 }
 
+export interface BarterFormSectionData {
+    sectionName: string;
+    sectionNumber: string;
+    fields: BarterFormSectionField[];
+  };
+
 export interface BarterFormSectionProps {
-    sectionData: {
-        sectionName: string;
-        sectionNumber: string;
-        fields: BarterFormSectionField[]
-    }
+  sectionData: BarterFormSectionData;
+  handleChange: FormEventHandler;
+  handleSubmit: FormEventHandler;
+  changeFormSection: Function;
+  barterType: string;
+  formData: BarterFormData;
 }

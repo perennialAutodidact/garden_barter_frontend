@@ -19,7 +19,7 @@ export const ArrowButton = () => {
                 "
             data-testid = "ArrowButton"
             data-bs-toggle="tooltip" 
-            data-bs-placement="bottom" 
+            data-bs-placement="top" 
             title="Trade!"
         >
             <RiArrowLeftRightLine/>
