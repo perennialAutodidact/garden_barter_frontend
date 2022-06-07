@@ -11,7 +11,7 @@ const BarterList = ({ barters }: BarterListProps) => {
   console.log('>> barters', JSON.stringify(barters))
   return (
     <div className="row py-5">
-      {barters.length > 0
+      {barters && barters.length > 0
         ? barters.map(barter =>
             <BarterItem barter={barter} key={barter.id}/>
           )
@@ -20,7 +20,7 @@ const BarterList = ({ barters }: BarterListProps) => {
   );
 };
 
-export const getServerSideProps = async context => {
+export const getServerSideProps = async () => {
   let barters = [];
 
   barters = await axios.get("/barters", {}).then(response=>response.data.barters);
