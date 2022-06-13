@@ -1,20 +1,21 @@
 import React from "react";
 import AuthForm from "../../../components/Auth/AuthForm";
 import Signup from "../../../pages/signup";
-import { render, RenderResult, authFormDataBuilder, screen } from "../../utils";
+import { render, RenderResult, authFormDataBuilder, cleanup } from "../../utils/utils";
 import { AuthFormData } from "../../../ts/interfaces/auth";
 import userEvent from "@testing-library/user-event";
 import { Provider as ReduxProvider} from 'react-redux';
 import {initialState as rootState} from '../../../store/store'
+import {NextRouter} from 'next/router';
 let documentBody: RenderResult;
 
-const setupSignupPage = (initialState=rootState) => render(
+const setupSignupPage = (initialState=rootState,  router: Partial<NextRouter>={}) => render(
     <Signup/>,
     {
         initialState: {
             ...initialState
         },
-        
+        router: { ...router }
     }
 )
 
@@ -61,7 +62,7 @@ describe("signup page", () => {
     documentBody = setupSignupPage()
 
     const user = userEvent.setup();
-    const authFormData: AuthFormData = authFormDataBuilder("sign up");
+    const authFormData: AuthFormData = authFormDataBuilder("signup");
 
     const email: HTMLElement = documentBody.getByLabelText(/email/i);
     await user.type(email, authFormData.email);

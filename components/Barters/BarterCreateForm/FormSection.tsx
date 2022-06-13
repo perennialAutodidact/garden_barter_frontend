@@ -8,29 +8,14 @@ const FormSection = ({
   handleChange,
   handleSubmit,
   formData,
-  changeFormSection
+  changeFormSection,
+  isLastSection
 }: BarterFormSectionProps) => {
-  const [isLastSection, setIsLastSection] = useState(false);
-  useEffect(() => {
-    setIsLastSection(sectionData.sectionName === "5 of 5");
-  }, []);
-
-  useEffect(
-    () => {
-      console.log(isLastSection);
-    },
-    [isLastSection]
-  );
-
   return (
     <div className="row">
       <p className="display-4 m-0">
-        {sectionData.sectionName && titleize(sectionData.sectionName)}
+        {sectionData.headerText && titleize(sectionData.headerText)}
       </p>
-      {sectionData.sectionNumber !== "1 of 5" &&
-        <p>
-          {/* display barter type */}
-        </p>}
 
       {sectionData.fields.map((field, i) => {
         switch (field.type) {
@@ -55,7 +40,7 @@ const FormSection = ({
                   )
                     ? "is-invalid"
                     : ""}`}
-                  onInput={(e)=>handleChange(e)}
+                  onInput={e => handleChange(e)}
                   value={formData[field.name]}
                   required={field.required}
                   data-fieldindex={i}
@@ -83,7 +68,7 @@ const FormSection = ({
                       className="form-check-input"
                       name={field.name}
                       value={choice.value}
-                      onChange={(e)=>handleChange(e)}
+                      onChange={e => handleChange(e)}
                       defaultChecked={formData[field.name] === choice.value} // if form state value equals radio value
                       required={field.required}
                       data-fieldindex={i}
@@ -112,7 +97,7 @@ const FormSection = ({
                       )
                         ? "is-invalid"
                         : ""}`}
-                      onChange={(e)=>handleChange(e)}
+                      onChange={e => handleChange(e)}
                       checked={formData[field.name]}
                       name={field.name}
                       required={field.required}
@@ -148,7 +133,7 @@ const FormSection = ({
                   )
                     ? "is-invalid"
                     : ""}`}
-                  onInput={(e)=>handleChange(e)}
+                  onInput={e => handleChange(e)}
                   required={field.required}
                   data-fieldindex={i}
                   {...field.additionalProps}
@@ -178,7 +163,7 @@ const FormSection = ({
                   )
                     ? "is-invalid"
                     : ""}`}
-                  onInput={(e)=>handleChange(e)}
+                  onInput={e => handleChange(e)}
                   required={field.required}
                   data-fieldindex={i}
                   {...field.additionalProps}
@@ -199,7 +184,7 @@ const FormSection = ({
                 <select
                   className="form-select"
                   id={field.name}
-                  onChange={(e)=>handleChange(e)}
+                  onChange={e => handleChange(e)}
                   onBeforeInput={handleChange}
                   name={field.name}
                   value={formData[field.name]}
@@ -229,12 +214,12 @@ const FormSection = ({
           onClick={e => changeFormSection(e, "prev")}
           className="mt-3 p-0 link-primary text-decoration-none"
         >
-          {sectionData.sectionNumber !== "1 of 5" ? "Back" : ""}
+          {sectionData.number !== "1 of 5" ? "Back" : ""}
         </a>
         <div className="d-flex-justify-content-center">
           {/* SECTION NUMBER e.g "1 of 5" */}
           <p className="lead m-0 text-center">
-            {sectionData.sectionNumber}
+            {sectionData.number}
           </p>
           {/* SUBMIT/NEXT BUTTON */}
 
@@ -242,6 +227,7 @@ const FormSection = ({
             className="btn btn-secondary-dark"
             onClick={e =>
               isLastSection ? handleSubmit(e) : changeFormSection(e, "next")}
+            data-testid='BarterCreateFormButton'
           >
             <h5 className="m-0 text-warning">
               {isLastSection ? "Submit" : "Next"}

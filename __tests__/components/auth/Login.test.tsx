@@ -1,7 +1,7 @@
 import React from "react";
 import AuthForm from "../../../components/Auth/AuthForm";
 import Login from "../../../pages/login";
-import {render, RenderResult, screen, fireEvent} from '../../utils'
+import {render, RenderResult, screen, fireEvent} from '../../utils/utils'
 import {initialState} from '../../../store/store'
 
 let documentBody: RenderResult;

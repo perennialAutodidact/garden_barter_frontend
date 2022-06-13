@@ -1,12 +1,12 @@
 import React from "react";
-import { render, RenderResult, screen, fireEvent } from "../../utils";
+import { render, RenderResult } from "../../utils/utils";
 import { TEST_BARTERS } from "../../testData";
 import { initialState as rootState, RootState } from "../../../store/store";
 import BartersHome from "../../../pages/barters";
-import { waitFor } from "@testing-library/react";
+import {waitFor} from "@testing-library/react";
 let documentBody: RenderResult;
 
-const setupBartersPage = (initialState = rootState) =>
+const setupBartersPage = (initialState:RootState = rootState) =>
   render(<BartersHome barters={initialState.barters.barters} />, {
     initialState: {
       ...initialState

@@ -123,8 +123,9 @@ export interface BarterFormSectionField {
 }
 
 export interface BarterFormSectionData {
-    sectionName: string;
-    sectionNumber: string;
+    name: string;
+    headerText: string;
+    number: string;
     fields: BarterFormSectionField[];
   };
 
@@ -135,4 +136,5 @@ export interface BarterFormSectionProps {
   changeFormSection: Function;
   barterType: string;
   formData: BarterFormData;
+  isLastSection: boolean;
 }

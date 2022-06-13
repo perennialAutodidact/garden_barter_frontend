@@ -78,6 +78,7 @@ const BarterCreateForm = () => {
     ],
   };
 
+  // fields required for all barters
   const requiredFields = {
     title: "",
     description: "",
@@ -88,6 +89,8 @@ const BarterCreateForm = () => {
     quantityUnits: "CT",
     barterType: "",
   };
+
+  // state object for the form
   const [formData, setFormData] = useState<BarterFormData>({
     ...requiredFields,
     datePackaged: "",
@@ -100,13 +103,18 @@ const BarterCreateForm = () => {
     crossStreet1: "",
     crossStreet2: "",
   });
+
+  // sectionIndex controls which formSection is currently showing
   const [sectionIndex, setSectionIndex] = useState<number>(
     parseInt(router.query.step as string) || 0
   );
+
+  // meta data for rendering form sections
   const [formSections, setFormSections] = useState([
     {
-      sectionName: "I have...",
-      sectionNumber: "1 of 5",
+    name: 'iHave',
+      headerText: "I have...",
+      number: "1 of 5",
       fields: [
         {
           name: "barterType",
@@ -122,8 +130,9 @@ const BarterCreateForm = () => {
       ],
     },
     {
-      sectionName: "general info",
-      sectionNumber: "2 of 5",
+        name: 'generalInfo',
+      headerText: "general info",
+      number: "2 of 5",
       fields: [
         {
           type: "text",
@@ -164,15 +173,17 @@ const BarterCreateForm = () => {
       ],
     },
     {
-      sectionName: "additional info",
-      sectionNumber: "3 of 5",
+    name: 'additionalInfo',
+      headerText: "additional info",
+      number: "3 of 5",
       fields: [
         //calculate additional fields
       ],
     },
     {
-      sectionName: "will trade for",
-      sectionNumber: "4 of 5",
+        name: 'willTradeFor',
+      headerText: "will trade for",
+      number: "4 of 5",
       fields: [
         {
           name: "willTradeFor",
@@ -193,8 +204,10 @@ const BarterCreateForm = () => {
       ],
     },
     {
-      sectionName: "location",
-      sectionNumber: "5 of 5",
+
+      name: "location",
+      headerText: 'location',
+      number: "5 of 5",
       fields: [
         {
           name: "crossStreet1",
@@ -325,7 +338,7 @@ const BarterCreateForm = () => {
       return formSections.map((formSection) => ({
         ...formSection,
         fields:
-          formSection.sectionName === "additional info"
+          formSection.name === "additionalInfo"
             ? ADDITIONAL_FIELDS[formData.barterType]
               ? [...ADDITIONAL_FIELDS[formData.barterType]]
               : []
@@ -361,7 +374,7 @@ const BarterCreateForm = () => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-12 col-lg-4 offset-lg-4">
-          <form onSubmit={handleSubmit} className="bg-light p-5 mt-5 rounded">
+          <form onSubmit={handleSubmit} className="bg-light p-5 mt-5 rounded shadow">
             <FormSection
               sectionData={formSections[sectionIndex]}
               handleChange={handleChange}
@@ -369,6 +382,7 @@ const BarterCreateForm = () => {
               barterType={formData.barterType}
               formData={formData}
               changeFormSection={changeFormSection}
+              isLastSection={sectionIndex === (formSections.length - 1)}
             />
           </form>
         </div>

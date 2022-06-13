@@ -25,7 +25,7 @@ export const getServerSideProps = async () => {
 
   barters = await axios.get("/barters", {}).then(response=>response.data.barters);
 
-    console.log('>> barters', barters)
+    // console.log('>> barters', barters)
 
   if (!barters) {
     return {

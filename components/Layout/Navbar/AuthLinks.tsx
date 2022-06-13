@@ -1,6 +1,7 @@
 import React from 'react'
+import Link from 'next/link'
 import { AuthLinksProps } from '../../../ts/interfaces/auth'
-function AuthLinks ({handleLogout}:AuthLinksProps) {
+function AuthLinks ({ handleLogout }: AuthLinksProps) {
   return (
     <ul className='navbar-nav ps-lg-0 text-end'>
       <li className='nav-item active'>
@@ -33,15 +34,17 @@ function AuthLinks ({handleLogout}:AuthLinksProps) {
                     '
             ></i>
           </a>
-          <a className='dropdown-item text-end' href='#'>
-            Create Post
-            <i
-              className='
+          <Link href='/barters/create/'>
+            <a className='dropdown-item text-end'>
+              Create Post
+              <i
+                className='
                     bi bi-pencil-fill text-primary 
                     ps-3 
                     '
-            ></i>
-          </a>
+              ></i>
+            </a>
+          </Link>
           <a className='dropdown-item text-end' href='#' onClick={handleLogout}>
             {/* <i className="bi bi-door-closed-fill text-primary pe-3 d-lg-none"></i> */}
             Log Out

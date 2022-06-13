@@ -1,5 +1,5 @@
 import React from "react";
-import { render, RenderResult, screen, fireEvent } from "../../utils";
+import { render, RenderResult, screen, fireEvent } from "../../utils/utils";
 import { TEST_BARTER } from "../../testData";
 import { initialState as rootState, RootState } from "../../../store/store";
 import BartersHome from "../../../pages/barters";
