@@ -5,6 +5,7 @@ import { QUANTITY_UNITS } from "../../../constants";
 
 const FormSection = ({
   sectionData,
+  errors,
   handleChange,
   handleSubmit,
   formData,
@@ -72,6 +73,7 @@ const FormSection = ({
                       defaultChecked={formData[field.name] === choice.value} // if form state value equals radio value
                       required={field.required}
                       data-fieldindex={i}
+                      data-testid={`BarterTypeRadio-${choice.value}`}
                       {...field.additionalProps}
                     />
                     <span className="ms-2 lead fw-bold">

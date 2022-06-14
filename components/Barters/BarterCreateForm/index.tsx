@@ -112,7 +112,7 @@ const BarterCreateForm = () => {
   // meta data for rendering form sections
   const [formSections, setFormSections] = useState([
     {
-    name: 'iHave',
+      name: "iHave",
       headerText: "I have...",
       number: "1 of 5",
       fields: [
@@ -130,7 +130,7 @@ const BarterCreateForm = () => {
       ],
     },
     {
-        name: 'generalInfo',
+      name: "generalInfo",
       headerText: "general info",
       number: "2 of 5",
       fields: [
@@ -173,7 +173,7 @@ const BarterCreateForm = () => {
       ],
     },
     {
-    name: 'additionalInfo',
+      name: "additionalInfo",
       headerText: "additional info",
       number: "3 of 5",
       fields: [
@@ -181,7 +181,7 @@ const BarterCreateForm = () => {
       ],
     },
     {
-        name: 'willTradeFor',
+      name: "willTradeFor",
       headerText: "will trade for",
       number: "4 of 5",
       fields: [
@@ -204,9 +204,8 @@ const BarterCreateForm = () => {
       ],
     },
     {
-
       name: "location",
-      headerText: 'location',
+      headerText: "location",
       number: "5 of 5",
       fields: [
         {
@@ -289,19 +288,19 @@ const BarterCreateForm = () => {
   ) => {
     e.preventDefault();
     const sectionIsValid = validateSection(formSections[sectionIndex]);
-    if (sectionIsValid) {
-      switch (direction) {
-        case "next":
+    switch (direction) {
+      case "next":
+        if (sectionIsValid) {
           if (sectionIndex < formSections.length) {
             setSectionIndex((sectionIndex) => ++sectionIndex);
           }
-          break;
-        case "prev":
-          if (sectionIndex > 0) {
-            setSectionIndex((sectionIndex) => --sectionIndex);
-          }
-          break;
-      }
+        }
+        break;
+      case "prev":
+        if (sectionIndex > 0) {
+          setSectionIndex((sectionIndex) => --sectionIndex);
+        }
+        break;
     }
   };
 
@@ -318,6 +317,7 @@ const BarterCreateForm = () => {
   // when the url parameter updates, update the sectionIndex
   useEffect(() => {
     if (router.query.step) {
+      console.log("router.query.step", router.query.step);
       setSectionIndex(
         (sectionIndex) => parseInt(router.query.step as string) - 1
       );
@@ -360,6 +360,7 @@ const BarterCreateForm = () => {
 
     const fieldIndex: number =
       parseInt(e.target.dataset.fieldindex as string) || 0;
+      // setFormSections(formSections=>formSections.map(formSection=>))
     formSections[sectionIndex].fields[fieldIndex].errors = [];
     // if (e.target.value) {
     // }
@@ -374,7 +375,10 @@ const BarterCreateForm = () => {
     <div className="container-fluid">
       <div className="row">
         <div className="col-12 col-lg-4 offset-lg-4">
-          <form onSubmit={handleSubmit} className="bg-light p-5 mt-5 rounded shadow">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-light p-5 mt-5 rounded shadow"
+          >
             <FormSection
               sectionData={formSections[sectionIndex]}
               handleChange={handleChange}
@@ -382,7 +386,7 @@ const BarterCreateForm = () => {
               barterType={formData.barterType}
               formData={formData}
               changeFormSection={changeFormSection}
-              isLastSection={sectionIndex === (formSections.length - 1)}
+              isLastSection={sectionIndex === formSections.length - 1}
             />
           </form>
         </div>
