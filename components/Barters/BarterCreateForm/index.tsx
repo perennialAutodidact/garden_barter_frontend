@@ -13,7 +13,6 @@ import {
   barterFormDataSchemaPartial
 } from "../../../ts/validation/barters";
 import { useRouter } from "next/router";
-import { CgLayoutGridSmall } from "react-icons/cg";
 
 const BarterCreateForm = () => {
   const router = useRouter();
@@ -245,6 +244,8 @@ const BarterCreateForm = () => {
       ]
     }
   ]);
+
+
   /**
    * Return true if required fields for each section are filled out with valid values, otherwise return false
    */
@@ -260,9 +261,12 @@ const BarterCreateForm = () => {
       .map(field => ({ [field.name]: formData[field.name] }));
 
     // console.log(sectionFields);
-    console.log(barterFormDataSchemaPartial.parse(sectionFields[1]))
 
+      const {success, error} = barterFormDataSchemaPartial.safeParse(sectionFields[0])
     
+      console.log(success, error ? error.issues : 'no errors');
+
+      
 
     // switch(sectionData.name){
     //     case 'iHave':
@@ -407,6 +411,7 @@ const BarterCreateForm = () => {
               formData={formData}
               changeFormSection={changeFormSection}
               isLastSection={sectionIndex === formSections.length - 1}
+              errors={errors}
             />
           </form>
         </div>

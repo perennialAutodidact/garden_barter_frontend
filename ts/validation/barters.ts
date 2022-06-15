@@ -1,14 +1,14 @@
 import {z} from 'zod'
 
 export const requiredFieldsSchema = z.object({
-    title: z.string(),
-    description: z.string(),
-    postalCode: z.string(),
+    title: z.string().nonempty({ message: "Can't be blank." }).min(3).max(255),
+    description: z.string().nonempty({ message: "Can't be blank." }).min(10).max(1000),
+    postalCode: z.string().length(5),
     willTradeFor: z.string(),
     isFree: z.boolean(),
-    quantity: z.number(),
+    quantity: z.number().min(1),
     quantityUnits: z.string(),
-    barterType: z.string(),
+    barterType: z.string().nonempty({ message: "Can't be blank." }),
 })
 
 export const barterFormDataSchema = requiredFieldsSchema.extend({
@@ -16,7 +16,7 @@ export const barterFormDataSchema = requiredFieldsSchema.extend({
   genus: z.string().optional(),
   species: z.string().optional(),
   commonName: z.string().optional(),
-  age: z.string().optional(),
+  age: z.string().min(5).optional(),
   dateHarvested: z.union([z.date(), z.string()]).optional(),
   latitude: z.string().optional(),
   longitude: z.string().optional(),

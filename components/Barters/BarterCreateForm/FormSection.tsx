@@ -5,12 +5,12 @@ import { QUANTITY_UNITS } from "../../../constants";
 
 const FormSection = ({
   sectionData,
-//   errors,
+  errors,
   handleChange,
   handleSubmit,
   formData,
   changeFormSection,
-  isLastSection
+  isLastSection,
 }: BarterFormSectionProps) => {
   return (
     <div className="row">
@@ -29,20 +29,22 @@ const FormSection = ({
               >
                 <label htmlFor={field.name} className="h5 form-label">
                   {field.label}
-                  {field.required
-                    ? <span className="text-danger ms-1">*</span>
-                    : ""}
+                  {field.required ? (
+                    <span className="text-danger ms-1">*</span>
+                  ) : (
+                    ""
+                  )}
                 </label>
                 <input
                   type="text"
                   name={field.name}
                   className={`form-control`}
-                //   className={`form-control ${(field.errors as string[]).includes(
-                //     field.name
-                //   )
-                //     ? "is-invalid"
-                //     : ""}`}
-                  onInput={e => handleChange(e)}
+                  //   className={`form-control ${(field.errors as string[]).includes(
+                  //     field.name
+                  //   )
+                  //     ? "is-invalid"
+                  //     : ""}`}
+                  onInput={(e) => handleChange(e)}
                   value={formData[field.name]}
                   required={field.required}
                   data-fieldindex={i}
@@ -57,10 +59,12 @@ const FormSection = ({
                 className={`form-group mt-3 ${field.columnClasses}`}
                 key={`field-${i}`}
               >
-                {field.required
-                  ? <span className="text-danger ms-1">*</span>
-                  : ""}
-                {field.choices.map((choice, j) =>
+                {field.required ? (
+                  <span className="text-danger ms-1">*</span>
+                ) : (
+                  ""
+                )}
+                {field.choices.map((choice, j) => (
                   <div
                     className="mb-2 d-flex align-items-center is-invalid"
                     key={choice.label}
@@ -70,18 +74,17 @@ const FormSection = ({
                       className="form-check-input"
                       name={field.name}
                       value={choice.value}
-                      onChange={e => handleChange(e)}
+                      onChange={(e) => handleChange(e)}
                       defaultChecked={formData[field.name] === choice.value} // if form state value equals radio value
                       required={field.required}
                       data-fieldindex={i}
                       data-testid={`BarterTypeRadio-${choice.value}`}
                       {...field.additionalProps}
                     />
-                    <span className="ms-2 lead fw-bold">
-                      {choice.label}
-                    </span>
+
+                    <span className="ms-2 lead fw-bold">{choice.label}</span>
                   </div>
-                )}
+                ))}
               </div>
             );
           // type of checkbox renders checkboxes
@@ -91,29 +94,26 @@ const FormSection = ({
                 className={`form-group mt-3 ${field.columnClasses}`}
                 key={`field-${i}`}
               >
-                {field.choices.map((choice, i) =>
-                  <div className="d-flex align-items-center" key={choice.label}>
+                {field.choices.map((choice, i) => (
+                  <div className="d-flex " key={choice.label}>
                     <input
                       type="checkbox"
-                  className={`form-control`}
-                    
+                      className={`form-check-input`}
                       //   className={`form-check-input ${(field.errors as string[]).includes(
-                    //     field.name
-                    //   )
-                    //     ? "is-invalid"
-                    //     : ""}`}
-                      onChange={e => handleChange(e)}
-                      checked={formData[field.name]}
+                      //     field.name
+                      //   )
+                      //     ? "is-invalid"
+                      //     : ""}`}
+                      onChange={(e) => handleChange(e)}
+                      defaultChecked={formData[field.name] === choice.value}
                       name={field.name}
                       required={field.required}
                       data-fieldindex={i}
                       {...field.additionalProps}
                     />
-                    <span className="ms-2 fw-bold">
-                      {choice.label}
-                    </span>
+                    <span className="ms-2 fw-bold">{choice.label}</span>
                   </div>
-                )}
+                ))}
               </div>
             );
           // type of number renders number field
@@ -125,22 +125,23 @@ const FormSection = ({
               >
                 <label htmlFor={field.name} className="h5 form-label">
                   {field.label}
-                  {field.required
-                    ? <span className="text-danger ms-1">*</span>
-                    : ""}
+                  {field.required ? (
+                    <span className="text-danger ms-1">*</span>
+                  ) : (
+                    ""
+                  )}
                 </label>
                 <input
                   type="number"
                   name={field.name}
                   value={formData[field.name]} // value from form state
                   className={`form-control`}
-
-                //   className={`form-control ${(field.errors as string[]).includes(
-                //     field.name
-                //   )
-                //     ? "is-invalid"
-                //     : ""}`}
-                  onInput={e => handleChange(e)}
+                  //   className={`form-control ${(field.errors as string[]).includes(
+                  //     field.name
+                  //   )
+                  //     ? "is-invalid"
+                  //     : ""}`}
+                  onInput={(e) => handleChange(e)}
                   required={field.required}
                   data-fieldindex={i}
                   {...field.additionalProps}
@@ -157,21 +158,23 @@ const FormSection = ({
               >
                 <label htmlFor={field.name} className="h5 form-label">
                   {field.label}
-                  {field.required
-                    ? <span className="text-danger ms-1">*</span>
-                    : ""}
+                  {field.required ? (
+                    <span className="text-danger ms-1">*</span>
+                  ) : (
+                    ""
+                  )}
                 </label>
                 <textarea
                   name={field.name}
                   value={formData[field.name]}
                   rows={5}
                   className={`form-control`}
-                //   className={`form-control ${(field.errors as string[]).includes(
-                //     field.name
-                //   )
-                //     ? "is-invalid"
-                //     : ""}`}
-                  onInput={e => handleChange(e)}
+                  //   className={`form-control ${(field.errors as string[]).includes(
+                  //     field.name
+                  //   )
+                  //     ? "is-invalid"
+                  //     : ""}`}
+                  onInput={(e) => handleChange(e)}
                   required={field.required}
                   data-fieldindex={i}
                   {...field.additionalProps}
@@ -192,7 +195,7 @@ const FormSection = ({
                 <select
                   className="form-select"
                   id={field.name}
-                  onChange={e => handleChange(e)}
+                  onChange={(e) => handleChange(e)}
                   onBeforeInput={handleChange}
                   name={field.name}
                   value={formData[field.name]}
@@ -201,11 +204,11 @@ const FormSection = ({
                   {...field.additionalProps}
                 >
                   {/* SELECT OPTIONS ARE PASSED AS OBJECTS */}
-                  {Object.keys(field.options).map(key =>
+                  {Object.keys(field.options).map((key) => (
                     <option value={key} key={key}>
                       {titleize(field.options[key])}
                     </option>
-                  )}
+                  ))}
                 </select>
               </div>
             );
@@ -219,23 +222,22 @@ const FormSection = ({
       <div className="d-flex justify-content-between align-items-end">
         {/* BACK LINK */}
         <a
-          onClick={e => changeFormSection(e, "prev")}
+          onClick={(e) => changeFormSection(e, "prev")}
           className="mt-3 p-0 link-primary text-decoration-none"
         >
           {sectionData.number !== "1 of 5" ? "Back" : ""}
         </a>
         <div className="d-flex-justify-content-center">
           {/* SECTION NUMBER e.g "1 of 5" */}
-          <p className="lead m-0 text-center">
-            {sectionData.number}
-          </p>
+          <p className="lead m-0 text-center">{sectionData.number}</p>
           {/* SUBMIT/NEXT BUTTON */}
 
           <button
             className="btn btn-secondary-dark"
-            onClick={e =>
-              isLastSection ? handleSubmit(e) : changeFormSection(e, "next")}
-            data-testid='BarterCreateFormButton'
+            onClick={(e) =>
+              isLastSection ? handleSubmit(e) : changeFormSection(e, "next")
+            }
+            data-testid="BarterCreateFormButton"
           >
             <h5 className="m-0 text-warning">
               {isLastSection ? "Submit" : "Next"}

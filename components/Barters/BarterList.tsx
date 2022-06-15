@@ -8,7 +8,7 @@ import BarterItem from "./BarterItem";
 const BarterList = ({ barters }: BarterListProps) => {
   const dispatch = useAppDispatch();
 
-  console.log('>> barters', JSON.stringify(barters))
+  // console.log('>> barters', JSON.stringify(barters))
   return (
     <div className="row py-5">
       {barters && barters.length > 0
@@ -23,9 +23,12 @@ const BarterList = ({ barters }: BarterListProps) => {
 export const getServerSideProps = async () => {
   let barters = [];
 
-  barters = await axios.get("/barters", {}).then(response=>response.data.barters);
-
-    // console.log('>> barters', barters)
+  try {
+    
+    barters = await axios.get("http://localhost:8000/barters/", {}).then(response=>response.data.barters);
+  } catch (error) {
+    console.log(error)
+  }
 
   if (!barters) {
     return {

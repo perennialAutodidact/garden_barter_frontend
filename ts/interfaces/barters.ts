@@ -137,6 +137,7 @@ export interface BarterFormSectionProps {
   barterType: string;
   formData: BarterFormData;
   isLastSection: boolean;
+  errors: BarterFormErrors;
 }
 
 export interface BarterFormErrors {

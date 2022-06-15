@@ -64,18 +64,7 @@ function GBNavbar() {
           className="collapse navbar-collapse d-lg-flex justify-content-lg-end align-items-lg-center"
           id="navbarNav"
         >
-          <div
-            className="text-end d-flex align-items-center"
-            data-bs-toggle="tooltip"
-            data-bs-placement="left"
-            title="New Barter"
-          >
-            <a href="text-decoration-none">
-              <Link href="/barters/create/">
-                <CgAdd className="h1 m-0 text-success" />
-              </Link>
-            </a>
-          </div>
+
           {(!isAuthenticated && authLoadingStatus) === "PENDING"
             ? <div
                 className="navbar-nav spinner-border text-success"
