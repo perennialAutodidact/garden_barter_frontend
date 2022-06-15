@@ -5,7 +5,7 @@ import { QUANTITY_UNITS } from "../../../constants";
 
 const FormSection = ({
   sectionData,
-  errors,
+//   errors,
   handleChange,
   handleSubmit,
   formData,
@@ -36,11 +36,12 @@ const FormSection = ({
                 <input
                   type="text"
                   name={field.name}
-                  className={`form-control ${(field.errors as string[]).includes(
-                    field.name
-                  )
-                    ? "is-invalid"
-                    : ""}`}
+                  className={`form-control`}
+                //   className={`form-control ${(field.errors as string[]).includes(
+                //     field.name
+                //   )
+                //     ? "is-invalid"
+                //     : ""}`}
                   onInput={e => handleChange(e)}
                   value={formData[field.name]}
                   required={field.required}
@@ -94,11 +95,13 @@ const FormSection = ({
                   <div className="d-flex align-items-center" key={choice.label}>
                     <input
                       type="checkbox"
-                      className={`form-check-input ${(field.errors as string[]).includes(
-                        field.name
-                      )
-                        ? "is-invalid"
-                        : ""}`}
+                  className={`form-control`}
+                    
+                      //   className={`form-check-input ${(field.errors as string[]).includes(
+                    //     field.name
+                    //   )
+                    //     ? "is-invalid"
+                    //     : ""}`}
                       onChange={e => handleChange(e)}
                       checked={formData[field.name]}
                       name={field.name}
@@ -130,11 +133,13 @@ const FormSection = ({
                   type="number"
                   name={field.name}
                   value={formData[field.name]} // value from form state
-                  className={`form-control ${(field.errors as string[]).includes(
-                    field.name
-                  )
-                    ? "is-invalid"
-                    : ""}`}
+                  className={`form-control`}
+
+                //   className={`form-control ${(field.errors as string[]).includes(
+                //     field.name
+                //   )
+                //     ? "is-invalid"
+                //     : ""}`}
                   onInput={e => handleChange(e)}
                   required={field.required}
                   data-fieldindex={i}
@@ -160,11 +165,12 @@ const FormSection = ({
                   name={field.name}
                   value={formData[field.name]}
                   rows={5}
-                  className={`form-control ${(field.errors as string[]).includes(
-                    field.name
-                  )
-                    ? "is-invalid"
-                    : ""}`}
+                  className={`form-control`}
+                //   className={`form-control ${(field.errors as string[]).includes(
+                //     field.name
+                //   )
+                //     ? "is-invalid"
+                //     : ""}`}
                   onInput={e => handleChange(e)}
                   required={field.required}
                   data-fieldindex={i}

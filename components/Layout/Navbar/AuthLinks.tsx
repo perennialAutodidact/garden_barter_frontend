@@ -1,6 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
-import { AuthLinksProps } from '../../../ts/interfaces/auth'
+import { AuthLinksProps } from '../../../ts/interfaces/auth';
+import { useAppDispatch } from '../../../store/hooks';
+
 function AuthLinks ({ handleLogout }: AuthLinksProps) {
   return (
     <ul className='navbar-nav ps-lg-0 text-end'>

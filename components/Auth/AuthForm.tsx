@@ -3,13 +3,13 @@ import Link from "next/link";
 import { AuthFormProps, AuthFormData } from "../../ts/interfaces/auth";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { signup, login } from "../../store/authSlice/actions";
-import { createMessage, deleteMessage } from "../../store/messageSlice";
+import { createAlert, deleteAlert } from "../../store/alertSlice";
 import Router from "next/router";
 import { unwrapResult } from "@reduxjs/toolkit";
 export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector(state => state.auth);
-  const { messages } = useAppSelector(state => state.messages);
+  const { alerts } = useAppSelector(state => state.alerts);
 
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
@@ -37,8 +37,8 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
           console.log(errorMessages);
           errorMessages.forEach(message => {
             dispatch(
-              createMessage({
-                id: messages.length,
+              createAlert({
+                id: alerts.length,
                 text: message,
                 level: "danger"
               })
@@ -53,8 +53,8 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
           console.log(errorMessages);
           errorMessages.forEach(message => {
             dispatch(
-              createMessage({
-                id: messages.length,
+              createAlert({
+                id: alerts.length,
                 text: message,
                 level: "danger"
               })

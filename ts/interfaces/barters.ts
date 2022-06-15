@@ -111,7 +111,7 @@ export interface BarterFormSectionField {
   name: string;
   type: string;
   required: boolean;
-  errors: [] | string[];
+//   errors: [] | string[];
   additionalProps: {
       defaultValue?: string | number 
       min?: number
@@ -137,4 +137,25 @@ export interface BarterFormSectionProps {
   barterType: string;
   formData: BarterFormData;
   isLastSection: boolean;
+}
+
+export interface BarterFormErrors {
+  title?:  string[]
+  description?:  string[]
+  postalCode?:  string[]
+  willTradeFor?:  string[]
+  isFree?:  string[]
+  quantity?:  string[]
+  quantityUnits?:  string[]
+  barterType?:  string[]
+  datePackaged?:  string[]
+  genus?:  string[]
+  species?:  string[]
+  commonName?:  string[]
+  age?:  string[]
+  dateHarvested?:  string[]
+  latitude?:  string[]
+  longitude?:  string[]
+  crossStreet1?:  string[]
+  crossStreet2?:  string[]
 }

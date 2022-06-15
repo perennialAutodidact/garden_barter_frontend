@@ -1,12 +1,16 @@
 import React from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import AuthLinks from "./AuthLinks";
 import GuestLinks from "./GuestLinks";
 import { useAppSelector, useAppDispatch } from "../../../store/hooks";
 import { logout } from "../../../store/authSlice/actions";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { CgAdd } from "react-icons/cg";
+import Link from "next/link";
 
 function GBNavbar() {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { isAuthenticated, authLoadingStatus, user } = useAppSelector(
     state => state.auth
@@ -16,7 +20,7 @@ function GBNavbar() {
     dispatch(logout(user))
       .then(unwrapResult)
       .then(res => {
-        console.log("res", res);
+        router.push("/");
       })
       .catch(err => console.log(err));
   };
@@ -57,15 +61,27 @@ function GBNavbar() {
 
         {/* NAV LINKS */}
         <div
-          className="collapse navbar-collapse d-lg-flex justify-content-lg-end align-items-lg-end"
+          className="collapse navbar-collapse d-lg-flex justify-content-lg-end align-items-lg-center"
           id="navbarNav"
         >
+          <div
+            className="text-end d-flex align-items-center"
+            data-bs-toggle="tooltip"
+            data-bs-placement="left"
+            title="New Barter"
+          >
+            <a href="text-decoration-none">
+              <Link href="/barters/create/">
+                <CgAdd className="h1 m-0 text-success" />
+              </Link>
+            </a>
+          </div>
           {(!isAuthenticated && authLoadingStatus) === "PENDING"
             ? <div
                 className="navbar-nav spinner-border text-success"
                 role="status"
               >
-               {''}
+                {""}
               </div>
             : isAuthenticated
               ? <AuthLinks handleLogout={handleLogout} />

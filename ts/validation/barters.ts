@@ -1,14 +1,17 @@
 import {z} from 'zod'
 
-export const barterFormDataSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  postalCode: z.string(),
-  willTradeFor: z.string(),
-  isFree: z.boolean(),
-  quantity: z.number(),
-  quantityUnits: z.string(),
-  barterType: z.string(),
+export const requiredFieldsSchema = z.object({
+    title: z.string(),
+    description: z.string(),
+    postalCode: z.string(),
+    willTradeFor: z.string(),
+    isFree: z.boolean(),
+    quantity: z.number(),
+    quantityUnits: z.string(),
+    barterType: z.string(),
+})
+
+export const barterFormDataSchema = requiredFieldsSchema.extend({
   datePackaged: z.union([z.date(), z.string()]).optional(),
   genus: z.string().optional(),
   species: z.string().optional(),
@@ -21,9 +24,8 @@ export const barterFormDataSchema = z.object({
   crossStreet2: z.string().optional(),
 });
 
-
-export const iHaveSectionSchema= z.object({})
-
+export const barterFormDataSchemaPartial = requiredFieldsSchema.partial()
+ 
 
 export const barterTypeRadioChoiceSchema = z.object({
   value: z.string(),

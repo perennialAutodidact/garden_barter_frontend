@@ -6,14 +6,20 @@ import _ from "lodash";
 import {
   BarterFormData,
   BarterFormSectionData,
+  BarterFormErrors
 } from "../../../ts/interfaces/barters";
-import { barterFormDataSchema } from "../../../ts/validation/barters";
+import {
+  barterFormDataSchema,
+  barterFormDataSchemaPartial
+} from "../../../ts/validation/barters";
 import { useRouter } from "next/router";
+import { CgLayoutGridSmall } from "react-icons/cg";
 
 const BarterCreateForm = () => {
   const router = useRouter();
 
   const [currentYear, _] = useState(new Date().getFullYear());
+  const [errors, setErrors] = useState<BarterFormErrors>({});
 
   // These fields will be rendered on each page of the form
   const PLANT_FIELDS = [
@@ -21,26 +27,23 @@ const BarterCreateForm = () => {
       name: "genus",
       type: "text",
       label: "Genus",
-      errors: [],
       required: false,
-      additionalProps: {},
+      additionalProps: {}
     },
     {
       name: "species",
       type: "text",
       label: "Species",
-      errors: [],
       required: false,
-      additionalProps: {},
+      additionalProps: {}
     },
     {
       name: "commonName",
       type: "text",
       label: "Common Name",
-      errors: [],
       required: false,
-      additionalProps: {},
-    },
+      additionalProps: {}
+    }
   ];
   const ADDITIONAL_FIELDS = {
     seed: [
@@ -50,9 +53,8 @@ const BarterCreateForm = () => {
         type: "number",
         label: "Year Packaged",
         required: false,
-        errors: [],
-        additionalProps: { defaultValue: currentYear, max: currentYear },
-      },
+        additionalProps: { defaultValue: currentYear, max: currentYear }
+      }
     ],
     plant: [...PLANT_FIELDS],
     produce: [...PLANT_FIELDS],
@@ -61,21 +63,19 @@ const BarterCreateForm = () => {
         name: "dimensions",
         type: "text",
         label: "Dimensions",
-        errors: [],
         required: false,
-        additionalProps: { placeholder: "Height x Width x Depth" },
-      },
+        additionalProps: { placeholder: "Height x Width x Depth" }
+      }
     ],
     tool: [
       {
         name: "dimensions",
         type: "text",
         label: "Dimensions",
-        errors: [],
         required: false,
-        additionalProps: { placeholder: "Height x Width x Depth" },
-      },
-    ],
+        additionalProps: { placeholder: "Height x Width x Depth" }
+      }
+    ]
   };
 
   // fields required for all barters
@@ -87,7 +87,7 @@ const BarterCreateForm = () => {
     isFree: false,
     quantity: 1,
     quantityUnits: "CT",
-    barterType: "",
+    barterType: ""
   };
 
   // state object for the form
@@ -101,7 +101,7 @@ const BarterCreateForm = () => {
     latitude: "",
     longitude: "",
     crossStreet1: "",
-    crossStreet2: "",
+    crossStreet2: ""
   });
 
   // sectionIndex controls which formSection is currently showing
@@ -110,7 +110,7 @@ const BarterCreateForm = () => {
   );
 
   // meta data for rendering form sections
-  const [formSections, setFormSections] = useState([
+  const [formSections, setFormSections] = useState<BarterFormSectionData[]>([
     {
       name: "iHave",
       headerText: "I have...",
@@ -120,14 +120,13 @@ const BarterCreateForm = () => {
           name: "barterType",
           type: "radio",
           required: true,
-          errors: [],
           additionalProps: {},
-          choices: BARTER_TYPES.map((barterType) => ({
+          choices: BARTER_TYPES.map(barterType => ({
             label: titleize(barterType),
-            value: barterType,
-          })),
-        },
-      ],
+            value: barterType
+          }))
+        }
+      ]
     },
     {
       name: "generalInfo",
@@ -139,16 +138,14 @@ const BarterCreateForm = () => {
           name: "title",
           label: "Title",
           required: true,
-          errors: [],
-          additionalProps: {},
+          additionalProps: {}
         },
         {
           type: "textArea",
           name: "description",
           label: "Description",
           required: true,
-          errors: [],
-          additionalProps: {},
+          additionalProps: {}
         },
 
         {
@@ -156,21 +153,19 @@ const BarterCreateForm = () => {
           label: "Quantity",
           type: "number",
           required: false,
-          errors: [],
           additionalProps: { min: 1 },
-          columnClasses: "col-6",
+          columnClasses: "col-6"
         },
         {
           name: "quantityUnits",
           type: "select",
           label: "Unit",
           required: false,
-          errors: [],
           additionalProps: {},
           options: QUANTITY_UNITS,
-          columnClasses: "col-6",
-        },
-      ],
+          columnClasses: "col-6"
+        }
+      ]
     },
     {
       name: "additionalInfo",
@@ -178,7 +173,7 @@ const BarterCreateForm = () => {
       number: "3 of 5",
       fields: [
         //calculate additional fields
-      ],
+      ]
     },
     {
       name: "willTradeFor",
@@ -189,19 +184,17 @@ const BarterCreateForm = () => {
           name: "willTradeFor",
           type: "textArea",
           required: true,
-          errors: [],
           additionalProps: {},
-          label: "Will Trade For",
+          label: "Will Trade For"
         },
         {
           name: "isFree",
           type: "checkbox",
           required: false,
-          errors: [],
           additionalProps: {},
-          choices: [{ label: "Free (No Trade Required)", value: "" }],
-        },
-      ],
+          choices: [{ label: "Free (No Trade Required)", value: "" }]
+        }
+      ]
     },
     {
       name: "location",
@@ -212,50 +205,45 @@ const BarterCreateForm = () => {
           name: "crossStreet1",
           type: "text",
           required: false,
-          errors: [],
           additionalProps: {},
           label: "Street",
-          columnClasses: "col-6",
+          columnClasses: "col-6"
         },
 
         {
           name: "crossStreet2",
           type: "text",
           required: false,
-          errors: [],
           additionalProps: {},
           label: "Cross Street",
-          columnClasses: "col-6",
+          columnClasses: "col-6"
         },
         {
           name: "latitude",
           type: "text",
           required: false,
-          errors: [],
           additionalProps: {},
           label: "Latitude",
-          columnClasses: "col-6",
+          columnClasses: "col-6"
         },
         {
           name: "longitude",
           type: "text",
           required: false,
-          errors: [],
           additionalProps: {},
           label: "Longitude",
-          columnClasses: "col-6",
+          columnClasses: "col-6"
         },
         {
           name: "postalCode",
           type: "text",
           required: true,
-          errors: [],
           additionalProps: {},
           label: "Postal Code",
-          columnClasses: "col-6",
-        },
-      ],
-    },
+          columnClasses: "col-6"
+        }
+      ]
+    }
   ]);
   /**
    * Return true if required fields for each section are filled out with valid values, otherwise return false
@@ -264,14 +252,36 @@ const BarterCreateForm = () => {
     let sectionIsValid = true;
     // check that all required fields have values
 
-    sectionData.fields.forEach((field) => {
+    // iHaveSectionSchema.parse(sectionData)
+
+
+    const sectionFields = sectionData.fields
+      .filter(field => field.required)
+      .map(field => ({ [field.name]: formData[field.name] }));
+
+    // console.log(sectionFields);
+    console.log(barterFormDataSchemaPartial.parse(sectionFields[1]))
+
+    
+
+    // switch(sectionData.name){
+    //     case 'iHave':
+
+    // }
+
+    // try {
+    //     console.log(barterFormDataSchema.safeParse({}))
+    // } catch (errors) {
+    //     errors.forEach(error=>console.log(error))
+    // }
+    sectionData.fields.forEach(field => {
+      // if the field is required and fails Zod validation
       if (field.required && !formData[field.name]) {
         sectionIsValid = false;
-        console.log("invalid!", field.name);
+        // console.log("invalid!", field.name);
         // update field errors if blank
-        field.errors = (field.errors as string[]).concat([field.name]);
-      } else {
-        field.errors = [];
+
+        // setErrors(errors=>errors.concat([field.name]));
       }
     });
 
@@ -292,13 +302,14 @@ const BarterCreateForm = () => {
       case "next":
         if (sectionIsValid) {
           if (sectionIndex < formSections.length) {
-            setSectionIndex((sectionIndex) => ++sectionIndex);
+            setSectionIndex(sectionIndex => ++sectionIndex);
           }
+        } else {
         }
         break;
       case "prev":
         if (sectionIndex > 0) {
-          setSectionIndex((sectionIndex) => --sectionIndex);
+          setSectionIndex(sectionIndex => --sectionIndex);
         }
         break;
     }
@@ -309,59 +320,68 @@ const BarterCreateForm = () => {
     // Always do navigations after the first render
     if (!router.query.step) {
       router.push(`create/?step=${sectionIndex + 1}`, undefined, {
-        shallow: true,
+        shallow: true
       });
     }
   }, []);
 
   // when the url parameter updates, update the sectionIndex
-  useEffect(() => {
-    if (router.query.step) {
-      console.log("router.query.step", router.query.step);
-      setSectionIndex(
-        (sectionIndex) => parseInt(router.query.step as string) - 1
-      );
-    }
-  }, [router.query.step]);
+  useEffect(
+    () => {
+      if (router.query.step) {
+        console.log("router.query.step", router.query.step);
+        setSectionIndex(
+          sectionIndex => parseInt(router.query.step as string) - 1
+        );
+      }
+    },
+    [router.query.step]
+  );
 
   // when the sectionIndex updates, update the url parameter
-  useEffect(() => {
-    router.push(`create/?step=${sectionIndex + 1}`, undefined, {
-      shallow: true,
-    });
-  }, [sectionIndex]);
+  useEffect(
+    () => {
+      router.push(`create/?step=${sectionIndex + 1}`, undefined, {
+        shallow: true
+      });
+    },
+    [sectionIndex]
+  );
 
   // when the barterType changes,
   // add additional fields from the newly chosen type
-  useEffect(() => {
-    setFormSections((formSections) => {
-      return formSections.map((formSection) => ({
-        ...formSection,
-        fields:
-          formSection.name === "additionalInfo"
-            ? ADDITIONAL_FIELDS[formData.barterType]
-              ? [...ADDITIONAL_FIELDS[formData.barterType]]
-              : []
-            : formSection.fields,
-      }));
-    });
-  }, [formData.barterType]);
+  useEffect(
+    () => {
+      setFormSections(formSections => {
+        return formSections.map(formSection => ({
+          ...formSection,
+          fields:
+            formSection.name === "additionalInfo"
+              ? ADDITIONAL_FIELDS[formData.barterType]
+                ? [...ADDITIONAL_FIELDS[formData.barterType]]
+                : []
+              : formSection.fields
+        }));
+      });
+    },
+    [formData.barterType]
+  );
 
   /**
    * Change field in the formData object
    */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((formData) => ({
+    setFormData(formData => ({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
 
     // console.log(formSections[sectionIndex].fields[fieldIndex].errors)
 
     const fieldIndex: number =
       parseInt(e.target.dataset.fieldindex as string) || 0;
-      // setFormSections(formSections=>formSections.map(formSection=>))
-    formSections[sectionIndex].fields[fieldIndex].errors = [];
+    // setFormSections(formSections=>formSections.map(formSection=>))
+    // formSections[sectionIndex].fields[fieldIndex].errors = [];
     // if (e.target.value) {
     // }
   };

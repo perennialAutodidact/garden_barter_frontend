@@ -3,22 +3,22 @@ import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import authReducer, {
   initialState as initialAuthState
 } from "../store/authSlice";
-import messageReducer, {
-  initialState as initialMessageState
-} from "../store/messageSlice";
+import alertReducer, {
+  initialState as initialAlertState
+} from "./alertSlice";
 import barterReducer, {
   initialState as initialBarterState
 } from "../store/bartersSlice";
 
 export const initialState = {
   auth: initialAuthState,
-  messages: initialMessageState,
+  alerts: initialAlertState,
   barters: initialBarterState
 };
 
 export const reducer = {
   auth: authReducer,
-  messages: messageReducer,
+  alerts: alertReducer,
   barters: barterReducer
 };
 

@@ -1,31 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { MessageItemProps } from "../../ts/interfaces/messages";
-import { useAppDispatch } from "../../store/hooks";
-import { deleteMessage } from "../../store/messageSlice";
+import { AlertItemProps } from "../../ts/interfaces/alerts";
+import { deleteAlert } from "../../store/alertSlice";
 
-const MESSAGE_ICONS = {
+const ALERT_ICONS = {
   success: "bi bi-heart-fill",
   info: "bi bi-info-circle-fill",
   warning: "bi bi-exclamation-diamond-fill",
   danger: "bi bi-heartbreak-fill"
 };
 
-function MessageItem({ message, messageIndex }: MessageItemProps) {
-  const dispatch = useAppDispatch();
-
+function AlertItem({ alert, alertIndex, dispatch }: AlertItemProps) {
   const [iconClass, setIconClass] = useState<string>("");
 
-  const onDelete = message => {
-    dispatch(deleteMessage(message));
+  const onDelete = alert => {
+    dispatch(deleteAlert(alert));
   };
 
   useEffect(
     () => {
-      setIconClass(MESSAGE_ICONS[message.level]);
+      setIconClass(ALERT_ICONS[alert.level]);
 
       setTimeout(() => {
-        onDelete(message);
-      }, 3000 + 500 * messageIndex);
+        onDelete(alert);
+      }, 3000 + 500 * alertIndex);
     },
     [setIconClass]
   );
@@ -35,20 +32,20 @@ function MessageItem({ message, messageIndex }: MessageItemProps) {
       className={
         `col-12 col-lg-6 offset-lg-3 my-0 rounded 
          alert alert-dismissible fade show shadow
-         d-flex align-items-center ` + `alert-${message.level}`
+         d-flex align-items-center ` + `alert-${alert.level}`
       }
     >
       <i className={"h3 p-0 m-0 me-3 " + iconClass} />
-      {message.text}
+      {alert.text}
       <button
         type="button"
         className="btn-close"
         data-bs-dismiss="alert"
         aria-bs-label="Close"
-        onClick={() => onDelete(message)}
+        onClick={() => onDelete(alert)}
       />
     </div>
   );
 }
 
-export default MessageItem;
+export default AlertItem;

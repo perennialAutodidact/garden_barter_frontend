@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import Tooltip from "bootstrap";
 import GBNavbar from "./Navbar/Navbar";
-import MessageList from "../MessageList";
+import AlertList from "../AlertList";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { requestToken } from "../../store/authSlice/actions";
-import Script from "next/script";
-import $ from "bootstrap";
 
 function Layout({ children }) {
   const dispatch = useAppDispatch();
@@ -43,7 +40,7 @@ function Layout({ children }) {
     [accessToken, authLoadingStatus]
   );
 
-  const { messages } = useAppSelector(state => state.messages);
+  const { alerts } = useAppSelector(state => state.alerts);
   return (
     <div className="bg-primary" id="app-container">
       <Head>
@@ -55,7 +52,7 @@ function Layout({ children }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <GBNavbar />
-      <MessageList />
+      <AlertList />
       {children}
     </div>
   );
