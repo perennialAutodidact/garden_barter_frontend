@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AuthFormProps, AuthFormData } from "../../ts/interfaces/auth";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { signup, login } from "../../store/authSlice/actions";
-import { createAlert, deleteAlert } from "../../store/alertSlice";
-import Router from "next/router";
+import { signup, login, fetchUser } from "../../store/authSlice/actions";
+import { resetAuthLoadingStatus } from "../../store/authSlice";
+import { createAlert } from "../../store/alertSlice";
+import { useRouter } from "next/router";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
 export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector(state => state.auth);
+  const router = useRouter();
+  const { isAuthenticated, authLoadingStatus, signupSuccess } = useAppSelector(
+    state => state.auth
+  );
   const { alerts } = useAppSelector(state => state.alerts);
 
   const [formData, setFormData] = useState<AuthFormData>({
@@ -32,46 +37,73 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
     if (formMode === "sign up") {
       dispatch(signup(formData))
         .then(unwrapResult)
-        .then(res => console.log("res", res))
-        .catch(errorMessages => {
-          console.log(errorMessages);
-          errorMessages.forEach(message => {
+        .then(res => {
+          dispatch(
+            createAlert({
+              id: 0,
+              text: res.message,
+              level: "success"
+            })
+          );
+          dispatch(login(formData));
+        })
+        .catch(error => {
+          error.errors.forEach((err, index) =>
             dispatch(
               createAlert({
-                id: alerts.length,
-                text: message,
+                id: index,
+                text: err,
                 level: "danger"
               })
-            );
-          });
+            )
+          );
         });
     } else {
       dispatch(login(formData))
         .then(unwrapResult)
-        .then(res => console.log("res", res))
-        .catch(errorMessages => {
-          console.log(errorMessages);
-          errorMessages.forEach(message => {
+        .then(res => {
+          dispatch(
+            createAlert({
+              id: 0,
+              text: res.message,
+              level: "success"
+            })
+          );
+        })
+        .catch(error =>
+          error.errors.forEach((err, index) =>
             dispatch(
               createAlert({
-                id: alerts.length,
-                text: message,
+                id: index,
+                text: err,
                 level: "danger"
               })
-            );
-          });
-        });
+            )
+          )
+        );
     }
   };
 
   useEffect(
     () => {
       if (isAuthenticated) {
-        Router.push("/barters");
+        if (router.query) {
+          let next = router.query.next;
+          if (next) {
+            router.push(encodeURIComponent(next as string));
+          }
+        }
+        router.push("/");
       }
     },
     [isAuthenticated]
   );
+
+  //   useEffect(() => {
+  //     if (dispatch && dispatch !== null && dispatch !== undefined) {
+  //       dispatch(resetAuthLoadingStatus());
+  //     }
+  //   }, []);
 
   return (
     <div className="row py-5">
@@ -86,7 +118,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
               id={`${formMode === "sign up" ? "signup" : "login"}-form`}
               className="p-3 d-flex flex-column gap-3"
               onSubmit={handleSubmit}
-              data-testid='auth-form'
+              data-testid="auth-form"
             >
               {/* EMAIL FIELD */}
               <div className="field-group d-flex flex-column">
@@ -106,7 +138,8 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
 
               {/* PASSWORD 1 */}
               <div className="field-group d-flex flex-column">
-                <label htmlFor="password" className="form-label">Password
+                <label htmlFor="password" className="form-label">
+                  Password
                 </label>
                 <input
                   type="password"
@@ -141,7 +174,13 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
                 className="btn btn-warning-dark my-3 text-dark fw-bold shadow"
                 data-testid="submit-button"
               >
-                {formTitle}
+                {authLoadingStatus === "PENDING"
+                  ? <div className="spinner-border text-dark" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  : <span>
+                      {formTitle}
+                    </span>}
               </button>
             </form>
           </div>
