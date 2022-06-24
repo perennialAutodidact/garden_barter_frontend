@@ -1,9 +1,19 @@
 # Garden Barter Frontend
 
 ## Novel Concepts
-- React Bootstrap
-- Typescript in React
+- Typescript
 - NextJS
+  - API routes
+- Unit and Integration Testing with Jest and React Testing Library
+- Form Validation with Zod
+
+## Features
+- Custom Multi-part form
+  - Render different fields for each barter type
+  - Validation with Zod
+  - Dynamic error validation styling with Bootstrap
+- Responsive design
+- 
 
 ## Getting Started
 
