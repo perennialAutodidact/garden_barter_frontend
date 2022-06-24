@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { BARTER_TYPES, QUANTITY_UNITS } from "../../../constants";
 import { titleize } from "../../../utils/helpers";
 import FormSection from "./FormSection";
@@ -8,23 +9,29 @@ import {
   BarterFormSectionData,
   BarterFormErrors
 } from "../../../ts/interfaces/barters";
-import {
-  barterFormDataSchema,
-  barterFormDataSchemaPartial
-} from "../../../ts/validation/barters";
+import { barterFormDataSchemaPartial } from "../../../ts/validation/barters";
 import { useRouter } from "next/router";
+import { createBarter } from "../../../store/bartersSlice/actions";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { createAlert } from "../../../store/alertSlice";
+import { User } from "../../../ts/interfaces/auth";
+import dayjs from "dayjs";
+import { refresh } from "../../../store/authSlice/actions";
 
 const BarterCreateForm = () => {
   const router = useRouter();
-
-  const [currentYear, _] = useState(new Date().getFullYear());
-  const [errors, setErrors] = useState<BarterFormErrors>({});
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector(state => state.auth);
+  const { alerts } = useAppSelector(state => state.alerts);
+  const [currentYear, _] = useState<number>(new Date().getFullYear());
+  const [formErrors, setFormErrors] = useState<BarterFormErrors>({});
 
   // These fields will be rendered on each page of the form
   const PLANT_FIELDS = [
     {
       name: "genus",
       type: "text",
+      defaultValue: "",
       label: "Genus",
       required: false,
       additionalProps: {}
@@ -32,6 +39,7 @@ const BarterCreateForm = () => {
     {
       name: "species",
       type: "text",
+      defaultValue: "",
       label: "Species",
       required: false,
       additionalProps: {}
@@ -39,6 +47,7 @@ const BarterCreateForm = () => {
     {
       name: "commonName",
       type: "text",
+      defaultValue: "",
       label: "Common Name",
       required: false,
       additionalProps: {}
@@ -50,6 +59,7 @@ const BarterCreateForm = () => {
       {
         name: "yearPackaged",
         type: "number",
+        defaultValue: dayjs().year(),
         label: "Year Packaged",
         required: false,
         additionalProps: { defaultValue: currentYear, max: currentYear }
@@ -61,6 +71,7 @@ const BarterCreateForm = () => {
       {
         name: "dimensions",
         type: "text",
+        defaultValue: "",
         label: "Dimensions",
         required: false,
         additionalProps: { placeholder: "Height x Width x Depth" }
@@ -70,6 +81,7 @@ const BarterCreateForm = () => {
       {
         name: "dimensions",
         type: "text",
+        defaultValue: "",
         label: "Dimensions",
         required: false,
         additionalProps: { placeholder: "Height x Width x Depth" }
@@ -84,8 +96,8 @@ const BarterCreateForm = () => {
     postalCode: "",
     willTradeFor: "",
     isFree: false,
-    quantity: 1,
-    quantityUnits: "CT",
+    quantity: "",
+    quantityUnits: "NA",
     barterType: ""
   };
 
@@ -245,47 +257,64 @@ const BarterCreateForm = () => {
     }
   ]);
 
-
   /**
    * Return true if required fields for each section are filled out with valid values, otherwise return false
    */
   const validateSection = (sectionData: BarterFormSectionData): boolean => {
     let sectionIsValid = true;
-    // check that all required fields have values
-
-    // iHaveSectionSchema.parse(sectionData)
-
 
     const sectionFields = sectionData.fields
       .filter(field => field.required)
       .map(field => ({ [field.name]: formData[field.name] }));
 
-    // console.log(sectionFields);
+    const validationErrors = {};
+    sectionFields.forEach(field => {
+      const { success, error } = barterFormDataSchemaPartial.safeParse(field);
 
-      const {success, error} = barterFormDataSchemaPartial.safeParse(sectionFields[0])
-    
-      console.log(success, error ? error.issues : 'no errors');
-
-      
-
-    // switch(sectionData.name){
-    //     case 'iHave':
-
-    // }
-
-    // try {
-    //     console.log(barterFormDataSchema.safeParse({}))
-    // } catch (errors) {
-    //     errors.forEach(error=>console.log(error))
-    // }
-    sectionData.fields.forEach(field => {
-      // if the field is required and fails Zod validation
-      if (field.required && !formData[field.name]) {
+      // if zod validation produced errors,
+      // compile them into validationErrors
+      if (!success) {
         sectionIsValid = false;
-        // console.log("invalid!", field.name);
-        // update field errors if blank
 
-        // setErrors(errors=>errors.concat([field.name]));
+        // loop through each validation issue
+        error.issues.forEach(issue => {
+          // use the field name as the key
+          const fieldName = issue.path[0];
+          // collate array of error messages for the field
+          validationErrors[fieldName] = [
+            ...(validationErrors[fieldName] || []),
+            issue.message
+          ];
+        });
+        setFormErrors(validationErrors);
+      }
+
+      // check that a trade is specified or the item is free
+      if (
+        sectionData.name === "willTradeFor" &&
+        formData["willTradeFor"] === "" &&
+        !formData["isFree"]
+      ) {
+        sectionIsValid = false;
+
+        setFormErrors({
+          ...formErrors,
+          willTradeFor: ["A trade is required if the item is not free."]
+        });
+      }
+
+      // check that a unit is entered if the quantity is entered
+      if (
+        sectionData.name === "generalInfo" &&
+        formData.quantity &&
+        formData.quantityUnits === "NA"
+      ) {
+        sectionIsValid = false;
+
+        setFormErrors({
+          ...formErrors,
+          quantityUnits: ["Please choose a unit."]
+        });
       }
     });
 
@@ -296,24 +325,21 @@ const BarterCreateForm = () => {
    * Increment or decrement the sectionIndex state
    * variable based on the direction paramater
    */
-  const changeFormSection = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    direction: "next" | "prev"
-  ) => {
-    e.preventDefault();
+  const changeFormSection = (direction: "next" | "prev") => {
+    console.log("changeFormSection");
     const sectionIsValid = validateSection(formSections[sectionIndex]);
     switch (direction) {
       case "next":
         if (sectionIsValid) {
           if (sectionIndex < formSections.length) {
-            setSectionIndex(sectionIndex => ++sectionIndex);
+            setSectionIndex(sectionIndex => sectionIndex + 1);
           }
-        } else {
         }
         break;
       case "prev":
         if (sectionIndex > 0) {
-          setSectionIndex(sectionIndex => --sectionIndex);
+          setFormErrors({});
+          setSectionIndex(sectionIndex => sectionIndex - 1);
         }
         break;
     }
@@ -333,7 +359,6 @@ const BarterCreateForm = () => {
   useEffect(
     () => {
       if (router.query.step) {
-        console.log("router.query.step", router.query.step);
         setSectionIndex(
           sectionIndex => parseInt(router.query.step as string) - 1
         );
@@ -356,16 +381,25 @@ const BarterCreateForm = () => {
   // add additional fields from the newly chosen type
   useEffect(
     () => {
+      formData.barterType &&
+        ADDITIONAL_FIELDS[formData.barterType].forEach(field => {
+          setFormData(formData => ({
+            ...formData,
+            [field.name]: field.defaultValue
+          }));
+        });
       setFormSections(formSections => {
-        return formSections.map(formSection => ({
-          ...formSection,
-          fields:
-            formSection.name === "additionalInfo"
-              ? ADDITIONAL_FIELDS[formData.barterType]
-                ? [...ADDITIONAL_FIELDS[formData.barterType]]
-                : []
-              : formSection.fields
-        }));
+        return formSections.map(formSection => {
+          return {
+            ...formSection,
+            fields:
+              formSection.name === "additionalInfo"
+                ? ADDITIONAL_FIELDS[formData.barterType]
+                  ? [...ADDITIONAL_FIELDS[formData.barterType]]
+                  : []
+                : formSection.fields
+          };
+        });
       });
     },
     [formData.barterType]
@@ -375,24 +409,53 @@ const BarterCreateForm = () => {
    * Change field in the formData object
    */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(formData => ({
-      ...formData,
-      [e.target.name]: e.target.value
-    }));
+    setFormErrors({ ...formErrors, [e.target.name]: [] });
 
-    // console.log(formSections[sectionIndex].fields[fieldIndex].errors)
-
-    const fieldIndex: number =
-      parseInt(e.target.dataset.fieldindex as string) || 0;
-    // setFormSections(formSections=>formSections.map(formSection=>))
-    // formSections[sectionIndex].fields[fieldIndex].errors = [];
-    // if (e.target.value) {
-    // }
+    if (e.target.type === "checkbox") {
+      setFormData(formData => ({
+        ...formData,
+        [e.target.name]: !formData[e.target.name]
+      }));
+    } else {
+      setFormData(formData => ({
+        ...formData,
+        [e.target.name]: e.target.value
+      }));
+    }
   };
 
   /** Dispatch redux action to POST to backend when form is submitted */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(formData);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (validateSection(formSections[sectionIndex])) {
+      dispatch(refresh()).then(res => {
+        dispatch(createBarter({ formData: formData, user: user }))
+          .then(unwrapResult)
+          .then(res => {
+            dispatch(
+              createAlert({
+                id: 0,
+                text: res.message,
+                level: "success"
+              })
+            );
+            router.push("/");
+          })
+          .catch(err => {
+            err.errors.forEach((error, index) => {
+              dispatch(
+                createAlert({
+                  id: index,
+                  text: error,
+                  level: "danger"
+                })
+              );
+            });
+          });
+        router.push("/barters/create/?step=1", undefined, {
+          shallow: true
+        });
+      });
+    }
   };
 
   return (
@@ -411,7 +474,7 @@ const BarterCreateForm = () => {
               formData={formData}
               changeFormSection={changeFormSection}
               isLastSection={sectionIndex === formSections.length - 1}
-              errors={errors}
+              errors={formErrors}
             />
           </form>
         </div>
