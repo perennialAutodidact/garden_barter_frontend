@@ -9,7 +9,7 @@ const ALERT_ICONS = {
   danger: "bi bi-heartbreak-fill"
 };
 
-function AlertItem({ alert, alertIndex, dispatch }: AlertItemProps) {
+function AlertItem({ alert, dispatch }: AlertItemProps) {
   const [iconClass, setIconClass] = useState<string>("");
 
   const onDelete = alert => {
@@ -22,7 +22,7 @@ function AlertItem({ alert, alertIndex, dispatch }: AlertItemProps) {
 
       setTimeout(() => {
         onDelete(alert);
-      }, 3000 + 500 * alertIndex);
+      }, 4000);
     },
     [setIconClass]
   );
