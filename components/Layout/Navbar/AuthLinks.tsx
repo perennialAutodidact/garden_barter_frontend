@@ -15,11 +15,16 @@ function AuthLinks ({ handleLogout }: AuthLinksProps) {
             data-bs-placement="left"
             title="New Barter"
           >
-              <Link href="/barters/create/">
-            <a className='text-decoration-none'>
-                <CgAdd className="h1 m-0 text-success" />
-            </a>
-              </Link>
+            <Link href="/barters/create/">
+                <a 
+                    className='text-decoration-none'
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="left" 
+                    title="New Barter"
+                >
+                    <CgAdd className="h1 m-0 text-success" />
+                </a>
+            </Link>
           </div>
 
 
