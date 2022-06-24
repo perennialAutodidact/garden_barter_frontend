@@ -40,6 +40,7 @@ $theme-colors: (
   'light': $custom-light,
   'light-light': $custom-light-light,
   'light-dark': $custom-light-dark,
+  'light-darker': $custom-light-darker,
   'dark': $custom-dark
 );
 
@@ -49,8 +50,12 @@ $theme-colors: (
   min-height: 100vh;
 }
 
-.h-100-percent {
-  min-height: 100%;
+.vh-100 {
+  min-height: 100vh;
+}
+
+.vh-75 {
+  min-height: 75vh;
 }
 
 h1,
@@ -75,9 +80,9 @@ h5,
 }
 
 textarea {
-    resize: none;
+  resize: none;
 }
 
 a:hover {
-    cursor: pointer;
+  cursor: pointer;
 }

@@ -29,5 +29,6 @@ $custom-danger: $flame;
 $custom-light: $honeydew;
 $custom-light-light: adjust-color($custom-light, $lightness: 10%);
 $custom-light-dark: adjust-color($custom-light, $lightness: -10%);
+$custom-light-darker: adjust-color($custom-light, $lightness: -20%);
 $custom-dark: $rich-black;
 $custom-dark-light: adjust-color($custom-dark, $lightness: 10%);
