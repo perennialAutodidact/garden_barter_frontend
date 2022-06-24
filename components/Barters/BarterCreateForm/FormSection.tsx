@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BARTER_ICONS } from "../../../constants";
 import { BarterFormSectionProps } from "../../../ts/interfaces/barters";
 import { titleize } from "../../../utils/helpers";
+import { useAppSelector } from "../../../store/hooks";
 
 const FormSection = ({
   sectionData,
@@ -12,11 +13,14 @@ const FormSection = ({
   changeFormSection,
   isLastSection
 }: BarterFormSectionProps) => {
+  const { barterLoadingStatus } = useAppSelector(state => state.barters);
+
   return (
     <div className="row">
-      {sectionData.name !== "iHave" &&
+      {sectionData &&
+        sectionData.name !== "iHave" &&
         <p className="h3 text-light-darker d-flex align-items-center gap-3">
-            {BARTER_ICONS[formData.barterType]||''}
+          {BARTER_ICONS[formData.barterType] || ""}
           {titleize(formData.barterType || "")}
         </p>}
       <p className="display-4 m-0">
@@ -263,7 +267,9 @@ const FormSection = ({
             data-testid="BarterCreateFormButton"
           >
             <h5 className="m-0 text-warning">
-              {isLastSection ? "Submit" : "Next"}
+              {isLastSection
+                ? barterLoadingStatus === "PENDING" ? "Loading..." : "Submit"
+                : "Next"}
             </h5>
           </button>
         </div>

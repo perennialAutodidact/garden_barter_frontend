@@ -91,14 +91,14 @@ const BarterCreateForm = () => {
 
   // fields required for all barters
   const requiredFields = {
-    title: "",
-    description: "",
-    postalCode: "",
-    willTradeFor: "",
+    title: "Watermelons",
+    description: "I have too many to eat",
+    postalCode: "97233",
+    willTradeFor: "Zucchini or apples",
     isFree: false,
     quantity: "",
     quantityUnits: "NA",
-    barterType: ""
+    barterType: "produce"
   };
 
   // state object for the form
@@ -330,7 +330,7 @@ const BarterCreateForm = () => {
     const sectionIsValid = validateSection(formSections[sectionIndex]);
     switch (direction) {
       case "next":
-        if (sectionIsValid) {
+        if (sectionIsValid && sectionIndex < formSections.length - 1) {
           if (sectionIndex < formSections.length) {
             setSectionIndex(sectionIndex => sectionIndex + 1);
           }
@@ -358,7 +358,10 @@ const BarterCreateForm = () => {
   // when the url parameter updates, update the sectionIndex
   useEffect(
     () => {
-      if (router.query.step) {
+      if (
+        router.query.step &&
+        router.query.step !== (formSections.length - 1).toString()
+      ) {
         setSectionIndex(
           sectionIndex => parseInt(router.query.step as string) - 1
         );
@@ -370,9 +373,11 @@ const BarterCreateForm = () => {
   // when the sectionIndex updates, update the url parameter
   useEffect(
     () => {
-      router.push(`create/?step=${sectionIndex + 1}`, undefined, {
-        shallow: true
-      });
+      if (sectionIndex < formSections.length - 1) {
+        router.push(`create/?step=${sectionIndex + 1}`, undefined, {
+          shallow: true
+        });
+      }
     },
     [sectionIndex]
   );
@@ -431,6 +436,7 @@ const BarterCreateForm = () => {
         dispatch(createBarter({ formData: formData, user: user }))
           .then(unwrapResult)
           .then(res => {
+            router.push("/");
             dispatch(
               createAlert({
                 id: 0,
@@ -438,22 +444,31 @@ const BarterCreateForm = () => {
                 level: "success"
               })
             );
-            router.push("/");
           })
           .catch(err => {
-            err.errors.forEach((error, index) => {
+            router.push("/barters/create/?step=1", undefined, {
+              shallow: true
+            });
+            if (err.errors) {
+              err.errors.forEach((error, index) => {
+                dispatch(
+                  createAlert({
+                    id: index,
+                    text: error,
+                    level: "danger"
+                  })
+                );
+              });
+            } else {
               dispatch(
                 createAlert({
-                  id: index,
-                  text: error,
+                  id: 0,
+                  text: "Something went wrong. Please try again later",
                   level: "danger"
                 })
               );
-            });
+            }
           });
-        router.push("/barters/create/?step=1", undefined, {
-          shallow: true
-        });
       });
     }
   };

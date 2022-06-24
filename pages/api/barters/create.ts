@@ -7,16 +7,11 @@ export default async (req, res) => {
     const cookies = cookie.parse(req.headers.cookie ?? "");
     const access = cookies.access ?? false;
 
-    console.log(cookies)
-    console.log(access)
-
     if (!access) {
       return res.status(401).json({
         errors: ["Unauthorized"]
       });
     }
-
-    console.log(req.body)
 
     try {
       const apiRes = await axios.post(
