@@ -61,11 +61,11 @@ export interface BarterFormData {
   postalCode: string;
   willTradeFor: string;
   isFree: boolean;
-  quantity: number;
-  quantityUnits: string;
   barterType: string;
-
+  
   // optional fields
+  quantity?: number | string;
+  quantityUnits?: string;
   datePackaged?: Date | string;
   genus?: string;
   species?: string;
