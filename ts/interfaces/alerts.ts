@@ -9,7 +9,6 @@ export interface Alert {
 
 export interface AlertItemProps {
   alert: Alert;
-  alertIndex: number;
   dispatch: AppDispatch;
 }
 

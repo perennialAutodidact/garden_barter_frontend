@@ -14,7 +14,6 @@ function AlertList() {
             <AlertItem
               alert={alert}
               key={alert.id.toString()}
-              alertIndex={index}
               dispatch={dispatch}
             />
           )}
