@@ -4,13 +4,12 @@ import GBNavbar from "./Navbar/Navbar";
 import AlertList from "../AlertList";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { requestToken } from "../../store/authSlice/actions";
+import { verify, refresh, fetchUser } from "../../store/authSlice/actions";
+import { useRouter } from "next/router";
 
 function Layout({ children }) {
   const dispatch = useAppDispatch();
-  const { accessToken, authLoadingStatus } = useAppSelector(
-    state => state.auth
-  );
+  const router = useRouter();
 
   // load bootstrap and initialize tool tips
   useEffect(() => {
@@ -28,19 +27,31 @@ function Layout({ children }) {
 
   useEffect(
     () => {
-      if (!accessToken && authLoadingStatus === "PENDING") {
-        dispatch(requestToken())
+      if (dispatch && dispatch != null && dispatch !== undefined) {
+        // check the validity of the access token
+        dispatch(verify("access"))
           .then(unwrapResult)
-          .then(res => console.log(res))
+          .then(res => {
+            dispatch(fetchUser());
+          })
+          // if the access token is expired or invalid, verify the refresh token
           .catch(err => {
-            console.log(err);
+            // if refresh token is still valid, request a new access token
+            dispatch(refresh())
+              .then(unwrapResult)
+              .then(res => {
+                dispatch(fetchUser());
+              })
+              // if refresh token is also invalid...
+              .catch(err => {
+                console.log('Something went wrong refreshing tokens in layout component')
+              });
           });
       }
     },
-    [accessToken, authLoadingStatus]
+    [dispatch]
   );
 
-  const { alerts } = useAppSelector(state => state.alerts);
   return (
     <div className="bg-primary" id="app-container">
       <Head>
