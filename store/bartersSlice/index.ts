@@ -8,6 +8,7 @@ import {
   MaterialBarter,
   ToolBarter
 } from "../../ts/interfaces/barters";
+import { createBarter } from "./actions";
 
 export const initialState: BarterState = {
   barters: [],
@@ -19,7 +20,9 @@ export const BarterSlice = createSlice({
   name: "barters",
   initialState,
   reducers: {},
-  extraReducers: {}
+  extraReducers: (builder) => {
+    builder.addCase(createBarter.pending, (state) => {});
+  }
 });
 
 export default BarterSlice.reducer;
