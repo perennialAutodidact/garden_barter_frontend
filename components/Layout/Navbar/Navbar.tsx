@@ -17,7 +17,7 @@ function GBNavbar() {
   );
 
   const handleLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
-    dispatch(logout(user))
+    dispatch(logout())
       .then(unwrapResult)
       .then(res => {
         router.push("/");
@@ -39,7 +39,7 @@ function GBNavbar() {
             Garden Barter
           </h1>
         </a>
-        {(!isAuthenticated && authLoadingStatus) === "PENDING"
+        {(authLoadingStatus) === "PENDING"
           ? <div
               className="navbar-nav spinner-border text-success d-lg-none"
               role="status"
@@ -65,7 +65,7 @@ function GBNavbar() {
           id="navbarNav"
         >
 
-          {(!isAuthenticated && authLoadingStatus) === "PENDING"
+          {(authLoadingStatus) === "PENDING"
             ? <div
                 className="navbar-nav spinner-border text-success"
                 role="status"
