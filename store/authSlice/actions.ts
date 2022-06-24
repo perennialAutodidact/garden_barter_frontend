@@ -1,10 +1,7 @@
-import { createAsyncThunk, ThunkAction } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AuthFormData, User } from "../../ts/interfaces/auth";
-import { AppThunk } from "../../store/store";
-import Router from "next/router";
 
-const BASE_URL: string = "http://localhost:8000";
 const headers = {
   accept: "application/json",
   "Access-Control-Allow-Origin": "http://localhost:3000"
@@ -14,15 +11,15 @@ axios.defaults.withCredentials = true;
 export const signup = createAsyncThunk(
   "auth/signup",
   async (formData: AuthFormData, { rejectWithValue }) => {
-    const url = BASE_URL + "/register/";
+    const url = "api/auth/register/";
     return await axios
       .post(url, formData, {
         headers: headers
       })
       .then((res) => res.data)
       .catch((err) => {
-        console.log("err", err.response);
-        return rejectWithValue(err.response.data.msg);
+        // console.log("err", err.response);
+        return rejectWithValue(err.response.data);
       });
   }
 );
@@ -30,41 +27,65 @@ export const signup = createAsyncThunk(
 export const login = createAsyncThunk(
   "auth/login",
   async (formData: AuthFormData, { rejectWithValue }) => {
-    const url = BASE_URL + "/login/";
+    const url = "api/auth/login/";
     return await axios
-      .post(url, formData, {
-        headers: headers
-      })
+      .post(url, formData, { headers: headers })
       .then((res) => res.data)
-      .catch((error) => rejectWithValue(error.response.data.msg));
+      .catch((error) => rejectWithValue(error.response.data));
   }
 );
 
-export const requestToken = createAsyncThunk(
-  "auth/requestToken",
+export const fetchUser = createAsyncThunk(
+  "auth/fetchUser",
   async ({}, { rejectWithValue }) => {
-    const url = BASE_URL + "/token/";
     return await axios
-      .get(url, {
+      .get("/api/auth/fetchUser", {
         headers: headers
       })
       .then((res) => res.data)
-      .catch((err) => rejectWithValue(err.response.data.msg));
+      .catch((err) => rejectWithValue(err.response.data));
+  }
+);
+
+export const verify = createAsyncThunk(
+  "auth/verify",
+  async (tokenType: "access" | "refresh", { rejectWithValue }) => {
+    return await axios
+      .post(`/api/auth/verify/`, { tokenType }, { headers: headers })
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.response.data));
+  }
+);
+
+export const refresh = createAsyncThunk(
+  "auth/refresh",
+  async ({}, { rejectWithValue }) => {
+    return await axios.post(
+      `/api/auth/refresh/`,
+      {},
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      }
+    );
   }
 );
 
 export const logout = createAsyncThunk(
   "auth/logout",
-  async (user: User, { rejectWithValue }) => {
-    const url = BASE_URL + "/logout/";
-    return await axios.post(
-      url,
-      {
-          user
-      },
-      {
-        headers: headers
-      }
-    );
+  async ({}, { rejectWithValue }) => {
+    const url = "api/auth/logout/";
+    return await axios
+      .post(
+        url,
+        {},
+        {
+          headers: headers
+        }
+      )
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.response.data));
   }
 );
