@@ -32,7 +32,6 @@ export default async (req, res) => {
       return res.status(200).json(apiRes.data);
     } catch (error) {
       if (error.response) {
-        console.log(error.response.data);
         return res.status(error.response.status).json({
           errors: error.response.data.errors.map(
             (messageData) => messageData.message

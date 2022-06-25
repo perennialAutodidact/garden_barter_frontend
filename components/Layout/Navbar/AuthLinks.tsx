@@ -12,15 +12,13 @@ function AuthLinks ({ handleLogout }: AuthLinksProps) {
           <div
             className="text-end d-flex align-items-center justify-content-end"
             data-bs-toggle="tooltip"
-            data-bs-placement="left"
-            title="New Barter"
+                    data-bs-placement="left"
+                    title="New Barter"
           >
             <Link href="/barters/create/">
                 <a 
                     className='text-decoration-none'
-                    data-bs-toggle="tooltip" 
-                    data-bs-placement="left" 
-                    title="New Barter"
+                    
                 >
                     <CgAdd className="h1 m-0 text-success" />
                 </a>

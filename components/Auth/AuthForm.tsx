@@ -56,7 +56,8 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
                 level: "danger"
               })
             )
-          );
+            );
+            dispatch(fetchUser())
         });
     } else {
       dispatch(login(formData))
@@ -68,7 +69,8 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
               text: res.message,
               level: "success"
             })
-          );
+            );
+            dispatch(fetchUser())
         })
         .catch(error =>
           error.errors.forEach((err, index) =>
@@ -86,24 +88,19 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
 
   useEffect(
     () => {
-      if (isAuthenticated) {
-        if (router.query) {
+      if (isAuthenticated && authLoadingStatus !== 'PENDING') {
+
+        if (router && router.query) {
           let next = router.query.next;
           if (next) {
-            router.push(encodeURIComponent(next as string));
+            router.push(next as string);
           }
         }
-        router.push("/");
+        // router.push("/");
       }
     },
-    [isAuthenticated]
+    [isAuthenticated, authLoadingStatus]
   );
-
-  //   useEffect(() => {
-  //     if (dispatch && dispatch !== null && dispatch !== undefined) {
-  //       dispatch(resetAuthLoadingStatus());
-  //     }
-  //   }, []);
 
   return (
     <div className="row py-5">

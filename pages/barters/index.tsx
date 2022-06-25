@@ -7,12 +7,6 @@ import { resetAuthLoadingStatus } from "../../store/authSlice";
 const BartersHome = ({ barters }: BartersHomePageProps) => {
   const dispatch = useAppDispatch();
 
-    // useEffect(()=>{
-    //     if(dispatch && dispatch!==null&&dispatch!==undefined){
-    //         dispatch(resetAuthLoadingStatus())
-    //     }
-    // },[dispatch])
-
   return (
     <main className="container-fluid">
       <BarterList barters={barters} />

@@ -59,22 +59,22 @@ export const authSlice = createSlice({
       })
       .addCase(verify.fulfilled, (state, action) => {
         state.isAuthenticated = true;
-        state.authLoadingStatus = "IDLE";
+        // state.authLoadingStatus = "IDLE";
       })
       .addCase(verify.rejected, (state) => {
-        state.user = null;
         state.isAuthenticated = false;
-        state.authLoadingStatus = "IDLE";
+        // state.authLoadingStatus = "IDLE";
       })
-
+      
       // REFRESH
       .addCase(refresh.pending, (state) => {
         state.authLoadingStatus = "PENDING";
       })
       .addCase(refresh.fulfilled, (state) => {
-        state.authLoadingStatus = "IDLE";
+        // state.authLoadingStatus = "IDLE";
       })
       .addCase(refresh.rejected, (state) => {
+        state.isAuthenticated = false;
         state.authLoadingStatus = "IDLE";
       })
 
@@ -85,14 +85,14 @@ export const authSlice = createSlice({
       .addCase(
         fetchUser.fulfilled,
         (state, action: PayloadAction<{ message: string; user: User }>) => {
-          console.log(action);
-          state.authLoadingStatus = "IDLE";
+        state.isAuthenticated = true;
+        state.authLoadingStatus = "IDLE";
           state.user = action.payload.user;
-          state.fetchUserSuccess = true;
         }
       )
       .addCase(fetchUser.rejected, (state) => {
         state.authLoadingStatus = "IDLE";
+        state.isAuthenticated = false;
         state.user = null;
       })
 
