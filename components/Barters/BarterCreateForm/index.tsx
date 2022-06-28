@@ -7,7 +7,7 @@ import _ from "lodash";
 import {
   BarterFormData,
   BarterFormSectionData,
-  BarterFormErrors,
+  BarterFormErrors
 } from "../../../ts/interfaces/barters";
 import { barterFormDataSchemaPartial } from "../../../ts/validation/barters";
 import { useRouter } from "next/router";

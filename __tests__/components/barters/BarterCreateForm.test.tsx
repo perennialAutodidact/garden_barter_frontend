@@ -7,7 +7,6 @@ import userEvent from "@testing-library/user-event";
 import { NextRouter } from "next/router";
 import { createMockRouter } from "../../utils/createMockRouter";
 import BarterCreatePage from "../../../pages/barters/create";
-import { debugPort } from "process";
 
 let documentBody: RenderResult;
 // let useRouter: jest.Mock<nextRouter.NextRouter>;
@@ -131,6 +130,19 @@ describe("<BarterCreateForm/>", () => {
       createMockRouter()
     );
 
-    // expect(await findByText(/5 of 5/i)).toBeInTheDocument();
+    const user = userEvent.setup();
+    const formButton = getByText(/next/i);
+    const validationFunction = jest
+      .fn()
+      .mockResolvedValue(true);
+    formButton.onclick = jest
+      .fn()
+      .mockImplementation(() => validationFunction());
+
+    waitFor(async () => {
+
+    })
+
+    expect(await findByText(/5 of 5/i)).toBeInTheDocument();
   });
 });
