@@ -1,27 +1,56 @@
 import React from "react";
 import AuthForm from "../../../components/Auth/AuthForm";
 import Signup from "../../../pages/signup";
-import { render, RenderResult, authFormDataBuilder, cleanup } from "../../utils/utils";
+import {
+  render,
+  RenderResult,
+  authFormDataBuilder,
+  cleanup,
+  waitFor,
+} from "../../utils/utils";
 import { AuthFormData } from "../../../ts/interfaces/auth";
 import userEvent from "@testing-library/user-event";
-import { Provider as ReduxProvider} from 'react-redux';
-import {initialState as rootState} from '../../../store/store'
-import {NextRouter} from 'next/router';
+import { Provider as ReduxProvider } from "react-redux";
+import { initialState as rootState } from "../../../store/store";
+import { NextRouter } from "next/router";
+import { createMockRouter } from "../../utils/createMockRouter";
+
 let documentBody: RenderResult;
 
-const setupSignupPage = (initialState=rootState,  router: Partial<NextRouter>={}) => render(
-    <Signup/>,
-    {
-        initialState: {
-            ...initialState
-        },
-        router: { ...router }
-    }
-)
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      route: "/",
+      pathname: "",
+      query: {},
+      asPath: "",
+      push: jest.fn(),
+      scroll: true,
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+      },
+      beforePopState: jest.fn(() => null),
+      prefetch: jest.fn(() => null),
+    };
+  },
+}));
+const useRouter = jest.spyOn(require("next/router"), "useRouter");
+
+const setupSignupPage = (
+  initialState = rootState,
+  router: Partial<NextRouter> = {}
+) =>
+  render(<Signup />, {
+    initialState: {
+      ...initialState,
+    },
+    router: { ...router },
+  });
 
 describe("signup page", () => {
-    it("renders signup form", () => {
-    documentBody = setupSignupPage()
+  it("renders signup form", () => {
+    documentBody = setupSignupPage(rootState, createMockRouter());
     const heading = documentBody.getByRole("heading");
     expect(heading).toBeInTheDocument();
     expect(heading).toHaveTextContent("Sign Up");
@@ -49,7 +78,7 @@ describe("signup page", () => {
   });
 
   it("renders form submit button", () => {
-    documentBody = setupSignupPage()
+    documentBody = setupSignupPage(rootState, createMockRouter());
 
     const submitButton = documentBody.getByTestId("submit-button");
     expect(submitButton).toBeInTheDocument();
@@ -59,40 +88,39 @@ describe("signup page", () => {
   });
 
   it("changes form data and submits form with input data", async () => {
-    documentBody = setupSignupPage()
+    documentBody = setupSignupPage(rootState, createMockRouter());
 
     const user = userEvent.setup();
     const authFormData: AuthFormData = authFormDataBuilder("signup");
 
     const email: HTMLElement = documentBody.getByLabelText(/email/i);
-    await user.type(email, authFormData.email);
-    expect(email).toHaveValue(authFormData.email);
+    const password: HTMLElement = documentBody.getByLabelText("Password");
+    const password2: HTMLElement = documentBody.getByLabelText(
+      "Confirm Password"
+    );
 
-    const password: HTMLElement = documentBody.getByLabelText("Password")
-    await user.type(password, authFormData.password)
-    expect(password).toHaveValue(authFormData.password)
+    documentBody.debug(email);
 
-    const password2: HTMLElement = documentBody.getByLabelText("Confirm Password")
-    await user.type(password2, authFormData.password2)
-    expect(password2).toHaveValue(authFormData.password2)   
+    waitFor(async () => {
+      await user.type(email, authFormData.email);
+      expect(email).toHaveValue(authFormData.email);
 
-    // mock form submit
-    const signupForm = documentBody.getByTestId("auth-form");
-    const submitButton = documentBody.getByTestId("submit-button");
-    const mockSubmit = jest.fn();
-    signupForm.onsubmit = mockSubmit;
-    console.log(authFormData)
-    await userEvent.click(submitButton).then(() => {
-      expect(signupForm.onsubmit).toHaveBeenCalled();
+      await user.type(password, authFormData.password);
+      expect(password).toHaveValue(authFormData.password);
+
+      await user.type(password2, authFormData.password2);
+      expect(password2).toHaveValue(authFormData.password2);
+
+      // mock form submit
+      const signupForm = documentBody.getByTestId("auth-form");
+      const submitButton = documentBody.getByTestId("submit-button");
+      const mockSubmit = jest.fn();
+      signupForm.onsubmit = mockSubmit;
+      await userEvent.click(submitButton).then(() => {
+        expect(signupForm.onsubmit).toHaveBeenCalled();
+      });
     });
-
-    
   });
 
-  it('redirects with successful login', async ()=>{
-
-    
-
-  })
-
+  it("redirects with successful login", async () => {});
 });
