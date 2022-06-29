@@ -7,7 +7,7 @@ import _ from "lodash";
 import {
   BarterFormData,
   BarterFormSectionData,
-  BarterFormErrors
+  BarterFormErrors,
 } from "../../../ts/interfaces/barters";
 import { barterFormDataSchemaPartial } from "../../../ts/validation/barters";
 import { useRouter } from "next/router";
@@ -118,7 +118,7 @@ const BarterCreateForm = () => {
 
   // sectionIndex controls which formSection is currently showing
   const [sectionIndex, setSectionIndex] = useState<number>(
-    parseInt(router.query.step as string || '0')
+    parseInt((router.query.step as string) || "0")
   );
 
   // meta data for rendering form sections
@@ -339,7 +339,9 @@ const BarterCreateForm = () => {
         break;
       case "prev":
         if (sectionIndex > 0) {
+          // clear all form errors
           setFormErrors({});
+
           setSectionIndex((sectionIndex) => sectionIndex - 1);
         }
         break;
@@ -368,32 +370,36 @@ const BarterCreateForm = () => {
     if (router && router !== null && router !== undefined) {
       if (
         router.query.step &&
-        router.query.step !== (formSections.length - 1).toString()
+        parseInt(router.query.step as string) < formSections.length
       ) {
         setSectionIndex(
           (sectionIndex) => parseInt(router.query.step as string) - 1
         );
       } else {
-        router.push(
-          `/barters/create/?step=1`,
-          {},
-          // { query: { step: (sectionIndex + 1).toString() } },
-          {
-            shallow: true,
-          }
-        );
+        // router.push(
+        //   `/barters/create/?step=1`,
+        //   {},
+        //   // { query: { step: (sectionIndex + 1).toString() } },
+        //   {
+        //     shallow: true,
+        //   }
+        // );
       }
     }
   }, [router]);
 
   // when the sectionIndex updates, update the url parameter
   useEffect(() => {
-    if (sectionIndex < formSections.length - 1) {
-      router.push(`/barters/create/?step=${sectionIndex + 1}`, undefined, {
-        shallow: true,
-      });
+    console.log("sectionIndex", sectionIndex);
+    console.log("formSections.length-1", formSections.length-1);
+    if (router && router !== null && router !== undefined) {
+      if (sectionIndex < formSections.length - 1) {
+        router.push(`/barters/create/?step=${sectionIndex + 1}`, undefined, {
+          shallow: true,
+        });
+      }
     }
-  }, [sectionIndex]);
+  }, [sectionIndex, formSections]);
 
   // when the barterType changes,
   // add additional fields from the newly chosen type

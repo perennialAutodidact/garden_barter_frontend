@@ -71,7 +71,7 @@ export const authSlice = createSlice({
         state.authLoadingStatus = "PENDING";
       })
       .addCase(refresh.fulfilled, (state) => {
-        // state.authLoadingStatus = "IDLE";
+        state.authLoadingStatus = "IDLE";
       })
       .addCase(refresh.rejected, (state) => {
         state.isAuthenticated = false;

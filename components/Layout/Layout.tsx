@@ -71,4 +71,3 @@ function Layout({ children }) {
 
 export default Layout;
 
-export const getServerSideProps = async () => {};
