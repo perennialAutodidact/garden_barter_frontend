@@ -33,7 +33,7 @@ const FormSection = ({
           case "text":
             return (
               <div
-                className={`form-group mt-3 ${field.columnClasses}`}
+                className={`form-group mt-3 ${field.columnClasses || ""}`}
                 key={`field-${i}`}
               >
                 <label htmlFor={field.name} className="h5 form-label">
@@ -45,6 +45,7 @@ const FormSection = ({
                 <input
                   type="text"
                   name={field.name}
+                  id={field.name}
                   className={`form-control ${errors[field.name] &&
                   errors[field.name].length > 0
                     ? "is-invalid"
@@ -57,7 +58,11 @@ const FormSection = ({
                 {errors[field.name] &&
                   errors[field.name].length > 0 &&
                   errors[field.name].map(message =>
-                    <p className="m-0 text-danger" key={message}>
+                    <p
+                      className="m-0 text-danger"
+                      data-testid={`BarterFormError-${field.name}`}
+                      key={message}
+                    >
                       {message}
                     </p>
                   )}
@@ -67,7 +72,7 @@ const FormSection = ({
           case "radio":
             return (
               <div
-                className={`form-group mt-3 ${field.columnClasses}`}
+                className={`form-group mt-3 ${field.columnClasses || ""}`}
                 key={`field-${i}`}
               >
                 {field.required
@@ -76,7 +81,11 @@ const FormSection = ({
                       {errors[field.name] &&
                         errors[field.name].length > 0 &&
                         errors[field.name].map(message =>
-                          <span className="m-0 text-danger" key={message}>
+                          <span
+                            className="m-0 text-danger"
+                            data-testid={`BarterFormError-${field.name}`}
+                            key={message}
+                          >
                             {message}
                           </span>
                         )}
@@ -92,6 +101,7 @@ const FormSection = ({
                       type="radio"
                       className="form-check-input"
                       name={field.name}
+                      id={field.name}
                       value={choice.value}
                       onChange={e => handleChange(e)}
                       defaultChecked={formData[field.name] === choice.value} // if form state value equals radio value
@@ -111,17 +121,17 @@ const FormSection = ({
           case "checkbox":
             return (
               <div
-                className={`form-group mt-3 ${field.columnClasses}`}
+                className={`form-group mt-3 ${field.columnClasses || ""}`}
                 key={`field-${i}`}
               >
                 {field.choices.map((choice, i) =>
                   <div className="d-flex " key={choice.label}>
                     <input
                       type="checkbox"
+                      id={field.name}
                       className={`form-check-input`}
                       onChange={e => handleChange(e)}
                       checked={formData[field.name] === true}
-                      //   defaultChecked={false}
                       value={formData[field.name]}
                       name={field.name}
                       data-fieldindex={i}
@@ -138,7 +148,7 @@ const FormSection = ({
           case "number":
             return (
               <div
-                className={`form-group mt-3 ${field.columnClasses}`}
+                className={`form-group mt-3 ${field.columnClasses || ""}`}
                 key={`field-${i}`}
               >
                 <label htmlFor={field.name} className="h5 form-label">
@@ -149,14 +159,10 @@ const FormSection = ({
                 </label>
                 <input
                   type="number"
+                  id={field.name}
                   name={field.name}
                   value={formData[field.name]} // value from form state
                   className={`form-control`}
-                  //   className={`form-control ${(field.errors as string[]).includes(
-                  //     field.name
-                  //   )
-                  //     ? "is-invalid"
-                  //     : ""}`}
                   onInput={e => handleChange(e)}
                   data-fieldindex={i}
                   {...field.additionalProps}
@@ -168,7 +174,7 @@ const FormSection = ({
           case "textArea":
             return (
               <div
-                className={`form-group mt-3 ${field.columnClasses}`}
+                className={`form-group mt-3 ${field.columnClasses || ""}`}
                 key={`field-${i}`}
               >
                 <label htmlFor={field.name} className="h5 form-label">
@@ -180,6 +186,7 @@ const FormSection = ({
                 <textarea
                   name={field.name}
                   value={formData[field.name]}
+                  id={field.name}
                   rows={5}
                   className={`form-control ${errors[field.name] &&
                   errors[field.name].length > 0
@@ -192,7 +199,11 @@ const FormSection = ({
                 {errors[field.name] &&
                   errors[field.name].length > 0 &&
                   errors[field.name].map(message =>
-                    <p className="m-0 text-danger" key={message}>
+                    <p
+                      className="m-0 text-danger"
+                      data-testid={`BarterFormError-${field.name}`}
+                      key={message}
+                    >
                       {message}
                     </p>
                   )}
@@ -203,7 +214,7 @@ const FormSection = ({
           case "select":
             return (
               <div
-                className={`form-group mt-3 ${field.columnClasses}`}
+                className={`form-group mt-3 ${field.columnClasses || ""}`}
                 key={`field-${i}`}
               >
                 <label htmlFor={field.name} className="h5 form-label">
@@ -229,7 +240,11 @@ const FormSection = ({
                 {errors[field.name] &&
                   errors[field.name].length > 0 &&
                   errors[field.name].map(message =>
-                    <p className="m-0 text-danger" key={message}>
+                    <p
+                      className="m-0 text-danger"
+                      data-testid={`BarterFormError-${field.name}`}
+                      key={message}
+                    >
                       {message}
                     </p>
                   )}

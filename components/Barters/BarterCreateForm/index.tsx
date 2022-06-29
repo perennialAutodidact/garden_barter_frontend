@@ -32,7 +32,7 @@ const BarterCreateForm = () => {
     {
       name: "genus",
       type: "text",
-      defaultValue: "",
+      value: "",
       label: "Genus",
       required: false,
       additionalProps: {},
@@ -40,7 +40,7 @@ const BarterCreateForm = () => {
     {
       name: "species",
       type: "text",
-      defaultValue: "",
+      value: "",
       label: "Species",
       required: false,
       additionalProps: {},
@@ -48,7 +48,7 @@ const BarterCreateForm = () => {
     {
       name: "commonName",
       type: "text",
-      defaultValue: "",
+      value: "",
       label: "Common Name",
       required: false,
       additionalProps: {},
@@ -60,10 +60,10 @@ const BarterCreateForm = () => {
       {
         name: "yearPackaged",
         type: "number",
-        defaultValue: dayjs().year(),
+        value: dayjs().year(),
         label: "Year Packaged",
         required: false,
-        additionalProps: { defaultValue: currentYear, max: currentYear },
+        additionalProps: { value: currentYear, max: currentYear },
       },
     ],
     plant: [...PLANT_FIELDS],
@@ -72,7 +72,7 @@ const BarterCreateForm = () => {
       {
         name: "dimensions",
         type: "text",
-        defaultValue: "",
+        value: "",
         label: "Dimensions",
         required: false,
         additionalProps: { placeholder: "Height x Width x Depth" },
@@ -82,7 +82,7 @@ const BarterCreateForm = () => {
       {
         name: "dimensions",
         type: "text",
-        defaultValue: "",
+        value: "",
         label: "Dimensions",
         required: false,
         additionalProps: { placeholder: "Height x Width x Depth" },
@@ -327,7 +327,6 @@ const BarterCreateForm = () => {
    * variable based on the direction paramater
    */
   const changeFormSection = (direction: "next" | "prev") => {
-    console.log("changeFormSection");
     const sectionIsValid = validateSection(formSections[sectionIndex]);
     switch (direction) {
       case "next":
@@ -390,8 +389,8 @@ const BarterCreateForm = () => {
 
   // when the sectionIndex updates, update the url parameter
   useEffect(() => {
-    console.log("sectionIndex", sectionIndex);
-    console.log("formSections.length-1", formSections.length-1);
+    // console.log("sectionIndex", sectionIndex);
+    // console.log("formSections.length-1", formSections.length-1);
     if (router && router !== null && router !== undefined) {
       if (sectionIndex < formSections.length - 1) {
         router.push(`/barters/create/?step=${sectionIndex + 1}`, undefined, {
@@ -408,7 +407,7 @@ const BarterCreateForm = () => {
       ADDITIONAL_FIELDS[formData.barterType].forEach((field) => {
         setFormData((formData) => ({
           ...formData,
-          [field.name]: field.defaultValue,
+          [field.name]: field.value,
         }));
       });
     setFormSections((formSections) => {
