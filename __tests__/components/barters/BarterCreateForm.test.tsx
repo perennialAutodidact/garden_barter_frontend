@@ -134,15 +134,21 @@ describe("<BarterCreateForm/>", () => {
     const formButton = getByText(/next/i);
     const validationFunction = jest
       .fn()
-      .mockResolvedValue(true);
+      .mockResolvedValueOnce(true)
+      .mockResolvedValueOnce(true)
     formButton.onclick = jest
       .fn()
       .mockImplementation(() => validationFunction());
 
-    waitFor(async () => {
+      const stepNumber = getByText(/\d{1} of \d{1}/i)
+      await user.click(formButton)
+      await user.click(formButton)
+      await user.click(formButton)
+      await user.click(formButton)
+      debug(stepNumber)
 
-    })
+    expect(validationFunction).toHaveBeenCalledTimes(4)
 
-    expect(await findByText(/5 of 5/i)).toBeInTheDocument();
+
   });
 });
