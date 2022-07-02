@@ -23,9 +23,9 @@ const FormSection = ({
           {BARTER_ICONS[formData.barterType] || ""}
           {titleize(formData.barterType || "")}
         </p>}
-      <p className="display-4 m-0">
+      <header className="display-4 m-0">
         {sectionData.headerText && titleize(sectionData.headerText)}
-      </p>
+      </header>
 
       {sectionData.fields.map((field, i) => {
         switch (field.type) {
@@ -131,15 +131,15 @@ const FormSection = ({
                       id={field.name}
                       className={`form-check-input`}
                       onChange={e => handleChange(e)}
-                      checked={formData[field.name] === true}
-                      value={formData[field.name]}
+                      checked={formData[field.name]}
+                    //   value={formData[field.name]}
                       name={field.name}
                       data-fieldindex={i}
                       {...field.additionalProps}
                     />
-                    <span className="ms-2 fw-bold">
+                    <label htmlFor={field.name} className="ms-2 fw-bold">
                       {choice.label}
-                    </span>
+                    </label>
                   </div>
                 )}
               </div>
