@@ -1,9 +1,11 @@
 import React, { ReactNode } from "react";
+import "@testing-library/react/dont-cleanup-after-each";
 import {
   render,
   RenderResult,
   cleanup,
   waitFor,
+  screen,
   findAllByTestId,
   getByLabelText,
   queryByTestId
@@ -14,7 +16,6 @@ import userEvent from "@testing-library/user-event";
 import { NextRouter } from "next/router";
 import { createMockRouter } from "../../utils/createMockRouter";
 import BarterCreatePage from "../../../pages/barters/create";
-import {screen}from'../../utils/utils'
 
 let documentBody: RenderResult;
 // let useRouter: jest.Mock<nextRouter.NextRouter>;
@@ -53,57 +54,27 @@ const setupBarterCreateForm = (
   });
 
 describe("<BarterCreateForm/>", () => {
-    beforeAll(()=>{
+    afterAll(()=>{
+        cleanup()
     })
-  beforeEach(() => {
-    cleanup();
-  });
-  it("Should render the first form page", () => {
-    const {
-      getByText,
-      queryByText,
-      getByTestId,
-      debug
-    }: RenderResult = setupBarterCreateForm(
-      <BarterCreatePage />,
-      rootState,
-      createMockRouter()
-    );
-    
+  it("should validate step 1 before moving to step 2", async () => {
+    setupBarterCreateForm(<BarterCreatePage />, rootState, createMockRouter());
+    const { getByTestId, getByText, queryByText, findAllByTestId } = screen;
+    const user = userEvent.setup();
+    const nextButton = getByText(/next/i);
+    nextButton.onclick = jest.fn();
 
-    // expect to be on page 1
-    expect(getByText(/I have.../i)).toBeInTheDocument();
+    // STEP 1 - I HAVE...
+
     expect(getByText(/1 of 5/i)).toBeInTheDocument();
-
-    expect(getByText(/next/i)).toBeInTheDocument();
 
     // the back button will not exist on the first step of the form
     expect(queryByText(/back/i)).not.toBeInTheDocument();
-  });
 
-  it("E2E form interaction", async () => {
-    let {
-      getByText,
-      getByLabelText,
-      getByTestId,
-      findByText,
-      findAllByTestId,
-      queryAllByTestId,
-      debug
-    }: RenderResult = setupBarterCreateForm(
-      <BarterCreatePage />,
-      rootState,
-      createMockRouter()
-    );
-
-    const user = userEvent.setup();
-    const formButton = getByText(/next/i);
-    formButton.onclick = jest.fn();
-
-    // STEP 1 - I HAVE...
+    // radio is unchecked by default, rendering validation errors when next button is clicked
     expect(getByTestId("BarterTypeRadio-seed")).not.toBeChecked();
-    await user.click(formButton);
-    // click the 'seed' radio button to select it
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(1);
     expect(
       (await findAllByTestId("BarterFormError-barterType")).length
     ).toBeGreaterThan(0);
@@ -111,26 +82,33 @@ describe("<BarterCreateForm/>", () => {
     // click the 'seed' radio button to select it
     await user.click(getByTestId("BarterTypeRadio-seed"));
     expect(getByTestId("BarterTypeRadio-seed")).toBeChecked();
+
     // click the 'next' button
-    await user.click(formButton);
-    expect(formButton.onclick).toHaveBeenCalled();
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(2);
+  });
 
-    // expect that the form step changes from 1 to 2
-    expect(await findByText(/general info/i)).toBeInTheDocument();
-    expect(await findByText(/2 of 5/i)).toBeInTheDocument();
-
-    // click the 'back' button and expect the step to change from 2 to 1
-    await user.click(getByText(/back/i));
-    expect(await findByText(/i have.../i)).toBeInTheDocument();
-    expect(await findByText(/1 of 5/i)).toBeInTheDocument();
-
-    await user.click(formButton); // to step 2
-
+  it("should validate title and description before moving to step 3", async () => {
     // STEP 2 - GENERAL INFO
     //
-    
+    const {
+      getByLabelText,
+      getByText,
+      findAllByTestId,
+      queryAllByTestId
+    } = screen;
+
+    const user = userEvent.setup();
+    const nextButton = getByText(/next/i);
+    nextButton.onclick = jest.fn();
+
+    // expect that the form step changes from 1 to 2
+    expect(getByText(/general info/i)).toBeInTheDocument();
+    expect(getByText(/2 of 5/i)).toBeInTheDocument();
+
     // fail to move to next step because title and description are blank
-    await user.click(formButton); 
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(1);
     expect(
       (await findAllByTestId("BarterFormError-title")).length
     ).toBeGreaterThan(0);
@@ -142,10 +120,10 @@ describe("<BarterCreateForm/>", () => {
     const titleField = getByLabelText(/title/i);
     await user.type(titleField, "test title");
     await waitFor(async () => {
-        expect(queryAllByTestId("BarterFormError-title")).toHaveLength(0);
+      expect(queryAllByTestId("BarterFormError-title")).toHaveLength(0);
     });
     expect(titleField).toHaveValue("test title");
-    
+
     // change descriptionField value to make title error disappear
     const descriptionField = getByLabelText(/description/i);
     await user.type(descriptionField, "test description");
@@ -154,10 +132,160 @@ describe("<BarterCreateForm/>", () => {
     });
     expect(descriptionField).toHaveValue("test description");
 
-
-    await user.click(formButton); // to step 3
-
-    expect()
+    await user.click(nextButton); // to step 3
+    expect(nextButton.onclick).toHaveBeenCalledTimes(2);
   });
-  // expect(validationFunction).toHaveBeenCalledTimes(4)
+
+  it(`should render step 3 with a 'back' link and
+       'next' button with step number label`, async () => {
+    // STEP 3 - ADDITIONAL INFO
+    // step 3 has no required fields, thus no validation logic
+    const { getByText } = screen;
+
+    const user = userEvent.setup();
+    const nextButton = getByText(/next/i);
+    nextButton.onclick = jest.fn();
+    const backButton = getByText(/back/i);
+    backButton.onclick = jest.fn();
+
+    expect(getByText(/3 of 5/i)).toBeInTheDocument();
+
+    // back button should go back to step 2
+    expect(backButton).toBeInTheDocument();
+    await user.click(backButton);
+    expect(getByText(/2 of 5/i)).toBeInTheDocument();
+    expect(backButton.onclick).toHaveBeenCalledTimes(1);
+
+    // progress to step 3 again
+    expect(nextButton).toBeInTheDocument();
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(1);
+
+    // to step 4...
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(2);
+  });
+
+  it(`should validate willTradeFor and isFree 
+      before moving to step 5`, async () => {
+    // STEP 4 - WILL TRADE FOR
+
+    const {
+      getByLabelText,
+      getByText,
+      findAllByTestId,
+      queryAllByTestId
+    } = screen;
+
+    const user = userEvent.setup();
+    const nextButton = getByText(/next/i);
+    nextButton.onclick = jest.fn();
+    const backButton = getByText(/back/i);
+    backButton.onclick = jest.fn();
+
+    expect(getByText(/4 of 5/i)).toBeInTheDocument();
+
+    // fail to progress to step 5
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(1);
+    expect(
+      (await findAllByTestId("BarterFormError-willTradeFor")).length
+    ).toBeGreaterThan(0);
+
+    // check the isFree checkbox to mitigate the error
+    let isFreeCheckbox = getByLabelText(/free/i);
+    expect(isFreeCheckbox).not.toBeChecked();
+    await user.click(isFreeCheckbox);
+    await waitFor(async () => {
+      expect(queryAllByTestId("BarterFormError-willTradeFor")).toHaveLength(0);
+    });
+    expect(isFreeCheckbox).toBeChecked();
+
+    // click nextButton to go to page 5
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(2);
+    await waitFor(() => {
+      expect(getByText(/5 of 5/i)).toBeInTheDocument();
+    });
+
+    // go back to step 4
+    await user.click(backButton);
+    expect(backButton.onclick).toHaveBeenCalledTimes(1);
+
+    isFreeCheckbox = getByLabelText(/free/i);
+    // uncheck isFree checkbox
+    await user.click(isFreeCheckbox);
+    await waitFor(async () => {
+      expect(queryAllByTestId("BarterFormError-willTradeFor")).toHaveLength(0);
+      expect(isFreeCheckbox).not.toBeChecked();
+    });
+
+    // fail to progress to step 5
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(3);
+
+    await waitFor(async () => {
+      expect(
+        queryAllByTestId("BarterFormError-willTradeFor").length
+      ).toBeGreaterThan(0);
+    });
+
+    // change value of willTradeFor field to remove error message
+    const willTradeForField = getByLabelText(/will trade for/i);
+    await user.type(willTradeForField, "test will trade for");
+    await waitFor(async () => {
+      expect(queryAllByTestId("BarterFormError-willTradeFor")).toHaveLength(0);
+    });
+    expect(willTradeForField).toHaveValue("test will trade for");
+
+    // fail to progress to step 5 if isFree is checked and willTradeFor is not blank
+    await user.click(isFreeCheckbox);
+    await user.click(nextButton);
+
+    await waitFor(async () => {
+      expect(
+        queryAllByTestId("BarterFormError-willTradeFor").length
+      ).toBeGreaterThan(0);
+      expect(isFreeCheckbox).toBeChecked();
+    });
+    expect(nextButton.onclick).toHaveBeenCalledTimes(4);
+
+    // uncheck isFree
+    await user.click(isFreeCheckbox);
+    expect(isFreeCheckbox).not.toBeChecked();
+
+    // progress to step 5
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(5);
+  });
+
+  it("should submit the form and redirect to barter preview page", async () => {
+    const { getByText, queryByText, findByText } = screen;
+    const user = userEvent.setup();
+    const submitButton = getByText(/submit/i);
+    submitButton.onclick = jest.fn();
+    const backButton = getByText(/back/i);
+    backButton.onclick = jest.fn();
+
+    expect(getByText(/5 of 5/i)).toBeInTheDocument();
+
+    expect(queryByText(/next/i)).not.toBeInTheDocument();
+
+    await user.click(backButton);
+    expect(backButton.onclick).toHaveBeenCalledTimes(1);
+    await waitFor(async () => {
+      expect(getByText(/4 of 5/i)).toBeInTheDocument();
+    });
+
+    // back to step 5
+    const nextButton = getByText(/next/i)
+    nextButton.onclick = jest.fn()
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(1);
+    await waitFor(async() => {
+      expect(getByText(/5 of 5/i)).toBeInTheDocument();
+      expect(submitButton).toBeInTheDocument()
+    });
+
+  });
 });
