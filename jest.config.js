@@ -16,9 +16,6 @@ const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   // only target files that match this regex pattern:
   testRegex: '(/__tests__/.*\\.test)\\.(ts|tsx|js)$',
-
-  // disable auto cleanup afterEach
-  setupFiles: ['@testing-library/react/dont-cleanup-after-each']
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
