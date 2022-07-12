@@ -1,4 +1,4 @@
-import React, { RefObject, ReactNode, FormEventHandler, SyntheticEvent } from "react";
+import React, { RefObject, ReactNode, FormEventHandler, SyntheticEvent, FormEvent } from "react";
 import { User } from "./auth";
 
 export interface Barter {
@@ -136,8 +136,22 @@ export interface BarterFormSectionProps {
   changeFormSection: Function;
   barterType: string;
   formData: BarterFormData;
+  totalSections: string;
+  isFirstSection: boolean;
   isLastSection: boolean;
   errors: BarterFormErrors;
+}
+
+export interface BarterFormReviewSectionProps {
+    formData: BarterFormData;
+}
+
+export interface BarterFormInputProps {
+    fields: BarterFormSectionField[];
+    errors: BarterFormErrors;
+    formData: BarterFormData;
+    handleChange: FormEventHandler;
+    handleSubmit: FormEventHandler;
 }
 
 export interface BarterFormErrors {

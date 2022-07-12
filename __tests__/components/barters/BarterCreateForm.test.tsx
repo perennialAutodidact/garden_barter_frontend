@@ -54,9 +54,9 @@ const setupBarterCreateForm = (
   });
 
 describe("<BarterCreateForm/>", () => {
-    afterAll(()=>{
-        cleanup()
-    })
+  afterAll(() => {
+    cleanup();
+  });
   it("should validate step 1 before moving to step 2", async () => {
     setupBarterCreateForm(<BarterCreatePage />, rootState, createMockRouter());
     const { getByTestId, getByText, queryByText, findAllByTestId } = screen;
@@ -66,7 +66,9 @@ describe("<BarterCreateForm/>", () => {
 
     // STEP 1 - I HAVE...
 
-    expect(getByText(/1 of 5/i)).toBeInTheDocument();
+    expect(getByText(/1 of 6/i)).toBeInTheDocument();
+
+    screen.debug();
 
     // the back button will not exist on the first step of the form
     expect(queryByText(/back/i)).not.toBeInTheDocument();
@@ -104,7 +106,7 @@ describe("<BarterCreateForm/>", () => {
 
     // expect that the form step changes from 1 to 2
     expect(getByText(/general info/i)).toBeInTheDocument();
-    expect(getByText(/2 of 5/i)).toBeInTheDocument();
+    expect(getByText(/2 of 6/i)).toBeInTheDocument();
 
     // fail to move to next step because title and description are blank
     await user.click(nextButton);
@@ -148,12 +150,12 @@ describe("<BarterCreateForm/>", () => {
     const backButton = getByText(/back/i);
     backButton.onclick = jest.fn();
 
-    expect(getByText(/3 of 5/i)).toBeInTheDocument();
+    expect(getByText(/3 of 6/i)).toBeInTheDocument();
 
     // back button should go back to step 2
     expect(backButton).toBeInTheDocument();
     await user.click(backButton);
-    expect(getByText(/2 of 5/i)).toBeInTheDocument();
+    expect(getByText(/2 of 6/i)).toBeInTheDocument();
     expect(backButton.onclick).toHaveBeenCalledTimes(1);
 
     // progress to step 3 again
@@ -183,7 +185,7 @@ describe("<BarterCreateForm/>", () => {
     const backButton = getByText(/back/i);
     backButton.onclick = jest.fn();
 
-    expect(getByText(/4 of 5/i)).toBeInTheDocument();
+    expect(getByText(/4 of 6/i)).toBeInTheDocument();
 
     // fail to progress to step 5
     await user.click(nextButton);
@@ -205,7 +207,7 @@ describe("<BarterCreateForm/>", () => {
     await user.click(nextButton);
     expect(nextButton.onclick).toHaveBeenCalledTimes(2);
     await waitFor(() => {
-      expect(getByText(/5 of 5/i)).toBeInTheDocument();
+      expect(getByText(/5 of 6/i)).toBeInTheDocument();
     });
 
     // go back to step 4
@@ -259,33 +261,34 @@ describe("<BarterCreateForm/>", () => {
     expect(nextButton.onclick).toHaveBeenCalledTimes(5);
   });
 
-  it("should submit the form and redirect to barter preview page", async () => {
-    const { getByText, queryByText, findByText } = screen;
+  it("should validate section 5 before moving on to section 6", async () => {
+    const { getByText, queryAllByTestId, findByText } = screen;
     const user = userEvent.setup();
-    const submitButton = getByText(/submit/i);
-    submitButton.onclick = jest.fn();
     const backButton = getByText(/back/i);
     backButton.onclick = jest.fn();
 
-    expect(getByText(/5 of 5/i)).toBeInTheDocument();
-
-    expect(queryByText(/next/i)).not.toBeInTheDocument();
+    expect(getByText(/5 of 6/i)).toBeInTheDocument();
 
     await user.click(backButton);
     expect(backButton.onclick).toHaveBeenCalledTimes(1);
-    await waitFor(async () => {
-      expect(getByText(/4 of 5/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getByText(/4 of 6/i)).toBeInTheDocument();
     });
 
     // back to step 5
-    const nextButton = getByText(/next/i)
-    nextButton.onclick = jest.fn()
+    const nextButton = getByText(/next/i);
+    nextButton.onclick = jest.fn();
     await user.click(nextButton);
     expect(nextButton.onclick).toHaveBeenCalledTimes(1);
-    await waitFor(async() => {
-      expect(getByText(/5 of 5/i)).toBeInTheDocument();
-      expect(submitButton).toBeInTheDocument()
+    await waitFor(async () => {
+      expect(getByText(/5 of 6/i)).toBeInTheDocument();
     });
 
+    await user.click(nextButton);
+    await waitFor(async () => {
+      expect(
+        queryAllByTestId("BarterFormError-postalCode").length
+      ).toBeGreaterThan(0);
+    });
   });
 });

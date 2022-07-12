@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 function Layout({ children }) {
   const dispatch = useAppDispatch();
   const router = useRouter();
-
+  
   // load bootstrap and initialize tool tips
   useEffect(() => {
     (async () => {
