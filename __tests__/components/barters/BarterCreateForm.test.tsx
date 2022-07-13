@@ -8,7 +8,8 @@ import {
   screen,
   findAllByTestId,
   getByLabelText,
-  queryByTestId
+  queryByTestId,
+  findByTestId
 } from "../../utils/utils";
 import BarterCreateForm from "../../../components/Barters/BarterCreateForm";
 import { initialState as rootState, RootState } from "../../../store/store";
@@ -262,7 +263,7 @@ describe("<BarterCreateForm/>", () => {
   });
 
   it("should validate section 5 before moving on to section 6", async () => {
-    const { getByText, queryAllByTestId, findByText } = screen;
+    const { getByText, getByLabelText, queryAllByTestId, findByTestId  } = screen;
     const user = userEvent.setup();
     const backButton = getByText(/back/i);
     backButton.onclick = jest.fn();
@@ -285,10 +286,59 @@ describe("<BarterCreateForm/>", () => {
     });
 
     await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(2)
     await waitFor(async () => {
       expect(
         queryAllByTestId("BarterFormError-postalCode").length
-      ).toBeGreaterThan(0);
+        ).toBeGreaterThan(0);
     });
+    
+    const postalCodeInput = getByLabelText(/postal code/i)
+    await user.type(postalCodeInput, '97233')
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(3)
+    await waitFor(async () => {
+      expect(
+        queryAllByTestId("BarterFormError-postalCode")
+      ).toHaveLength(0)
+    });
+
+    await waitFor(() => {
+        expect(getByText(/6 of 6/i)).toBeInTheDocument();
+      });
   });
+
+  it("Should submit form data and redirect to barter list", async ()=>{
+
+    const {getByText} = screen;
+
+    const user = userEvent.setup();
+    const backButton = getByText(/back/i);
+    backButton.onclick = jest.fn();
+
+    expect(getByText(/6 of 6/i)).toBeInTheDocument();
+
+    await user.click(backButton);
+    expect(backButton.onclick).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(getByText(/5 of 6/i)).toBeInTheDocument();
+    });
+
+    // back to step 5
+    const nextButton = getByText(/next/i);
+    nextButton.onclick = jest.fn();
+    await user.click(nextButton);
+    expect(nextButton.onclick).toHaveBeenCalledTimes(1);
+    await waitFor(async () => {
+      expect(getByText(/6 of 6/i)).toBeInTheDocument();
+    });
+
+    const submitButton = getByText(/submit/i)
+    submitButton.onclick = jest.fn()
+    expect(submitButton).toBeInTheDocument()
+    await user.click(submitButton)
+    expect(submitButton.onclick).toHaveBeenCalledTimes(1)
+
+    
+  })
 });

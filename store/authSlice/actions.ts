@@ -60,16 +60,19 @@ export const verify = createAsyncThunk(
 export const refresh = createAsyncThunk(
   "auth/refresh",
   async ({}, { rejectWithValue }) => {
-    return await axios.post(
-      `/api/auth/refresh/`,
-      {},
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
+    return await axios
+      .post(
+        `/api/auth/refresh/`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          }
         }
-      }
-    );
+      )
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.response.data));
   }
 );
 

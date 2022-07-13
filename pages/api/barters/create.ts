@@ -29,6 +29,8 @@ export default async (req, res) => {
         }
       );
 
+        // console.log(apiRes.data)
+
       return res.status(200).json(apiRes.data);
     } catch (error) {
       if (error.response) {

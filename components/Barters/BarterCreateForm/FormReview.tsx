@@ -4,27 +4,35 @@ import { BarterFormReviewSectionProps } from "../../../ts/interfaces/barters";
 import { formSectionsData } from "./formSectionsData";
 import { QUANTITY_UNITS } from "../../../constants";
 
-const FormReviewSection = ({ formData }: BarterFormReviewSectionProps) => {
-  const getWillTradeForValue = (): string =>
-    formData.isFree ? "Free (no trade required)" : formData.willTradeFor;
+const FormReviewSection = ({
+  formData,
+  allFormSections
+}: BarterFormReviewSectionProps) => {
 
-  const getQuantity = (): string =>
-    `${formData.quantity} ${QUANTITY_UNITS[formData.quantityUnits]}`;
+  const getWillTradeForValue = (): React.ReactNode =>
+    <p className="mb-3">
+      {formData.isFree ? "Free (no trade required)" : formData.willTradeFor}
+    </p>;
+
+  const getQuantity = (): React.ReactNode =>
+    <p className="mb-3">
+      {`${formData.quantity} ${QUANTITY_UNITS[formData.quantityUnits]}`}
+    </p>;
 
   return (
     <Fragment>
-      {formSectionsData.map(
+      {allFormSections.map(
         formSection =>
           formSection.name !== "iHave" &&
           formSection.name !== "review" &&
-          <div className="row">
+          <div className="row" key={formSection.name}>
             {formSection.fields.map(
               field =>
-                field.name !== "quantityUnits" &&
-                <div
-                  className={`ps-3 mb-3 text-break ${field.columnClasses ||
-                    ""}`}
-                >
+                ((field.name !== "quantityUnits" && formData[field.name]) ||
+                  (field.name === "willTradeFor" &&
+                    !formData[field.name] &&
+                    formData.isFree)) &&
+                <div className={`text-break ${field.columnClasses || ""}`} key={field.name}>
                   <h5 className="m-0">
                     {field.label}
                   </h5>
@@ -32,7 +40,10 @@ const FormReviewSection = ({ formData }: BarterFormReviewSectionProps) => {
                     ? getWillTradeForValue()
                     : field.name === "quantity" && formData.quantityUnits
                       ? getQuantity()
-                      : formData[field.name]}
+                      : field.name !== "isFree" &&
+                        <p className="mb-3">
+                          {formData[field.name]}
+                        </p>}
                 </div>
             )}
           </div>

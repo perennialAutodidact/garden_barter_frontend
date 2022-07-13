@@ -17,11 +17,13 @@ import { createAlert } from "../../../store/alertSlice";
 import dayjs from "dayjs";
 import { refresh } from "../../../store/authSlice/actions";
 import { formSectionsData } from "./formSectionsData";
+import Spinner from "../../Layout/Spinner";
 
 const BarterCreateForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
+  const { barterLoadingStatus } = useAppSelector(state => state.barters);
   const [currentYear, _] = useState<number>(new Date().getFullYear());
   const [formErrors, setFormErrors] = useState<BarterFormErrors>({});
 
@@ -61,7 +63,8 @@ const BarterCreateForm = () => {
         value: dayjs().year(),
         label: "Year Packaged",
         required: false,
-        additionalProps: { value: currentYear, max: currentYear }
+        additionalProps: { value: currentYear, max: currentYear },
+        columnClasses: "col-12 col-lg-6"
       }
     ],
     plant: [...PLANT_FIELDS],
@@ -73,7 +76,8 @@ const BarterCreateForm = () => {
         value: "",
         label: "Dimensions",
         required: false,
-        additionalProps: { placeholder: "Height x Width x Depth" }
+        additionalProps: { placeholder: "Height x Width x Depth" },
+        columnClasses: "col-12"
       }
     ],
     tool: [
@@ -83,35 +87,36 @@ const BarterCreateForm = () => {
         value: "",
         label: "Dimensions",
         required: false,
-        additionalProps: { placeholder: "Height x Width x Depth" }
+        additionalProps: { placeholder: "Height x Width x Depth" },
+        columnClasses: "col-12"
       }
     ]
   };
 
-  //   // fields required for all barters
-  //   const requiredFields = {
-  //     title: "Rake",
-  //     description:
-  //       "I have two identical rakes. Getting rid of one to make space.",
-  //     postalCode: "97233",
-  //     willTradeFor: "Black plastic planter pots",
-  //     isFree: false,
-  //     quantity: "",
-  //     quantityUnits: "NA",
-  //     barterType: "tool"
-  //   };
-
   // fields required for all barters
-  const requiredFields = {
-    title: "",
-    description: "",
-    postalCode: "",
-    willTradeFor: "",
-    isFree: false,
-    quantity: "",
-    quantityUnits: "",
-    barterType: ""
-  };
+//   const requiredFields = {
+//     title: "Rake",
+//     description:
+//       "I have two identical rakes. Getting rid of one to make space.",
+//     postalCode: "97233",
+//     willTradeFor: "Black plastic planter pots",
+//     isFree: false,
+//     quantity: "",
+//     quantityUnits: "NA",
+//     barterType: "tool"
+//   };
+
+//   fields required for all barters
+    const requiredFields = {
+      title: "",
+      description: "",
+      postalCode: "",
+      willTradeFor: "",
+      isFree: false,
+      quantity: "",
+      quantityUnits: "",
+      barterType: ""
+    };
 
   // state object for the form
   const [formData, setFormData] = useState<BarterFormData>({
@@ -231,8 +236,6 @@ const BarterCreateForm = () => {
     }
   };
 
- 
-
   // when the page loads, set url parameter to step 1
   // when the url parameter updates, update the sectionIndex
   useEffect(
@@ -240,10 +243,10 @@ const BarterCreateForm = () => {
       if (router && router !== null && router !== undefined) {
         if (
           router.query.step &&
-          parseInt(router.query.step as string) < formSections.length
+          parseInt(router.query.step as string) < formSections.length - 1
         ) {
           setSectionIndex(parseInt(router.query.step as string) - 1);
-        }
+        } 
       }
     },
     [router]
@@ -252,10 +255,10 @@ const BarterCreateForm = () => {
   // when the sectionIndex updates, update the url parameter
   useEffect(
     () => {
-      if (router && router !== null && router !== undefined) {
+      if (router && router !== null && router !== undefined) {  
         if (sectionIndex < formSections.length) {
           router.push(
-            `/barters/create/?step=${formSections[sectionIndex].number}`,
+            `/barters/create/?step=${sectionIndex+1}`,
             undefined,
             {
               shallow: true
@@ -334,54 +337,58 @@ const BarterCreateForm = () => {
             );
           })
           .catch(err => {
+            console.log("create barter error", err);
             router.push("/barters/create/?step=1", undefined, {
               shallow: true
             });
             if (err.errors) {
-              err.errors.forEach((error, index) => {
+                err.errors.forEach((error, index) => {
+                  dispatch(
+                    createAlert({
+                      id: index,
+                      text: error,
+                      level: "danger"
+                    })
+                  );
+                });
+            } else {
                 dispatch(
                   createAlert({
-                    id: index,
-                    text: error,
+                    id: 0,
+                    text: "Something went wrong. Please try again later",
                     level: "danger"
                   })
                 );
-              });
-            } else {
-              dispatch(
-                createAlert({
-                  id: 0,
-                  text: "Something went wrong. Please try again later",
-                  level: "danger"
-                })
-              );
             }
           });
       });
     }
+    // setSectionIndex(0)
   };
 
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col-12 col-lg-4 offset-lg-4">
-          <form
-            onSubmit={handleSubmit}
-            className="bg-light p-3 p-lg-5 mt-5 rounded shadow"
-          >
-            <FormSection
-              sectionData={formSections[sectionIndex]}
-              handleChange={handleChange}
-              handleSubmit={handleSubmit}
-              barterType={formData.barterType}
-              formData={formData}
-              changeFormSection={changeFormSection}
-              totalSections={formSections.length.toString()}
-              isFirstSection={sectionIndex === 0}
-              isLastSection={sectionIndex === formSections.length - 1}
-              errors={formErrors}
-            />
-          </form>
+          {!formSections[sectionIndex]? <Spinner /> :
+            <form
+              onSubmit={handleSubmit}
+              className="bg-light p-3 p-lg-5 mt-5 rounded shadow"
+            >
+              <FormSection
+                sectionData={formSections[sectionIndex]}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                barterType={formData.barterType}
+                formData={formData}
+                allFormSections={formSections}
+                changeFormSection={changeFormSection}
+                totalSections={formSections.length.toString()}
+                isFirstSection={sectionIndex === 0}
+                isLastSection={sectionIndex === formSections.length - 1}
+                errors={formErrors}
+              />
+            </form>}
         </div>
       </div>
     </div>

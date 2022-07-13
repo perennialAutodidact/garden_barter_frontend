@@ -4,7 +4,7 @@ import BarterItem from "./BarterItem";
 
 const BarterList = ({ barters }: BarterListProps) => {
   return (
-    <div className="row py-5">
+    <div className="row py-5" data-testid="BarterList">
       {barters && barters.length > 0
         ? barters.map(barter => <BarterItem barter={barter} key={barter.id} />)
         : <h1 className="h1 text-center">No Barters</h1>}

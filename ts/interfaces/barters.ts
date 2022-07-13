@@ -140,10 +140,12 @@ export interface BarterFormSectionProps {
   isFirstSection: boolean;
   isLastSection: boolean;
   errors: BarterFormErrors;
+  allFormSections: BarterFormSectionData[]
 }
 
 export interface BarterFormReviewSectionProps {
     formData: BarterFormData;
+    allFormSections: BarterFormSectionData[]
 }
 
 export interface BarterFormInputProps {

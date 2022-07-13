@@ -5,7 +5,6 @@ import { titleize } from "../../../utils/helpers";
 import { useAppSelector } from "../../../store/hooks";
 import FormFields from "./FormFields";
 import FormReview from "./FormReview";
-import Link from "next/link";
 
 const FormSection = ({
   sectionData,
@@ -16,7 +15,8 @@ const FormSection = ({
   changeFormSection,
   isFirstSection,
   isLastSection,
-  totalSections
+  totalSections,
+  allFormSections
 }: BarterFormSectionProps) => {
   const { barterLoadingStatus } = useAppSelector(state => state.barters);
 
@@ -24,18 +24,12 @@ const FormSection = ({
     <div className="row">
       {sectionData &&
         sectionData.name !== "iHave" &&
-        <p className="h3 text-primary    d-flex align-items-center gap-3">
-          {BARTER_ICONS[formData.barterType] || ""}
+        <p className="h3 text-primary d-flex align-items-center gap-3">
           {titleize(formData.barterType || "")}
+          {BARTER_ICONS[formData.barterType] || ""}
         </p>}
       <header className="display-4 m-0 d-flex">
         {sectionData.headerText && titleize(sectionData.headerText)}
-        {isLastSection &&
-          <Link href="/barters/create/">
-            <a className="d-flex align-items-end ms-3">
-              <i className="bi bi-pencil-fill text-primary h3" />
-            </a>
-          </Link>}
       </header>
 
       {!isLastSection
@@ -46,7 +40,7 @@ const FormSection = ({
             handleChange={handleChange}
             handleSubmit={handleSubmit}
           />
-        : <FormReview formData={formData} />}
+        : <FormReview formData={formData} allFormSections={allFormSections} />}
 
       {/* REQUIRED LEGEND */}
       {!isLastSection &&
