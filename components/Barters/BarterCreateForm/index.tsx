@@ -114,7 +114,7 @@ const BarterCreateForm = () => {
       willTradeFor: "",
       isFree: false,
       quantity: "",
-      quantityUnits: "",
+      quantityUnits: "NA",
       barterType: ""
     };
 
