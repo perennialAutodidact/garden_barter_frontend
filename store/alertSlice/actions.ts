@@ -1,12 +1,12 @@
 import { Alert } from "../../ts/interfaces/alerts"
 
-export const createAlert = (message:Alert) => ({
+export const createAlert = (alert:Alert) => ({
     type: 'CREATE_MESSAGE',
-    payload: message
+    payload: alert
 })
 
-export const deleteAlert = (message:Alert) => ({
+export const deleteAlert = (alert:Alert) => ({
     type: 'DELETE_MESSAGE',
-    payload: message
+    payload: alert
 })
 
