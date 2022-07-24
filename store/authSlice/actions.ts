@@ -79,7 +79,7 @@ export const refresh = createAsyncThunk(
 export const logout = createAsyncThunk(
   "auth/logout",
   async ({}, { rejectWithValue }) => {
-    const url = "api/auth/logout/";
+    const url = "/api/auth/logout/";
     return await axios
       .post(
         url,
