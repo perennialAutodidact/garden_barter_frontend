@@ -39,7 +39,7 @@ const BarterItem = ({ barter }: BarterItemProps) => {
                 justify-content-center
             "
         >
-            <ArrowButton />
+            <ArrowButton hrefUrl="/barters/trade/"/>
           </div>
           <div className="d-none d-lg-block col-1 py-3 p-0 border-bottom border-primary bg-light-dark" />
 
@@ -51,7 +51,7 @@ const BarterItem = ({ barter }: BarterItemProps) => {
                     </div >
                   </div>
                   <div className="col-3 d-flex justify-content-center d-lg-none">
-                        <ArrowButton />
+                        <ArrowButton hrefUrl="/barters/trade/"/>
                   </div>
                   <div className="col-12 pt-3">
                     <p
