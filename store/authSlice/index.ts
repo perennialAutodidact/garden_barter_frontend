@@ -19,7 +19,7 @@ export const authSlice = createSlice({
       state.signupSuccess = false;
     },
     resetAuthLoadingStatus(state) {
-      state.authLoadingStatus = "IDLE";
+      state.authLoadingStatus = "PENDING";
     }
   },
   extraReducers: (builder) => {
