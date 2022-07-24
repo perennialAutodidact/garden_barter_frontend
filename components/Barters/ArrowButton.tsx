@@ -2,10 +2,13 @@ import React, {useEffect, useRef} from 'react'
 import {RiArrowLeftRightLine} from 'react-icons/ri'
 import Link from 'next/link'
 
-export const ArrowButton = () => {
+interface ArrowButtonProps {
+    hrefUrl: string
+}
 
+export const ArrowButton = ({hrefUrl}:ArrowButtonProps) => {
   return (
-      <Link href='/'>
+      <Link href={hrefUrl}>
         <div className="
                 arrow-button
                 h1
