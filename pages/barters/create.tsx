@@ -1,22 +1,11 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { useRouter } from "next/router";
+import { useProtectedRouter } from "../../hooks/useProtectedRouter";
 import BarterCreateForm from "../../components/Barters/BarterCreateForm";
 
 const BarterCreatePage = () => {
-  const router = useRouter();
-  const { isAuthenticated, authLoadingStatus } = useAppSelector(
-    state => state.auth
-  );
-
-  useEffect(
-    () => {
-      if (!isAuthenticated) {
-        router.push("/login?next=/barters/create/");
-      }
-    },
-    [isAuthenticated, authLoadingStatus]
-  );
+  const { router } = useProtectedRouter();
+  const { authLoadingStatus } = useAppSelector(state => state.auth);
 
   return (
     <div>
