@@ -208,6 +208,7 @@ const BarterCreateForm = () => {
       }
     });
 
+    console.log(validationErrors)
     return sectionIsValid;
   };
 
