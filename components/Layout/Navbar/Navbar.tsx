@@ -29,17 +29,19 @@ function GBNavbar() {
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow">
       <div className="container-fluid ps-lg-3 pe-lg-5">
         {/* LOGO */}
-        <a className="navbar-brand d-flex align-items-center gap-3" href="#">
-          <img
-            src="/images/garden_barter_logo.svg"
-            className="navbar-logo px-lg-3"
-            alt="Garden Barter Logo"
-          />
-          <h1 className="navbar-brand-heading text-success m-0">
-            Garden Barter
-          </h1>
-        </a>
-        {(authLoadingStatus) === "PENDING"
+        <Link href="/">
+          <a className="navbar-brand d-flex align-items-center gap-3">
+            <img
+              src="/images/garden_barter_logo.svg"
+              className="navbar-logo px-lg-3"
+              alt="Garden Barter Logo"
+            />
+            <h1 className="navbar-brand-heading text-success m-0">
+              Garden Barter
+            </h1>
+          </a>
+        </Link>
+        {authLoadingStatus === "PENDING"
           ? <div
               className="navbar-nav spinner-border text-success d-lg-none"
               role="status"
@@ -64,8 +66,7 @@ function GBNavbar() {
           className="collapse navbar-collapse d-lg-flex justify-content-lg-end align-items-lg-center"
           id="navbarNav"
         >
-
-          {(authLoadingStatus) === "PENDING"
+          {authLoadingStatus === "PENDING"
             ? <div
                 className="navbar-nav spinner-border text-success"
                 role="status"
