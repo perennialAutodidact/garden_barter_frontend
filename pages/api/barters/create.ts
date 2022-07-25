@@ -18,7 +18,8 @@ export default async (req, res) => {
         `${API_URL}/barters/create/`,
         {
           formData: req.body.formData,
-          user: req.body.user
+          userData: req.body.user,
+          barterType: req.body.formData.barterType
         },
         {
           headers: {
