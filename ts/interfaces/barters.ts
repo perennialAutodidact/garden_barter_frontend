@@ -2,7 +2,7 @@ import React, { RefObject, ReactNode, FormEventHandler, SyntheticEvent, FormEven
 import { User } from "./auth";
 
 export interface Barter {
-  id: number;
+  uuid: string;
   creator: User;
   title: string;
   description: string;
@@ -42,16 +42,17 @@ export interface ProduceBarter extends Barter {
 export interface MaterialBarter extends Barter {}
 export interface ToolBarter extends Barter {}
 
+type AnyBarter = (Barter
+| SeedBarter
+| PlantBarter
+| ProduceBarter
+| MaterialBarter
+| ToolBarter);
+
 export interface BarterState {
-  barters: (
-    | Barter
-    | SeedBarter
-    | PlantBarter
-    | ProduceBarter
-    | MaterialBarter
-    | ToolBarter
-  )[];
+  barters: AnyBarter[];
   barterLoadingStatus: "PENDING" | "IDLE";
+  activeBarter: AnyBarter;
   page: number;
 }
 
@@ -76,6 +77,7 @@ export interface BarterFormData {
   longitude?: string;
   crossStreet1?: string;
   crossStreet2?: string;
+  dimensions?: string
 }
 
 export interface BartersHomePageProps {
@@ -87,10 +89,10 @@ export interface BarterListProps {
 }
 export interface BarterItemProps {
   barter: Barter;
+  showAllFields?: boolean;
 }
 
-export interface BarterItemHeaderProps {
-  icon: ReactNode;
+export interface BarterIconProps {
   barterType: string;
 }
 
