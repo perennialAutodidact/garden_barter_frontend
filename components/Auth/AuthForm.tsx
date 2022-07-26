@@ -88,15 +88,11 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
 
   useEffect(
     () => {
-      if (isAuthenticated && authLoadingStatus !== 'PENDING') {
-
+      if (isAuthenticated && authLoadingStatus !== "PENDING") {
         if (router && router.query) {
-          let next = router.query.next;
-          if (next) {
-            router.push(next as string);
-          }
+          let next = router.query.next || "/";
+          router.push(next as string);
         }
-        // router.push("/");
       }
     },
     [isAuthenticated, authLoadingStatus]
