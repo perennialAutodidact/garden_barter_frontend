@@ -1,17 +1,23 @@
 import React, {useEffect, useRef} from 'react'
 import {RiArrowLeftRightLine} from 'react-icons/ri'
 import Link from 'next/link'
+import { Barter } from '../../ts/interfaces/barters'
 
 interface ArrowButtonProps {
-    hrefUrl: string
+    hrefUrl: string,
+    barter: Barter
 }
 
-export const ArrowButton = ({hrefUrl}:ArrowButtonProps) => {
+export const ArrowButton = ({hrefUrl, barter}:ArrowButtonProps) => {
+    const {barterType, uuid:barterId } = barter
   return (
-      <Link href={hrefUrl}>
+      <Link href={{
+        pathname: `${hrefUrl}/[barterType]/[barterId]`,
+        query: {barterType, barterId}
+      }}>
         <div className="
                 arrow-button
-                h1
+                h2
                 m-0
                 bg-warning-dark
                 rounded-circle shadow
