@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from "react";
 import { useAppSelector } from "../store/hooks";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 
 export const useProtectedRouter = () => {
-  const router = useRouter();
+  const router:NextRouter = useRouter();
   const { isAuthenticated, authLoadingStatus } = useAppSelector(
     (state) => state.auth
   );
@@ -11,7 +11,14 @@ export const useProtectedRouter = () => {
   useEffect(() => {
     if (router && router !== null && router !== undefined) {
       if (!isAuthenticated && authLoadingStatus === "IDLE") {
-        router.push(`/login?next=${router.pathname}`);
+
+        // const query = {next:router.asPath}
+        const query = {next:router.asPath}
+
+        router.push({
+          pathname: '/login',
+          query,
+        });
       }
     }
   }, [isAuthenticated, authLoadingStatus]);
