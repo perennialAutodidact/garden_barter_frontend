@@ -12,7 +12,8 @@ export const PLANT_FIELDS = [
     value: "",
     label: "Genus",
     required: false,
-    additionalProps: {}
+    additionalProps: {},
+    columnClasses: "col-12"
   },
   {
     name: "species",
@@ -20,7 +21,8 @@ export const PLANT_FIELDS = [
     value: "",
     label: "Species",
     required: false,
-    additionalProps: {}
+    additionalProps: {},
+    columnClasses: "col-12"
   },
   {
     name: "commonName",
@@ -28,7 +30,8 @@ export const PLANT_FIELDS = [
     value: "",
     label: "Common Name",
     required: false,
-    additionalProps: {}
+    additionalProps: {},
+    columnClasses: "col-12"
   }
 ];
 
@@ -119,7 +122,7 @@ export const FORM_SECTIONS_DATA: BarterFormSectionData[] = [
         type: "number",
         required: false,
         additionalProps: { min: 1 },
-        columnClasses: "col-6"
+        columnClasses: "col-12 col-lg-6"
       },
       {
         name: "quantityUnits",
@@ -128,7 +131,7 @@ export const FORM_SECTIONS_DATA: BarterFormSectionData[] = [
         required: false,
         additionalProps: {},
         options: QUANTITY_UNITS,
-        columnClasses: "col-6"
+        columnClasses: "col-12 col-lg-6"
       }
     ]
   },
