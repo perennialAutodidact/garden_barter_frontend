@@ -47,8 +47,8 @@ export const fetchUser = createAsyncThunk(
   }
 );
 
-export const verify = createAsyncThunk(
-  "auth/verify",
+export const verifyToken = createAsyncThunk(
+  "auth/verifyToken",
   async (tokenType: "access" | "refresh", { rejectWithValue }) => {
     return await axios
       .post(`/api/auth/verify/`, { tokenType }, { headers: headers })
@@ -57,18 +57,15 @@ export const verify = createAsyncThunk(
   }
 );
 
-export const refresh = createAsyncThunk(
-  "auth/refresh",
+export const refreshToken = createAsyncThunk(
+  "auth/refreshToken",
   async ({}, { rejectWithValue }) => {
     return await axios
       .post(
         `/api/auth/refresh/`,
         {},
         {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
+          headers
         }
       )
       .then((res) => res.data)
