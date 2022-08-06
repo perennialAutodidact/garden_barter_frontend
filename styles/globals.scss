@@ -32,16 +32,24 @@ $theme-colors: (
   'secondary': $custom-secondary,
   'secondary-dark': $custom-secondary-dark,
   'success': $custom-success,
+  'success-light': $custom-success-light,
+  'success-lightest': $custom-success-lightest,
   'success-dark': $custom-success-dark,
   'info': $custom-info,
   'warning': $custom-warning,
   'warning-dark': $custom-warning-dark,
   'danger': $custom-danger,
+  'danger-light': $custom-danger-light,
+  'danger-lighter': $custom-danger-lighter,
+  'danger-lightest': $custom-danger-lightest,
   'light': $custom-light,
   'light-light': $custom-light-light,
+  'light-lighter': $custom-light-lighter,
   'light-dark': $custom-light-dark,
   'light-darker': $custom-light-darker,
-  'dark': $custom-dark
+  'dark': $custom-dark,
+  'dark-lighter': $custom-dark-lighter,
+  'dark-lightest': $custom-dark-lightest
 );
 
 @import '~bootstrap/scss/bootstrap';
@@ -72,7 +80,12 @@ h5,
 }
 
 .navbar-logo {
-  height: 50px;
+  height: 30px;
+  @media screen and (min-width:992px){
+    height: 50px !important;
+    // width: 30px !important;
+    
+}
 }
 
 .navbar-brand-heading {
