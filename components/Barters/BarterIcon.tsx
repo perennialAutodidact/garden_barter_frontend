@@ -13,7 +13,7 @@ const BarterIcon = ({ barterType }: BarterIconProps) => {
         className='
             barter-icon
             rounded-3
-            bg-secondary text-light
+            bg-secondary text-light-light
             h2
             m-0
             d-flex justify-content-center align-items-center 
