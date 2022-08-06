@@ -23,7 +23,6 @@ describe("<BarterItem/>", () => {
 
     expect(getByTestId("WillTradeFor")).toBeInTheDocument();
 
-    expect(queryAllByTitle('Trade!')).toHaveLength(2)
 
   });
 });
