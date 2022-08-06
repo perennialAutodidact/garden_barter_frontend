@@ -4,7 +4,7 @@ import GBNavbar from "./Navbar/Navbar";
 import AlertList from "../AlertList";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { verify, refresh, fetchUser } from "../../store/authSlice/actions";
+import { verifyToken, refreshToken, fetchUser } from "../../store/authSlice/actions";
 import { useRouter } from "next/router";
 
 function Layout({ children }) {
@@ -29,7 +29,7 @@ function Layout({ children }) {
     () => {
       if (dispatch && dispatch != null && dispatch !== undefined) {
         // check the validity of the access token
-        dispatch(verify("access"))
+        dispatch(verifyToken("access"))
           .then(unwrapResult)
           .then(res => {
             dispatch(fetchUser());
@@ -37,7 +37,7 @@ function Layout({ children }) {
           // if the access token is expired or invalid, verify the refresh token
           .catch(err => {
             // if refresh token is still valid, request a new access token
-            dispatch(refresh())
+            dispatch(refreshToken())
               .then(unwrapResult)
               .then(res => {
                 dispatch(fetchUser());
@@ -51,6 +51,8 @@ function Layout({ children }) {
     },
     [dispatch]
   );
+
+
 
   return (
     <div className="bg-primary" id="app-container">
