@@ -4,22 +4,17 @@ import { BARTER_TYPES, QUANTITY_UNITS } from "../../../constants";
 import { titleize } from "../../../utils/helpers";
 import FormSection from "./FormSection";
 import _ from "lodash";
-import {
-  BarterFormData,
-  BarterFormSectionData,
-  BarterFormErrors
-} from "../../../ts/interfaces/barters";
-import { barterFormDataSchemaPartial } from "../../../ts/validation/barters";
+import { BarterFormData } from "../../../ts/interfaces/barters";
 import { useRouter } from "next/router";
 import { createBarter } from "../../../store/bartersSlice/actions";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { createAlert } from "../../../store/alertSlice";
-import dayjs from "dayjs";
-import { refresh } from "../../../store/authSlice/actions";
+import { refreshToken, verifyToken } from "../../../store/authSlice/actions";
 import Spinner from "../../Layout/Spinner";
 import { useChangeFormSection } from "./hooks/useChangeFormSection";
 import { useFormSections } from "./hooks/useFormSections";
 import { validateSection } from "./utils";
+import RouteProtector from "../../Layout/RouteProtector";
 
 const BarterCreateForm = () => {
   const router = useRouter();
@@ -27,8 +22,6 @@ const BarterCreateForm = () => {
   const { user } = useAppSelector(state => state.auth);
   const { barterLoadingStatus } = useAppSelector(state => state.barters);
   // const [formErrors, setFormErrors] = useState<BarterFormErrors>({});
-
-  
 
   // fields required for all barters
   //   const requiredFields = {
@@ -69,7 +62,7 @@ const BarterCreateForm = () => {
     crossStreet2: ""
   });
 
- const {formSections} = useFormSections(formData, setFormData)
+  const { formSections } = useFormSections(formData, setFormData);
 
   const {
     sectionIndex,
@@ -100,6 +93,11 @@ const BarterCreateForm = () => {
     }
   };
 
+  /** dispatch action to set an alert */
+  const handleAlert = (id: number, text: string, level: string) => {
+    dispatch(createAlert({ id, text, level }));
+  };
+
   /** Dispatch redux action to POST to backend when form is submitted */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const { sectionIsValid } = validateSection(
@@ -108,76 +106,62 @@ const BarterCreateForm = () => {
     );
 
     if (sectionIsValid) {
-      dispatch(refresh()).then(res => {
-        dispatch(createBarter({ formData: formData, user: user }))
-          .then(unwrapResult)
-          .then(res => {
-            router.push("/");
-            dispatch(
-              createAlert({
-                id: 0,
-                text: res.message,
-                level: "success"
-              })
+      try {
+        const verify = await verifyToken("access");
+        await dispatch(refreshToken());
+
+        const barterRes = await dispatch(
+          createBarter({ formData: formData, user: user })
+        ).then(unwrapResult);
+        router.push("/");
+        handleAlert(0, barterRes.message, "success");
+      } catch (error) {
+        router.push("/barters/create?step=1", undefined, {
+          shallow: true
+        });
+        error.errors
+          ? error.errors.forEach((error, index) => {
+              handleAlert(index, error, "danger");
+            })
+          : handleAlert(
+              0,
+              "Something went wrong. Please try again later",
+              "danger"
             );
-          })
-          .catch(err => {
-            console.log("create barter error", err);
-            router.push("/barters/create?step=1", undefined, {
-              shallow: true
-            });
-            if (err.errors) {
-              err.errors.forEach((error, index) => {
-                dispatch(
-                  createAlert({
-                    id: index,
-                    text: error,
-                    level: "danger"
-                  })
-                );
-              });
-            } else {
-              dispatch(
-                createAlert({
-                  id: 0,
-                  text: "Something went wrong. Please try again later",
-                  level: "danger"
-                })
-              );
-            }
-          });
-      });
+      }
     }
     // setSectionIndex(0)
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-12 col-lg-4 offset-lg-4">
-          {!formSections[sectionIndex]
-            ? <Spinner />
-            : <form
-                onSubmit={handleSubmit}
-                className="bg-light p-3 p-lg-5 mt-5 rounded shadow"
-              >
-                <FormSection
-                  sectionData={formSections[sectionIndex]}
-                  handleChange={handleChange}
-                  handleSubmit={handleSubmit}
-                  barterType={formData.barterType}
-                  formData={formData}
-                  allFormSections={formSections}
-                  changeFormSection={changeFormSection}
-                  totalSections={formSections.length.toString()}
-                  isFirstSection={sectionIndex === 0}
-                  isLastSection={sectionIndex === formSections.length - 1}
-                  errors={formErrors}
-                />
-              </form>}
+    <RouteProtector>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-12 col-lg-4 offset-lg-4">
+            {!formSections[sectionIndex]
+              ? <Spinner />
+              : <form
+                  onSubmit={handleSubmit}
+                  className="bg-light p-3 p-lg-5 mt-5 rounded shadow"
+                >
+                  <FormSection
+                    sectionData={formSections[sectionIndex]}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    barterType={formData.barterType}
+                    formData={formData}
+                    allFormSections={formSections}
+                    changeFormSection={changeFormSection}
+                    totalSections={formSections.length.toString()}
+                    isFirstSection={sectionIndex === 0}
+                    isLastSection={sectionIndex === formSections.length - 1}
+                    errors={formErrors}
+                  />
+                </form>}
+          </div>
         </div>
       </div>
-    </div>
+    </RouteProtector>
   );
 };
 
