@@ -9,7 +9,7 @@ export default async (req, res) => {
 
     if (!refresh) {
       return res.status(401).json({
-        errors: ["Unauthorized"]
+        errors: [`Unauthorized. Missing refresh token.`]
       });
     }
 
