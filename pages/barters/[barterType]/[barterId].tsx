@@ -1,15 +1,22 @@
 import { GetServerSideProps } from "next";
-import { useProtectedRouter } from "../../../hooks/useProtectedRouter";
 import axios from "axios";
-import BarterItem from "../../../components/Barters/BarterItem";
+import BarterDetail from "../../../components/Barters/BarterDetail";
 import { API_URL } from "../../../constants";
+import { Barter } from "../../../ts/interfaces/barters";
+import { useRouter, NextRouter } from "next/router";
+import RouteProtector from "../../../components/Layout/RouteProtector";
+interface BarterDetailPageProps {
+  barter: Barter;
+}
 
-const BarterTradePage = ({ barter }) => {
-  const { router } = useProtectedRouter();
+const BarterDetailPage = ({ barter }: BarterDetailPageProps) => {
+  const router: NextRouter = useRouter();
   return (
-    <div className="container-fluid">
-      <BarterItem barter={barter} showAllFields={true}/>
-    </div>
+    <RouteProtector>
+      <div className="container-fluid bg-light-lighter">
+        <BarterDetail barter={barter} />
+      </div>
+    </RouteProtector>
   );
 };
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -30,4 +37,4 @@ export const getServerSideProps: GetServerSideProps = async context => {
   }
 };
 
-export default BarterTradePage;
+export default BarterDetailPage;
