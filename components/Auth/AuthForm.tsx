@@ -45,7 +45,11 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
               level: "success"
             })
           );
-          dispatch(login(formData));
+          dispatch(login(formData))
+          .then(unwrapResult)
+          .then(res=>{
+            dispatch(fetchUser());
+          })
         })
         .catch(error => {
           error.errors.forEach((err, index) =>
@@ -56,21 +60,20 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
                 level: "danger"
               })
             )
-            );
-            dispatch(fetchUser())
+          );
         });
     } else {
       dispatch(login(formData))
         .then(unwrapResult)
         .then(res => {
+          dispatch(fetchUser());
           dispatch(
             createAlert({
               id: 0,
               text: res.message,
               level: "success"
             })
-            );
-            dispatch(fetchUser())
+          );
         })
         .catch(error =>
           error.errors.forEach((err, index) =>
