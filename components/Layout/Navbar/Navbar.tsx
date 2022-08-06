@@ -12,9 +12,12 @@ import Link from "next/link";
 function GBNavbar() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isAuthenticated, authLoadingStatus, user } = useAppSelector(
-    state => state.auth
-  );
+  const {
+    isAuthenticated,
+    authLoadingStatus,
+    user,
+    accessTokenRefreshSuccess
+  } = useAppSelector(state => state.auth);
 
   const handleLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(logout())
@@ -36,12 +39,15 @@ function GBNavbar() {
               className="navbar-logo px-lg-3"
               alt="Garden Barter Logo"
             />
-            <h1 className="navbar-brand-heading text-success m-0">
+            <h1 className="d-none d-lg-block navbar-brand-heading text-success m-0">
               Garden Barter
             </h1>
+            <h2 className="d-lg-none navbar-brand-heading text-success m-0">
+              Garden Barter
+            </h2>
           </a>
         </Link>
-        {authLoadingStatus === "PENDING"
+        {authLoadingStatus === "PENDING" && !accessTokenRefreshSuccess
           ? <div
               className="navbar-nav spinner-border text-success d-lg-none"
               role="status"
@@ -66,7 +72,7 @@ function GBNavbar() {
           className="collapse navbar-collapse d-lg-flex justify-content-lg-end align-items-lg-center"
           id="navbarNav"
         >
-          {authLoadingStatus === "PENDING"
+          {authLoadingStatus === "PENDING" && !accessTokenRefreshSuccess
             ? <div
                 className="navbar-nav spinner-border text-success"
                 role="status"
