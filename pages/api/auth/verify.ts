@@ -9,7 +9,7 @@ export default async (req, res) => {
     const token = cookies[tokenType] ?? false;
 
     if (!token) {
-      return res.status(403).json({
+      return res.status(401).json({
         errors: [`Unauthorized. Missing ${tokenType} token.`]
       });
     }
@@ -32,7 +32,7 @@ export default async (req, res) => {
         });
       } else {
         return res.status(500).json({
-          errors: ["Something went wrong trying to register."]
+          errors: [`Something went wrong trying to verify token of type '${tokenType}'.`]
         });
       }
     }
