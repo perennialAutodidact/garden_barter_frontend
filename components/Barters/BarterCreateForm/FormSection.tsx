@@ -5,6 +5,7 @@ import { titleize } from "../../../utils/helpers";
 import { useAppSelector } from "../../../store/hooks";
 import FormFields from "./FormFields";
 import FormReview from "./FormReview";
+import Spinner from "../../Layout/Spinner";
 
 const FormSection = ({
   sectionData,
@@ -73,7 +74,7 @@ const FormSection = ({
           >
             <h5 className="m-0 text-warning">
               {isLastSection
-                ? barterLoadingStatus === "PENDING" ? "Loading..." : "Submit"
+                ? barterLoadingStatus === "PENDING" ? <Spinner/> : "Submit"
                 : "Next"}
             </h5>
           </button>
