@@ -1,14 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../ts/interfaces/auth";
 import { AuthState } from "../../ts/interfaces/auth";
-import { signup, login, logout, verify, fetchUser, refresh } from "./actions";
+import {
+  signup,
+  login,
+  logout,
+  verifyToken,
+  fetchUser,
+  refreshToken
+} from "./actions";
 
 export const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
-  authLoadingStatus: "IDLE",
+  authLoadingStatus: "PENDING",
   signupSuccess: false,
   fetchUserSuccess: false,
+  accessTokenRefreshSuccess: true
 };
 
 export const authSlice = createSlice({
@@ -54,26 +62,29 @@ export const authSlice = createSlice({
       })
 
       // VERIFY
-      .addCase(verify.pending, (state) => {
+      .addCase(verifyToken.pending, (state) => {
         state.authLoadingStatus = "PENDING";
       })
-      .addCase(verify.fulfilled, (state, action) => {
+      .addCase(verifyToken.fulfilled, (state, action) => {
         state.isAuthenticated = true;
         // state.authLoadingStatus = "IDLE";
       })
-      .addCase(verify.rejected, (state) => {
+      .addCase(verifyToken.rejected, (state) => {
         state.isAuthenticated = false;
         // state.authLoadingStatus = "IDLE";
       })
-      
+
       // REFRESH
-      .addCase(refresh.pending, (state) => {
+      .addCase(refreshToken.pending, (state) => {
         state.authLoadingStatus = "PENDING";
+        state.accessTokenRefreshSuccess = false;
       })
-      .addCase(refresh.fulfilled, (state) => {
+      .addCase(refreshToken.fulfilled, (state) => {
         state.authLoadingStatus = "IDLE";
+        state.accessTokenRefreshSuccess = true;
       })
-      .addCase(refresh.rejected, (state) => {
+      .addCase(refreshToken.rejected, (state) => {
+        state.accessTokenRefreshSuccess = true;
         state.isAuthenticated = false;
         state.authLoadingStatus = "IDLE";
       })
@@ -85,8 +96,8 @@ export const authSlice = createSlice({
       .addCase(
         fetchUser.fulfilled,
         (state, action: PayloadAction<{ message: string; user: User }>) => {
-        state.isAuthenticated = true;
-        state.authLoadingStatus = "IDLE";
+          state.isAuthenticated = true;
+          state.authLoadingStatus = "IDLE";
           state.user = action.payload.user;
         }
       )
