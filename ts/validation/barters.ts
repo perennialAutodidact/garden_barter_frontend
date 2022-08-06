@@ -7,7 +7,7 @@ export const requiredFieldsSchema = z.object({
     .nonempty({ message: "Can't be blank." })
     .min(10)
     .max(1000),
-  postalCode: z.string().length(5),
+  postalCode: z.string().length(5).regex(new RegExp('\\d'), 'Must contain only numbers.') ,
   willTradeFor: z.string(),
   isFree: z.boolean(),
   barterType: z.string().nonempty({ message: "Please choose one." })
@@ -31,35 +31,3 @@ export const barterFormDataSchema = requiredFieldsSchema.extend({
 // for validating each section of the form, use this partial schema
 export const barterFormDataSchemaPartial = requiredFieldsSchema.partial();
 
-export const barterTypeRadioChoiceSchema = z.object({
-  value: z.string(),
-  label: z.string()
-});
-
-export const barterTypeCheckboxOptionSchema = z.object({
-  label: z.string(),
-  value: z.string()
-});
-
-export const barterFormSectionFieldSchema = z.object({
-  name: z.string(),
-  type: z.string(),
-  required: z.boolean(),
-  errors: z.union([z.tuple([]), z.array(z.string())]),
-  additionalProps: z.object({
-    defaultValue: z.union([z.string(), z.number()]).optional(),
-    min: z.number().optional()
-  }),
-  label: z.string().optional(),
-  columnClasses: z.string().optional(),
-  choices: z
-    .union([z.array(barterTypeRadioChoiceSchema), z.undefined()])
-    .optional(),
-  options: z.union([z.any(), z.array(z.any()), z.undefined()]).optional()
-});
-
-export const barterFormSectionDataSchema = z.object({
-  sectionName: z.string(),
-  sectionNumber: z.string(),
-  fields: z.array(barterFormSectionFieldSchema)
-});
