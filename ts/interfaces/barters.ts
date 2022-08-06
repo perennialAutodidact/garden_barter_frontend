@@ -19,40 +19,19 @@ export interface Barter {
   longitude: string;
   crossStreet1: string;
   crossStreet2: string;
-}
-
-export interface SeedBarter extends Barter {
   genus?: string;
   species?: string;
   commonName?: string;
-  datePackaged?: Date | string;
+  dimensions?:string;
+  datePackaged?: string;
 }
 
-export interface PlantBarter extends Barter {
-  genus?: string;
-  species?: string;
-  commonName?: string;
-  age?: string;
-}
 
-export interface ProduceBarter extends Barter {
-  dateHarvested?: Date | string;
-}
-
-export interface MaterialBarter extends Barter {}
-export interface ToolBarter extends Barter {}
-
-type AnyBarter = (Barter
-| SeedBarter
-| PlantBarter
-| ProduceBarter
-| MaterialBarter
-| ToolBarter);
 
 export interface BarterState {
-  barters: AnyBarter[];
+  barters: Barter[];
   barterLoadingStatus: "PENDING" | "IDLE";
-  activeBarter: AnyBarter;
+  activeBarter: Barter;
   page: number;
 }
 
