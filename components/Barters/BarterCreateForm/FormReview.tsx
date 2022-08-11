@@ -1,7 +1,7 @@
 import React, { Fragment, useMemo } from "react";
 
 import { BarterFormReviewSectionProps } from "../../../ts/interfaces/barters";
-import { QUANTITY_UNITS } from "../../../constants";
+import { QUANTITY_UNITS } from "../../../common/constants";
 
 const FormReviewSection = ({
   formData,

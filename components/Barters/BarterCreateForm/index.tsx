@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { BARTER_TYPES, QUANTITY_UNITS } from "../../../constants";
+import { BARTER_TYPES, QUANTITY_UNITS } from "../../../common/constants";
 import { titleize } from "../../../utils/helpers";
 import FormSection from "./FormSection";
 import _ from "lodash";

@@ -8,7 +8,10 @@ export const API_URL =
     : process.env.API_URL_PRODUCTION;
 
 
-    
+    export const ACCESS_TOKEN_LIFETIME = 60 * 30 * 1000
+    export const REFRESH_TOKEN_LIFETIME = 60 * 60 * 24 * 1000
+
+
 export const BARTER_TYPES = ["seed", "plant", "produce", "material", "tool"];
 
 export const QUANTITY_UNITS = {

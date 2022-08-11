@@ -1,6 +1,6 @@
 import axios from "axios";
 import cookie from "cookie";
-import { API_URL } from "../../../constants";
+import { API_URL } from "../../../common/constants";
 
 export default async (req, res) => {
   if (req.method === "POST") {

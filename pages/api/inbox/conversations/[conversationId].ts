@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "../../../../constants";
+import { API_URL } from "../../../../common/constants";
 import cookie from "cookie";
 
 export default async (req, res) => {

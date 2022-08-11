@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BARTER_ICONS } from "../../../constants";
+import { BARTER_ICONS } from "../../../common/constants";
 import { BarterFormSectionProps } from "../../../ts/interfaces/barters";
 import { titleize } from "../../../utils/helpers";
 import { useAppSelector } from "../../../store/hooks";
