@@ -6,7 +6,7 @@ import {
   RenderResult,
   authFormDataBuilder,
   cleanup,
-  waitFor,
+  waitFor
 } from "../../utils/utils";
 import { AuthFormData } from "../../../ts/interfaces/auth";
 import userEvent from "@testing-library/user-event";
@@ -28,12 +28,12 @@ jest.mock("next/router", () => ({
       scroll: true,
       events: {
         on: jest.fn(),
-        off: jest.fn(),
+        off: jest.fn()
       },
       beforePopState: jest.fn(() => null),
-      prefetch: jest.fn(() => null),
+      prefetch: jest.fn(() => null)
     };
-  },
+  }
 }));
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
@@ -43,15 +43,15 @@ const setupSignupPage = (
 ) =>
   render(<Signup />, {
     initialState: {
-      ...initialState,
+      ...initialState
     },
-    router: { ...router },
+    router: { ...router }
   });
 
 describe("signup page", () => {
-  it("renders signup form", () => {
+  it("renders signup form", async () => {
     documentBody = setupSignupPage(rootState, createMockRouter());
-    const heading = documentBody.getByRole("heading");
+    const heading = await documentBody.queryByRole("heading");
     expect(heading).toBeInTheDocument();
     expect(heading).toHaveTextContent("Sign Up");
 
@@ -77,10 +77,14 @@ describe("signup page", () => {
     expect(password2Input).toHaveValue("");
   });
 
-  it("renders form submit button", () => {
-    documentBody = setupSignupPage(rootState, createMockRouter());
+  it("renders form submit button", async () => {
+    documentBody = setupSignupPage(
+      { ...rootState, auth: { ...rootState.auth, authLoadingStatus: "IDLE" } },
+      createMockRouter()
+    );
 
-    const submitButton = documentBody.getByTestId("submit-button");
+    const submitButton = await documentBody.findByTestId("submit-button");
+
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveTextContent("Sign Up");
     expect(submitButton.tagName).toBe("BUTTON");
