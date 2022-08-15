@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { BARTER_TYPES, QUANTITY_UNITS } from "../../../common/constants";
-import { titleize } from "../../../utils/helpers";
+import { titleize } from "../../../common/utils/helpers";
 import { BarterFormSectionData } from "../../../ts/interfaces/barters";
 const currentYear: number = new Date().getFullYear();
 

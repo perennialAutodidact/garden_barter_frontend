@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { BARTER_ICONS } from "../../../common/constants";
 import { BarterFormSectionProps } from "../../../ts/interfaces/barters";
-import { titleize } from "../../../utils/helpers";
+import { titleize } from "../../../common/utils/helpers";
 import { useAppSelector } from "../../../store/hooks";
 import FormFields from "./FormFields";
 import FormReview from "./FormReview";
-import Spinner from "../../Layout/Spinner";
+import Spinner from "../../../common/components/Spinner"
 
 const FormSection = ({
   sectionData,

@@ -1,5 +1,5 @@
 import "../styles/globals.scss";
-import Layout from "../components/Layout/Layout";
+import Layout from "../common/components/Layout";
 import { useEffect } from "react";
 import { Provider } from 'react-redux';
 import type { AppProps } from 'next/app';

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import BarterCreateForm from "../../components/Barters/BarterCreateForm";
-import RouteProtector from "../../components/Layout/RouteProtector";
+import RouteProtector from "../../common/components/RouteProtector";
 
 const BarterCreatePage = () => {
   const { authLoadingStatus } = useAppSelector(state => state.auth);

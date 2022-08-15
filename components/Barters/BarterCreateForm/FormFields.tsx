@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { titleize } from "../../../utils/helpers";
+import { titleize } from "../../../common/utils/helpers";
 import { BarterFormInputProps } from "../../../ts/interfaces/barters";
 
 function FormFields({

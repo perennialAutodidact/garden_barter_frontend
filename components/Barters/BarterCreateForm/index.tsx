@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { BARTER_TYPES, QUANTITY_UNITS } from "../../../common/constants";
-import { titleize } from "../../../utils/helpers";
+import { titleize } from "../../../common/utils/helpers";
 import FormSection from "./FormSection";
 import _ from "lodash";
 import { BarterFormData } from "../../../ts/interfaces/barters";
@@ -10,11 +10,11 @@ import { createBarter } from "../../../store/bartersSlice/actions";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { createAlert } from "../../../store/alertSlice";
 import { refreshToken, verifyToken } from "../../../store/authSlice/actions";
-import Spinner from "../../Layout/Spinner";
+import Spinner from "../../../common/components/Spinner"
 import { useChangeFormSection } from "./hooks/useChangeFormSection";
 import { useFormSections } from "./hooks/useFormSections";
 import { validateSection } from "./utils";
-import RouteProtector from "../../Layout/RouteProtector";
+import RouteProtector from "../../../common/components/RouteProtector"
 
 const BarterCreateForm = () => {
   const router = useRouter();

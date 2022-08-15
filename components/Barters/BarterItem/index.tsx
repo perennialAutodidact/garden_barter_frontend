@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { BarterItemProps } from "../../../ts/interfaces/barters";
 import BarterIcon from "../BarterIcon";
-import { titleize } from "../../../utils/helpers";
+import { titleize } from "../../../common/utils/helpers";
 import { humanizeDateDistance } from "../utils";
 import Link from "next/link";
 

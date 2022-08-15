@@ -1,6 +1,6 @@
 import React, { useState, ReactNode } from 'react'
 import { BarterIconProps } from '../../ts/interfaces/barters'
-import { titleize } from '../../utils/helpers'
+import { titleize } from '../../common/utils/helpers'
 import { BARTER_ICONS } from '../../common/constants'
 
 /**
