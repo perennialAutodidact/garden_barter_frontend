@@ -1,7 +1,7 @@
 import React, {FC, ReactElement} from 'react'
 import {render, RenderOptions} from '@testing-library/react'
 import { Provider as ReduxProvider} from 'react-redux';
-import { store } from '../store/store';
+import { store } from '../../store/store';
 
 type Props = {
     children: JSX.Element

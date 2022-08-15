@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import GBNavbar from "./Navbar/Navbar";
-import AlertList from "../AlertList";
+import GBNavbar from "../../components/Layout/Navbar/Navbar";
+import AlertList from "../../components/AlertList";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { verifyToken, refreshToken, fetchUser } from "../../store/authSlice/actions";

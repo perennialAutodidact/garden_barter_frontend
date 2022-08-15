@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useRouter, NextRouter } from "next/router";
 import { useAppSelector } from "../../store/hooks";
-import Spinner from "../Layout/Spinner";
+import Spinner from "../../common/components/Spinner"
 
 interface RouteProtectorProps {
   children: React.ReactNode;
