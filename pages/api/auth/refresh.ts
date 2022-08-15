@@ -48,7 +48,7 @@ export default async (req, res) => {
     //   console.log(error.response)
       if (error.response) {
         return res.status(error.response.status).json({
-          errors: [error.response.data]
+          errors: [error.response.data.detail]
         });
       } else {
         return res.status(500).json({

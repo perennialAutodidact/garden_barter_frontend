@@ -42,7 +42,7 @@ export default async (req, res) => {
         // console.log(error)
       if (error.response) {
         return res.status(error.response.status).json({
-          errors: error.response.data.errors
+          errors: [error.response.data.detail]
         });
       } else {
         return res.status(500).json({
