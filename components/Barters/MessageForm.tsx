@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { createMessage } from "../../store/inboxSlice/actions";
 import { Barter } from "../../ts/interfaces/barters";
 import { MessageFormData } from "../../ts/interfaces/inbox";
-import Spinner from "../../components/Layout/Spinner";
+import Spinner from "../../common/components/Spinner";
 import { refreshToken, verifyToken } from "../../store/authSlice/actions";
 import { createAlert } from "../../store/alertSlice/actions";
 import { unwrapResult } from "@reduxjs/toolkit";
