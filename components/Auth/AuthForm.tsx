@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AuthFormProps, AuthFormData } from "../../ts/interfaces/auth";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { signup, login, fetchUser } from "../../store/authSlice/actions";
-import { resetAuthLoadingStatus } from "../../store/authSlice";
+import {
+  signup,
+  login,
+  fetchUser,
+  verifyToken,
+  refreshToken
+} from "../../store/authSlice/actions";
 import { createAlert } from "../../store/alertSlice";
 import { useRouter } from "next/router";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
+
 export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -34,59 +39,49 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    if (formMode === "sign up") {
-      dispatch(signup(formData))
-        .then(unwrapResult)
-        .then(res => {
-          dispatch(
-            createAlert({
-              id: 0,
-              text: res.message,
-              level: "success"
-            })
-          );
-          dispatch(login(formData))
-          .then(unwrapResult)
-          .then(res=>{
-            dispatch(fetchUser());
+    formMode === "sign up"
+      ? handleSignupAction(formData)
+      : handleLoginAction(formData);
+  };
+
+  const handleSignupAction = async (formData: AuthFormData) => {
+    try {
+      const res = await dispatch(signup(formData)).then(unwrapResult);
+      dispatch(login(formData)).then(unwrapResult).then(res => {
+        dispatch(fetchUser());
+      });
+      handleAlert(res.message, "success");
+    } catch (error) {
+      error.errors
+        ? error.errors.forEach((err, index) => {
+            handleAlert(err, "danger", index);
           })
-        })
-        .catch(error => {
-          error.errors.forEach((err, index) =>
-            dispatch(
-              createAlert({
-                id: index,
-                text: err,
-                level: "danger"
-              })
-            )
-          );
-        });
-    } else {
-      dispatch(login(formData))
-        .then(unwrapResult)
-        .then(res => {
-          dispatch(fetchUser());
-          dispatch(
-            createAlert({
-              id: 0,
-              text: res.message,
-              level: "success"
-            })
-          );
-        })
-        .catch(error =>
-          error.errors.forEach((err, index) =>
-            dispatch(
-              createAlert({
-                id: index,
-                text: err,
-                level: "danger"
-              })
-            )
-          )
-        );
+        : handleAlert("Something went wrong. Please try again later", "danger");
     }
+  };
+
+  const handleLoginAction = async (formData: AuthFormData) => {
+    try {
+      const verify = await verifyToken("access");
+      await dispatch(refreshToken());
+
+      const res = await dispatch(login(formData)).then(unwrapResult);
+
+      dispatch(fetchUser());
+      handleAlert(res.message, "success");
+    } catch (error) {
+      error.errors
+        ? error.errors.forEach((err, index) =>
+            handleAlert(err, "danger", index)
+          )
+        : console.log("error", error);
+    //   handleAlert("Something went wrong. Please try again later", "danger");
+    }
+  };
+
+  /** dispatch action to set an alert */
+  const handleAlert = (text: string, level: string, id: number = 0) => {
+    dispatch(createAlert({ id, text, level }));
   };
 
   useEffect(
