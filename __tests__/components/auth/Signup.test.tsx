@@ -103,8 +103,6 @@ describe("signup page", () => {
       "Confirm Password"
     );
 
-    documentBody.debug(email);
-
     waitFor(async () => {
       await user.type(email, authFormData.email);
       expect(email).toHaveValue(authFormData.email);

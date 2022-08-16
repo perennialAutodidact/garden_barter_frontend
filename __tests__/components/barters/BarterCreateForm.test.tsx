@@ -69,8 +69,6 @@ describe("<BarterCreateForm/>", () => {
 
     expect(getByText(/1 of 6/i)).toBeInTheDocument();
 
-    screen.debug();
-
     // the back button will not exist on the first step of the form
     expect(queryByText(/back/i)).not.toBeInTheDocument();
 
