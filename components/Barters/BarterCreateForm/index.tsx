@@ -9,18 +9,18 @@ import { useRouter } from "next/router";
 import { createBarter } from "../../../store/bartersSlice/actions";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { createAlert } from "../../../store/alertSlice";
-import { refreshToken, verifyToken } from "../../../store/authSlice/actions";
-import Spinner from "../../../common/components/Spinner"
+import { updateTokens } from "../../../store/authSlice/actions";
+import Spinner from "../../../common/components/Spinner";
 import { useChangeFormSection } from "./hooks/useChangeFormSection";
 import { useFormSections } from "./hooks/useFormSections";
 import { validateSection } from "./utils";
-import RouteProtector from "../../../common/components/RouteProtector"
-
+import RouteProtector from "../../../common/components/RouteProtector";
+import { useHandleAlert } from "../../AlertList/utils";
 const BarterCreateForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector(state => state.auth);
-  const { barterLoadingStatus } = useAppSelector(state => state.barters);
+  const { user } = useAppSelector((state) => state.auth);
+ const handleAlert = useHandleAlert()
   // const [formErrors, setFormErrors] = useState<BarterFormErrors>({});
 
   // fields required for all barters
@@ -46,7 +46,7 @@ const BarterCreateForm = () => {
     isFree: false,
     quantity: "",
     quantityUnits: "NA",
-    barterType: ""
+    barterType: "",
   };
 
   // state object for the form
@@ -60,7 +60,7 @@ const BarterCreateForm = () => {
     latitude: "",
     longitude: "",
     crossStreet1: "",
-    crossStreet2: ""
+    crossStreet2: "",
   });
 
   const { formSections } = useFormSections(formData, setFormData);
@@ -69,7 +69,7 @@ const BarterCreateForm = () => {
     sectionIndex,
     changeFormSection,
     formErrors,
-    setFormErrors
+    setFormErrors,
   } = useChangeFormSection({ formSections, formData });
 
   /**
@@ -82,21 +82,16 @@ const BarterCreateForm = () => {
       if (e.target.name === "isFree") {
         setFormErrors({ ...formErrors, willTradeFor: [] });
       }
-      setFormData(formData => ({
+      setFormData((formData) => ({
         ...formData,
-        [e.target.name]: !formData[e.target.name]
+        [e.target.name]: !formData[e.target.name],
       }));
     } else {
-      setFormData(formData => ({
+      setFormData((formData) => ({
         ...formData,
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       }));
     }
-  };
-
-  /** dispatch action to set an alert */
-  const handleAlert = (id: number, text: string, level: string) => {
-    dispatch(createAlert({ id, text, level }));
   };
 
   /** Dispatch redux action to POST to backend when form is submitted */
@@ -108,24 +103,21 @@ const BarterCreateForm = () => {
 
     if (sectionIsValid) {
       try {
-        const verify = await verifyToken("access");
-        await dispatch(refreshToken());
-
+        await dispatch(updateTokens());
         const barterRes = await dispatch(
           createBarter({ formData: formData, user: user })
         ).then(unwrapResult);
         router.push("/");
-        handleAlert(0, barterRes.message, "success");
+        handleAlert(barterRes.message, "success");
       } catch (error) {
         router.push("/barters/create?step=1", undefined, {
-          shallow: true
+          shallow: true,
         });
         error.errors
           ? error.errors.forEach((error, index) => {
-              handleAlert(index, error, "danger");
+              handleAlert(error, "danger", index);
             })
           : handleAlert(
-              0,
               "Something went wrong. Please try again later",
               "danger"
             );
@@ -139,26 +131,28 @@ const BarterCreateForm = () => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-12 col-lg-4 offset-lg-4">
-            {!formSections[sectionIndex]
-              ? <Spinner />
-              : <form
-                  onSubmit={handleSubmit}
-                  className="bg-light p-3 p-lg-5 mt-5 rounded shadow"
-                >
-                  <FormSection
-                    sectionData={formSections[sectionIndex]}
-                    handleChange={handleChange}
-                    handleSubmit={handleSubmit}
-                    barterType={formData.barterType}
-                    formData={formData}
-                    allFormSections={formSections}
-                    changeFormSection={changeFormSection}
-                    totalSections={formSections.length.toString()}
-                    isFirstSection={sectionIndex === 0}
-                    isLastSection={sectionIndex === formSections.length - 1}
-                    errors={formErrors}
-                  />
-                </form>}
+            {!formSections[sectionIndex] ? (
+              <Spinner />
+            ) : (
+              <form
+                onSubmit={handleSubmit}
+                className="bg-light p-3 p-lg-5 mt-5 rounded shadow"
+              >
+                <FormSection
+                  sectionData={formSections[sectionIndex]}
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmit}
+                  barterType={formData.barterType}
+                  formData={formData}
+                  allFormSections={formSections}
+                  changeFormSection={changeFormSection}
+                  totalSections={formSections.length.toString()}
+                  isFirstSection={sectionIndex === 0}
+                  isLastSection={sectionIndex === formSections.length - 1}
+                  errors={formErrors}
+                />
+              </form>
+            )}
           </div>
         </div>
       </div>
