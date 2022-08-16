@@ -60,7 +60,7 @@ const BarterDetail = ({ barter }: BarterDetailProps) => {
           {barter.title}
         </h3>
         <p className="mb-lg-3">
-          Posted {dateCreated}
+          Posted {dateCreated} by {barter.creator.username || 'Anonymous'}
         </p>
 
         <h3 className="h3 my-2 ">Trade</h3>
