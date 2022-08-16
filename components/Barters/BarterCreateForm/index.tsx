@@ -24,6 +24,7 @@ const BarterCreateForm = () => {
   // const [formErrors, setFormErrors] = useState<BarterFormErrors>({});
 
   // fields required for all barters
+  // This is only here to pre-populate BarterCreateForm fields
   //   const requiredFields = {
   //     title: "Rake",
   //     description:
