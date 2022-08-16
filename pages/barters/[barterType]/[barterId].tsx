@@ -4,7 +4,7 @@ import BarterDetail from "../../../components/Barters/BarterDetail";
 import { API_URL } from "../../../common/constants";
 import { Barter } from "../../../ts/interfaces/barters";
 import { useRouter, NextRouter } from "next/router";
-import RouteProtector from "../../../common//components/RouteProtector";
+import RouteProtector from "../../../common/components/RouteProtector";
 interface BarterDetailPageProps {
   barter: Barter;
 }
