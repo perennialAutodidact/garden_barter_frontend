@@ -5,7 +5,7 @@ import {
   signup,
   login,
   logout,
-  verifyToken,
+  updateTokens,
   fetchUser,
   refreshToken
 } from "./actions";
@@ -16,7 +16,7 @@ export const initialState: AuthState = {
   authLoadingStatus: "PENDING",
   signupSuccess: false,
   fetchUserSuccess: false,
-  accessTokenRefreshSuccess: true
+  updateTokenSuccess: false 
 };
 
 export const authSlice = createSlice({
@@ -61,30 +61,30 @@ export const authSlice = createSlice({
         state.authLoadingStatus = "IDLE";
       })
 
-      // VERIFY
-      .addCase(verifyToken.pending, (state) => {
+      // UPDATE TOKENS
+      .addCase(updateTokens.pending, (state) => {
         state.authLoadingStatus = "PENDING";
       })
-      .addCase(verifyToken.fulfilled, (state, action) => {
+      .addCase(updateTokens.fulfilled, (state, action) => {
         state.isAuthenticated = true;
-        // state.authLoadingStatus = "IDLE";
+        state.authLoadingStatus = "IDLE";
       })
-      .addCase(verifyToken.rejected, (state) => {
+      .addCase(updateTokens.rejected, (state) => {
         state.isAuthenticated = false;
-        // state.authLoadingStatus = "IDLE";
+        state.authLoadingStatus = "IDLE";
       })
 
       // REFRESH
       .addCase(refreshToken.pending, (state) => {
         state.authLoadingStatus = "PENDING";
-        state.accessTokenRefreshSuccess = false;
+        state.updateTokenSuccess = false;
       })
       .addCase(refreshToken.fulfilled, (state) => {
         state.authLoadingStatus = "IDLE";
-        state.accessTokenRefreshSuccess = true;
+        state.updateTokenSuccess = true;
       })
       .addCase(refreshToken.rejected, (state) => {
-        state.accessTokenRefreshSuccess = true;
+        state.updateTokenSuccess = true;
         state.isAuthenticated = false;
         state.authLoadingStatus = "IDLE";
       })

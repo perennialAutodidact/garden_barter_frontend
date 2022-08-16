@@ -34,5 +34,5 @@ export interface AuthState {
   authLoadingStatus: "PENDING" | "IDLE";
   signupSuccess: boolean;
   fetchUserSuccess: boolean;
-  accessTokenRefreshSuccess: boolean;
+  updateTokenSuccess: boolean;
 }

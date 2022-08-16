@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useRouter, NextRouter } from "next/router";
 import { useAppSelector } from "../../store/hooks";
-import Spinner from "../../common/components/Spinner"
+import Spinner from "../../common/components/Spinner";
 
 interface RouteProtectorProps {
   children: React.ReactNode;
@@ -9,38 +9,30 @@ interface RouteProtectorProps {
 
 const RouteProtector = ({ children }: RouteProtectorProps) => {
   const {
-    user,
     isAuthenticated,
     authLoadingStatus,
-    accessTokenRefreshSuccess
-  } = useAppSelector(state => state.auth);
+    updateTokenSuccess,
+  } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
-  useEffect(
-    () => {
-      if (router && router !== null && router !== undefined) {
-        if (
-          !isAuthenticated &&
-          authLoadingStatus === "IDLE" &&
-          !accessTokenRefreshSuccess
-        ) {
-          const query = { next: router.asPath };
+  useEffect(() => {
+    if (router && router !== null && router !== undefined) {
+      if (
+        !isAuthenticated &&
+        authLoadingStatus === "IDLE" &&
+        !updateTokenSuccess
+      ) {
+        const query = { next: router.asPath };
 
-          router.push({
-            pathname: "/login",
-            query
-          });
-        }
+        router.push({
+          pathname: "/login",
+          query,
+        });
       }
-    },
-    [isAuthenticated, authLoadingStatus]
-  );
+    }
+  }, [isAuthenticated, authLoadingStatus]);
 
-  if (
-    !isAuthenticated &&
-    authLoadingStatus === "IDLE" && 
-    !accessTokenRefreshSuccess
-  ) {
+  if (!isAuthenticated && authLoadingStatus === "IDLE" && !updateTokenSuccess) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-75">
         <Spinner />
@@ -48,11 +40,7 @@ const RouteProtector = ({ children }: RouteProtectorProps) => {
     );
   }
 
-  return (
-    <Fragment>
-      {children}
-    </Fragment>
-  );
+  return <Fragment>{children}</Fragment>;
 };
 
 export default RouteProtector;
