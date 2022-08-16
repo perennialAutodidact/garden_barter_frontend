@@ -7,7 +7,6 @@ import {
   logout,
   updateTokens,
   fetchUser,
-  refreshToken
 } from "./actions";
 
 export const initialState: AuthState = {
@@ -16,7 +15,7 @@ export const initialState: AuthState = {
   authLoadingStatus: "PENDING",
   signupSuccess: false,
   fetchUserSuccess: false,
-  updateTokenSuccess: false 
+  updateTokenSuccess: false,
 };
 
 export const authSlice = createSlice({
@@ -28,7 +27,7 @@ export const authSlice = createSlice({
     },
     resetAuthLoadingStatus(state) {
       state.authLoadingStatus = "PENDING";
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -73,22 +72,7 @@ export const authSlice = createSlice({
         state.isAuthenticated = false;
         state.authLoadingStatus = "IDLE";
       })
-
-      // REFRESH
-      .addCase(refreshToken.pending, (state) => {
-        state.authLoadingStatus = "PENDING";
-        state.updateTokenSuccess = false;
-      })
-      .addCase(refreshToken.fulfilled, (state) => {
-        state.authLoadingStatus = "IDLE";
-        state.updateTokenSuccess = true;
-      })
-      .addCase(refreshToken.rejected, (state) => {
-        state.updateTokenSuccess = true;
-        state.isAuthenticated = false;
-        state.authLoadingStatus = "IDLE";
-      })
-
+    
       // FETCH USER
       .addCase(fetchUser.pending, (state) => {
         state.authLoadingStatus = "PENDING";
@@ -120,7 +104,7 @@ export const authSlice = createSlice({
       .addCase(logout.rejected, (state) => {
         state.authLoadingStatus = "IDLE";
       });
-  }
+  },
 });
 
 export const { resetSignupSuccess, resetAuthLoadingStatus } = authSlice.actions;
