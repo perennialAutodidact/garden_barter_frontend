@@ -4,13 +4,13 @@ import GBNavbar from "../../components/Layout/Navbar/Navbar";
 import AlertList from "../../components/AlertList";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { verifyToken, refreshToken, fetchUser } from "../../store/authSlice/actions";
+import { updateTokens, fetchUser } from "../../store/authSlice/actions";
 import { useRouter } from "next/router";
 
 function Layout({ children }) {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  
+
   // load bootstrap and initialize tool tips
   useEffect(() => {
     (async () => {
@@ -19,40 +19,28 @@ function Layout({ children }) {
       var tooltipTriggerList = [].slice.call(
         document.querySelectorAll('[data-bs-toggle="tooltip"]')
       );
-      var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
       });
     })();
   }, []);
 
-  useEffect(
-    () => {
-      if (dispatch && dispatch != null && dispatch !== undefined) {
-        // check the validity of the access token
-        dispatch(verifyToken("access"))
-          .then(unwrapResult)
-          .then(res => {
-            dispatch(fetchUser());
-          })
-          // if the access token is expired or invalid, verify the refresh token
-          .catch(err => {
-            // if refresh token is still valid, request a new access token
-            dispatch(refreshToken())
-              .then(unwrapResult)
-              .then(res => {
-                dispatch(fetchUser());
-              })
-              // if refresh token is also invalid...
-              .catch(err => {
-                console.log('Something went wrong refreshing tokens in layout component')
-              });
-          });
-      }
-    },
-    [dispatch]
-  );
-
-
+  useEffect(() => {
+    if (dispatch && dispatch != null && dispatch !== undefined) {
+      // check the validity of the access token
+      dispatch(updateTokens())
+        .then(unwrapResult)
+        .then((res) => {
+          dispatch(fetchUser());
+        })
+        // if refresh token is also invalid...
+        .catch((err) => {
+          console.log(
+            "Something went wrong refreshing tokens in layout component"
+          );
+        });
+    }
+  }, [dispatch]);
 
   return (
     <div className="bg-primary" id="app-container">
@@ -72,4 +60,3 @@ function Layout({ children }) {
 }
 
 export default Layout;
-
