@@ -1,49 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Barter } from "../../ts/interfaces/barters";
 import { humanizeDateDistance } from "./utils";
 import IconButton from "./IconButton";
 import BarterIcon from "./BarterIcon";
-import { findConversation } from "../../store/inboxSlice/actions";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppSelector } from "../../store/hooks";
 import MessageForm from "./MessageForm";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { FaRegEnvelope } from "react-icons/fa";
 import { useRouter, NextRouter } from "next/router";
-
+import { useFetchConversation } from "../Inbox/hooks/useFetchConversation";
 interface BarterDetailProps {
   barter: Barter;
 }
 
 const BarterDetail = ({ barter }: BarterDetailProps) => {
   const router: NextRouter = useRouter();
-  const dispatch = useAppDispatch();
   const [dateCreated, _] = useState<string>(
     humanizeDateDistance(barter.dateCreated.toString())
   );
   const { user } = useAppSelector(state => state.auth);
-  const [showForm, setShowForm] = useState<boolean>(false);
+  const [showMessageForm, setShowMessageForm] = useState<boolean>(false);
+  const toggleShowForm = () => setShowMessageForm(!showMessageForm);
 
-  const [conversationId, setConversationId] = useState<number>(null);
+  const conversation = useFetchConversation(user, barter);
 
-  useEffect(
-    () => {
-      if (!user) return;
-      (async () => {
-        const res = await dispatch(
-          findConversation({
-            recipientId: barter.creator.id,
-            senderId: user.id,
-            barterId: barter.uuid,
-            barterType: barter.barterType
-          })
-        ).then(unwrapResult);
-        setConversationId(res.conversation.id);
-      })();
-    },
-    [user]
-  );
+  console.log("conversation", conversation);
+  console.log("user", user);
 
-  const toggleShowForm = () => setShowForm(!showForm);
   const goToConverstaion = (conversationId: number) => {
     router.push({
       pathname: "/inbox/conversations/[conversationId]",
@@ -86,13 +68,13 @@ const BarterDetail = ({ barter }: BarterDetailProps) => {
           {barter.isFree ? "Free (no trade required)" : barter.willTradeFor}
         </p>
 
-        {showForm
+        {showMessageForm
           ? <MessageForm toggleShowForm={toggleShowForm} barter={barter} />
           : <div
               onClick={() => {
-                conversationId
-                  ? goToConverstaion(conversationId)
-                  : setShowForm(!showForm);
+                conversation
+                  ? goToConverstaion(conversation.id)
+                  : setShowMessageForm(!showMessageForm);
               }}
             >
               <IconButton icon={<FaRegEnvelope />} />
