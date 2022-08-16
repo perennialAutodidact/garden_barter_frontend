@@ -4,7 +4,7 @@ import { AuthFormData, User } from "../../ts/interfaces/auth";
 
 const headers = {
   accept: "application/json",
-  "Access-Control-Allow-Origin": "http://localhost:3000"
+  "Access-Control-Allow-Origin": "http://localhost:3000",
 };
 axios.defaults.withCredentials = true;
 
@@ -14,7 +14,7 @@ export const signup = createAsyncThunk(
     const url = "api/auth/register/";
     return await axios
       .post(url, formData, {
-        headers: headers
+        headers: headers,
       })
       .then((res) => res.data)
       .catch((err) => {
@@ -40,37 +40,19 @@ export const fetchUser = createAsyncThunk(
   async ({}, { rejectWithValue }) => {
     return await axios
       .get("/api/auth/fetchUser", {
-        headers: headers
+        headers: headers,
       })
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
 );
-
-export const verifyToken = createAsyncThunk(
-  "auth/verifyToken",
-  async (tokenType: "access" | "refresh", { rejectWithValue }) => {
-    return await axios
-      .post(`/api/auth/verify/`, { tokenType }, { headers: headers })
+export const updateTokens = createAsyncThunk(
+  "auth/updateTokens",
+  async ({}, { rejectWithValue }) =>
+    await axios
+      .post("/api/auth/updateTokens/", {}, { headers })
       .then((res) => res.data)
-      .catch((err) => rejectWithValue(err.response.data));
-  }
-);
-
-export const refreshToken = createAsyncThunk(
-  "auth/refreshToken",
-  async ({}, { rejectWithValue }) => {
-    return await axios
-      .post(
-        `/api/auth/refresh/`,
-        {},
-        {
-          headers
-        }
-      )
-      .then((res) => res.data)
-      .catch((err) => rejectWithValue(err.response.data));
-  }
+      .catch((err) => rejectWithValue(err.response.data))
 );
 
 export const logout = createAsyncThunk(
@@ -82,7 +64,7 @@ export const logout = createAsyncThunk(
         url,
         {},
         {
-          headers: headers
+          headers: headers,
         }
       )
       .then((res) => res.data)
