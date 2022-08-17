@@ -6,8 +6,7 @@ import {
   signup,
   login,
   fetchUser,
-  verifyToken,
-  refreshToken
+  updateTokens,
 } from "../../store/authSlice/actions";
 import { createAlert } from "../../store/alertSlice";
 import { useRouter } from "next/router";
@@ -17,14 +16,14 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isAuthenticated, authLoadingStatus, signupSuccess } = useAppSelector(
-    state => state.auth
+    (state) => state.auth
   );
-  const { alerts } = useAppSelector(state => state.alerts);
+  const { alerts } = useAppSelector((state) => state.alerts);
 
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
     password: "",
-    password2: ""
+    password2: "",
   });
 
   const { email, password, password2 } = formData;
@@ -32,7 +31,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setFormData({
       ...formData,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -46,10 +45,13 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
 
   const handleSignupAction = async (formData: AuthFormData) => {
     try {
+      await dispatch(updateTokens())
       const res = await dispatch(signup(formData)).then(unwrapResult);
-      dispatch(login(formData)).then(unwrapResult).then(res => {
-        dispatch(fetchUser());
-      });
+      dispatch(login(formData))
+        .then(unwrapResult)
+        .then((res) => {
+          dispatch(fetchUser());
+        });
       handleAlert(res.message, "success");
     } catch (error) {
       error.errors
@@ -62,9 +64,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
 
   const handleLoginAction = async (formData: AuthFormData) => {
     try {
-      const verify = await verifyToken("access");
-      await dispatch(refreshToken());
-
+      await dispatch(updateTokens())
       const res = await dispatch(login(formData)).then(unwrapResult);
 
       dispatch(fetchUser());
@@ -75,7 +75,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
             handleAlert(err, "danger", index)
           )
         : console.log("error", error);
-    //   handleAlert("Something went wrong. Please try again later", "danger");
+      //   handleAlert("Something went wrong. Please try again later", "danger");
     }
   };
 
@@ -84,17 +84,14 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
     dispatch(createAlert({ id, text, level }));
   };
 
-  useEffect(
-    () => {
-      if (isAuthenticated && authLoadingStatus !== "PENDING") {
-        if (router && router.query) {
-          let next = router.query.next || "/";
-          router.push(next as string);
-        }
+  useEffect(() => {
+    if (isAuthenticated && authLoadingStatus !== "PENDING") {
+      if (router && router.query) {
+        let next = router.query.next || "/";
+        router.push(next as string);
       }
-    },
-    [isAuthenticated, authLoadingStatus]
-  );
+    }
+  }, [isAuthenticated, authLoadingStatus]);
 
   return (
     <div className="row py-5">
@@ -144,7 +141,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
               </div>
 
               {/* PASSWORD 2 */}
-              {formMode === "sign up" &&
+              {formMode === "sign up" && (
                 <div className="field-group d-flex flex-column">
                   <label htmlFor="password2" className="form-label">
                     Confirm Password
@@ -158,42 +155,45 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
                     value={password2}
                     onChange={handleChange}
                   />
-                </div>}
+                </div>
+              )}
 
               <button
                 type="submit"
                 className="btn btn-warning-dark my-3 text-dark fw-bold shadow"
                 data-testid="submit-button"
               >
-                {authLoadingStatus === "PENDING"
-                  ? <div className="spinner-border text-dark" role="status">
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
-                  : <span>
-                      {formTitle}
-                    </span>}
+                {authLoadingStatus === "PENDING" ? (
+                  <div className="spinner-border text-dark" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                ) : (
+                  <span>{formTitle}</span>
+                )}
               </button>
             </form>
           </div>
 
           <div className="bg-light-dark col-12 p-3 text-center rounded-bottom">
-            {formMode === "sign up"
-              ? <div>
-                  Have an account?{" "}
-                  <Link href="/login">
-                    <a className="link-secondary fw-bold text-decoration-none">
-                      Log In
-                    </a>
-                  </Link>
-                </div>
-              : <div>
-                  Need an account?{" "}
-                  <Link href="/signup">
-                    <a className="link-secondary fw-bold text-decoration-none">
-                      Sign Up
-                    </a>
-                  </Link>
-                </div>}
+            {formMode === "sign up" ? (
+              <div>
+                Have an account?{" "}
+                <Link href="/login">
+                  <a className="link-secondary fw-bold text-decoration-none">
+                    Log In
+                  </a>
+                </Link>
+              </div>
+            ) : (
+              <div>
+                Need an account?{" "}
+                <Link href="/signup">
+                  <a className="link-secondary fw-bold text-decoration-none">
+                    Sign Up
+                  </a>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -201,7 +201,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   );
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = {};
 
