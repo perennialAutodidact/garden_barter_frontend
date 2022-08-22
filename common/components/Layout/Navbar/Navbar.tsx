@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import AuthLinks from "./AuthLinks";
 import GuestLinks from "./GuestLinks";
-import { useAppSelector, useAppDispatch } from "../../../store/hooks";
-import { logout } from "../../../store/authSlice/actions";
+import { useAppSelector, useAppDispatch } from "../../../../store/hooks";
+import { logout } from "../../../../store/authSlice/actions";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { CgAdd } from "react-icons/cg";
 import Link from "next/link";
@@ -16,7 +16,6 @@ function GBNavbar() {
     isAuthenticated,
     authLoadingStatus,
     user,
-    accessTokenRefreshSuccess
   } = useAppSelector(state => state.auth);
 
   const handleLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -47,7 +46,7 @@ function GBNavbar() {
             </h2>
           </a>
         </Link>
-        {authLoadingStatus === "PENDING" && !accessTokenRefreshSuccess
+        {authLoadingStatus === "PENDING" && !isAuthenticated
           ? <div
               className="navbar-nav spinner-border text-success d-lg-none"
               role="status"
@@ -72,7 +71,7 @@ function GBNavbar() {
           className="collapse navbar-collapse d-lg-flex justify-content-lg-end align-items-lg-center"
           id="navbarNav"
         >
-          {authLoadingStatus === "PENDING" && !accessTokenRefreshSuccess
+          {authLoadingStatus === "PENDING"
             ? <div
                 className="navbar-nav spinner-border text-success"
                 role="status"

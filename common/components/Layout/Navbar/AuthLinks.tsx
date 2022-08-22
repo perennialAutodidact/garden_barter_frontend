@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import { AuthLinksProps } from '../../../ts/interfaces/auth';
-import { useAppDispatch } from '../../../store/hooks';
+import { AuthLinksProps } from '../../../../ts/interfaces/auth';
+import { useAppDispatch } from '../../../../store/hooks';
 import {CgAdd} from 'react-icons/cg'
 
 function AuthLinks ({ handleLogout }: AuthLinksProps) {
