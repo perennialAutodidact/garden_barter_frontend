@@ -43,7 +43,7 @@ export const createMessage = createAsyncThunk(
   "inbox/createMessage",
   async (data: MessageFormData, { rejectWithValue }) => {
     return await axios
-      .post(`/api/inbox/messages/create/`, data, { headers: headers })
+      .post(`/api/inbox/messages/create/`, data, { headers })
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
