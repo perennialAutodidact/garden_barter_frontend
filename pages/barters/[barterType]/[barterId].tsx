@@ -12,15 +12,14 @@ interface BarterDetailPageProps {
 const BarterDetailPage = ({ barter }: BarterDetailPageProps) => {
   const router: NextRouter = useRouter();
   return (
-    <RouteProtector>
       <div className="container-fluid bg-light-lighter">
         <BarterDetail barter={barter} />
       </div>
-    </RouteProtector>
   );
 };
 export const getServerSideProps: GetServerSideProps = async context => {
   let { barterType, barterId } = context.query;
+  console.log(barterType, barterId)
 
   try {
     const res = await axios.get(`${API_URL}/barters/${barterType}/${barterId}`);
