@@ -4,9 +4,7 @@ import { useEffect } from "react";
 import { Provider } from 'react-redux';
 import type { AppProps } from 'next/app';
 import { store } from '../store/store';
-import axios from "axios";
-
-axios.defaults.withCredentials = true
+import axios from '../common/utils/axiosSetup'
 
 function MyApp({ Component, pageProps }:AppProps) {
 
