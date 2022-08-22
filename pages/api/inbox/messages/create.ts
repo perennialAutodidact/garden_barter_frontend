@@ -4,8 +4,8 @@ import cookie from "cookie";
 
 export default async (req, res) => {
   if (req.method === "POST") {
-    const cookies = cookie.parse(req.headers.cookie ?? "");
-    const access = cookies.access ?? false;
+    const cookies = cookie.parse(req.headers.cookie || "");
+    const access = cookies.access || false;
 
     if (!access) {
       return res.status(401).json({
