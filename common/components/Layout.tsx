@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import GBNavbar from "../../components/Layout/Navbar/Navbar";
+import GBNavbar from "./Layout/Navbar/Navbar";
 import AlertList from "../../components/AlertList";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
@@ -31,6 +31,7 @@ function Layout({ children }) {
       dispatch(updateTokens())
         .then(unwrapResult)
         .then((res) => {
+            console.log('fetching user...')
           dispatch(fetchUser());
         })
         // if refresh token is also invalid...
