@@ -19,7 +19,7 @@ const BarterIcon = ({ barterType }: BarterIconProps) => {
             d-flex justify-content-center align-items-center 
         '
         title={titleize(barterType)}
-        data-testid='BarterItem'
+        data-testid='BarterIcon'
       >
         <span
             className='
