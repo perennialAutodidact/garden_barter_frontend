@@ -1,21 +1,26 @@
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import React from 'react'
-import { Conversation } from '../../../ts/interfaces/inbox'
+import {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+} from "next";
+import React from "react";
+import { Conversation } from "../../../ts/interfaces/inbox";
 
 interface conversationDetailPageProps {
-    conversation: Conversation
+  conversation: Conversation;
 }
 
 const ConversationDetailPage = (conversation: Conversation) => {
-  return (
-    <div></div>
-  )
-}
+  return <div></div>;
+};
 
-export const getServerSideProps: GetServerSideProps =
-    async (context: GetServerSidePropsContext)=> {
-        const {conversationId} = context.query
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const { conversationId } = context.query;
 
-        return {props:{}}
-    }
-export default ConversationDetailPage
+  console.log(conversationId);
+
+  return { props: {} };
+};
+export default ConversationDetailPage;
