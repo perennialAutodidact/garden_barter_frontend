@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 function GuestLinks() {
   return (
-    <ul className="navbar-nav ps-lg-0 text-end">
+    <ul className="navbar-nav ps-lg-0 text-end" role="AccountDropdownMenu">
       <li className="nav-item active">
         <Link href="/signup">
           <a className="nav-link fw-bold">Sign Up</a>
@@ -10,9 +10,7 @@ function GuestLinks() {
       </li>
       <li className="nav-item active">
         <Link href="/login">
-          <a className="nav-link fw-bold">
-            Log In
-          </a>
+          <a className="nav-link fw-bold">Log In</a>
         </Link>
       </li>
     </ul>
