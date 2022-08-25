@@ -19,6 +19,7 @@ export interface AuthFormProps {
 }
 
 export interface AuthLinksProps {
+    user: User;
     handleLogout: React.MouseEventHandler
 }
 
