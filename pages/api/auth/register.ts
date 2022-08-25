@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../../../common/constants";
 
-export default async (req, res) => {
+const registerRoute = async (req, res) => {
   if (req.method === "POST") {
     try {
       const data = req.body;
@@ -29,3 +29,5 @@ export default async (req, res) => {
     return res.status(405).json({ error: `Method ${req.method} not allowed` });
   }
 };
+
+export default registerRoute
