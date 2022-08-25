@@ -1,12 +1,14 @@
-import React, { forwardRef, useEffect, useRef } from 'react'
+import React, { forwardRef, FC, HTMLProps } from 'react'
 import { RiArrowLeftRightLine } from 'react-icons/ri'
-import Link from 'next/link'
+import NextLink from 'next/link'
 import { Barter } from '../../ts/interfaces/barters'
 
 interface IconButtonProps {
-    icon: React.ReactNode
+    icon: React.ReactNode;
+    ref: React.RefObject<HTMLAnchorElement>;
+    onClick: React.MouseEvent
 }
-const IconButton = forwardRef(({icon }: IconButtonProps, {onClick, href}, ref) => {
+const IconButton = (({ icon }) => {
     return (
         <a className="
             icon-button
@@ -21,14 +23,13 @@ const IconButton = forwardRef(({icon }: IconButtonProps, {onClick, href}, ref) =
             w-100
             link-dark
         "
-        data-testid="IconButton"
-        title="Trade!"
-    >
-        {icon}
-    </a>
+            data-testid="IconButton"
+            title="Trade!"
+        >
+            {icon}
+        </a>
 
     )
-IconButton.displayName = 'IconButton'
 })
 
 export default IconButton
