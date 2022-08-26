@@ -143,5 +143,6 @@ export const INIT_STATE_AUTHENTICATED = {
     ...rootState.auth,
     authLoadingStatus: "IDLE" as "IDLE",
     isAuthenticated: true,
+    user: TEST_USER
   },
 };
