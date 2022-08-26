@@ -26,7 +26,7 @@ function AuthLinks({ user, handleLogout }: AuthLinksProps) {
       </li>
 
       <li className="nav-item dropdown">
-        <a
+        <div
           className="nav-link dropdown-toggle fw-bold"
           id="navbarDropdownMenuLink"
           data-bs-toggle="dropdown"
@@ -35,7 +35,7 @@ function AuthLinks({ user, handleLogout }: AuthLinksProps) {
           role="AccountDropdown"
         >
           Account
-        </a>
+        </div>
         <div
           className="dropdown-menu bg-light-dark dropdown-menu-lg-end shadow"
           aria-labelledby="navbarDropdownMenuLink"
@@ -49,9 +49,9 @@ function AuthLinks({ user, handleLogout }: AuthLinksProps) {
               "
             ></i>
           </p>
-          <Link href="/barters/create/">
+          <Link href="/barters/create/" data-testid="CreateBarterDropdownLink">
             <a className="dropdown-item text-end">
-              Create Post
+              Create Barter
               <i
                 className="
                     bi bi-pencil-fill text-primary 
