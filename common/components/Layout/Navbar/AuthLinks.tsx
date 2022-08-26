@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 import { AuthLinksProps } from "../../../../ts/interfaces/auth";
 import { CgAdd } from "react-icons/cg";
-import {MdAccountCircle} from 'react-icons/md'
 function AuthLinks({ user, handleLogout }: AuthLinksProps) {
   return (
     <ul className="navbar-nav ps-lg-0 text-end" role="AccountDropdownMenu">
@@ -20,7 +19,7 @@ function AuthLinks({ user, handleLogout }: AuthLinksProps) {
         </Link>
       </div>
 
-      <li className="nav-item active">
+      <li className="nav-item">
         <a className="nav-link fw-bold" href="#">
           About
         </a>
@@ -29,7 +28,6 @@ function AuthLinks({ user, handleLogout }: AuthLinksProps) {
       <li className="nav-item dropdown">
         <a
           className="nav-link dropdown-toggle fw-bold"
-          href="#"
           id="navbarDropdownMenuLink"
           data-bs-toggle="dropdown"
           aria-haspopup="true"
