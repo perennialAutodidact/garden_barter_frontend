@@ -1,5 +1,5 @@
 import Navbar from "../../../common/components/Layout/Navbar/Navbar";
-import { render, RenderResult, screen } from "../../utils/utils";
+import { render, RenderResult, waitFor } from "../../utils/utils";
 import userEvent from "@testing-library/user-event";
 import { RootState, initialState as rootState } from "../../../store/store";
 import {
@@ -39,7 +39,6 @@ jest.mock("next/router", () => ({
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
 describe("<Navbar/>", () => {
-
   it("should render without crashing", () => {
     setupNavbar(rootState, createMockRouter());
   });
@@ -60,30 +59,26 @@ describe("<Navbar/>", () => {
   it("should render authenticated navbar", async () => {
     const user = userEvent.setup();
 
-    const { getByRole, findByRole,queryByRole, findByText, debug } = setupNavbar(
-        {
-            ...rootState,
-            auth: {
-                ...rootState.auth,
-                authLoadingStatus: "IDLE" as "IDLE",
-                isAuthenticated: true,
-                user: TEST_USER
-            },
-        },
-        createMockRouter()
-        );
-        await findByRole('AccountDropdown')
-        screen.debug()
-        // const accountDropdown = await screen.findByRole("AccountDropdown");
-        // expect(getByRole("GBLogo")).toBeInTheDocument();
-        // expect(getByRole("NavbarHeader")).toBeInTheDocument();
-    // accountDropdown.onclick = jest.fn();
+    const {
+      getByRole,
+      findByRole,
+      queryByRole,
+      findByText,
+      debug,
+    } = setupNavbar(INIT_STATE_AUTHENTICATED, createMockRouter());
+    const accountDropdown = await findByRole("AccountDropdown");
+    expect(getByRole("GBLogo")).toBeInTheDocument();
+    expect(getByRole("NavbarHeader")).toBeInTheDocument();
+    accountDropdown.onclick = jest.fn();
+    debug(accountDropdown)
     // expect(accountDropdown).toBeInTheDocument();
     // await user.click(accountDropdown);
-    // expect(await findByRole("AccountDropdownMenu")).toBeInTheDocument();
+    // waitFor(async()=>{
 
-    // expect(await findByRole("CreateBarterButton")).toBeInTheDocument();
-    // expect(await findByText(TEST_USER.username)).toBeInTheDocument();
+      // expect(await findByRole("AccountDropdownMenu")).toBeInTheDocument();
+      // expect(await findByRole("CreateBarterButton")).toBeInTheDocument();
+      // expect(await findByText(TEST_USER.username)).toBeInTheDocument();
+    // })
   });
 
   it("should render all account dropdown buttons and they should navigate to the correct pages", () => {});
