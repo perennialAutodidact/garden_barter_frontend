@@ -30,7 +30,7 @@ const BarterItem = ({ barter, showAllFields = false }: BarterItemProps) => {
     </Fragment>;
 
   return (
-    <div className="col-10 offset-1 col-lg-8 offset-lg-2 text-dark">
+    <div className="col-10 offset-1 col-lg-8 offset-lg-2 text-dark" data-testid='BarterItem'>
       <div className="row mt-5 bg-light position-relative rounded-top">
         <div className="py-2 px-3 d-flex align-items-center justify-content-between bg-light-dark rounded-top">
           <div className="d-flex">
