@@ -1,21 +1,15 @@
 import React from "react";
-import { render, RenderResult, screen, fireEvent } from "../../utils/utils";
+import { render, RenderResult, screen, fireEvent } from "../../utils";
 import { TEST_BARTER } from "../../testData";
-import { initialState as rootState, RootState } from "../../../store/store";
-import BartersHome from "../../../pages/barters";
 import BarterItem from "../../../components/Barters/BarterItem";
-import { getAllByTitle, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-
-let documentBody: RenderResult;
-
-const setupBarterItem = barter => render(<BarterItem barter={barter} />);
+import setupElement from '../../utils/setupElement'
 
 describe("<BarterItem/>", () => {
   it("Should render item data", () => {
     const user = userEvent.setup();
-
-    const { getByText, getByTestId, queryAllByTitle } = setupBarterItem(TEST_BARTER);
+    
+    const { getByText, getByTestId, queryAllByTitle } = setupElement(<BarterItem barter={TEST_BARTER}/>);
 
     expect(getByText(TEST_BARTER.title)).toBeInTheDocument();
 
