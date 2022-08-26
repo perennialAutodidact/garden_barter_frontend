@@ -128,7 +128,7 @@ const BarterCreateForm = () => {
 
   return (
     <RouteProtector>
-      <div className="container-fluid">
+      <div className="container-fluid" data-testid="BarterCreatePage">
         <div className="row">
           <div className="col-12 col-lg-4 offset-lg-4">
             {!formSections[sectionIndex] ? (
