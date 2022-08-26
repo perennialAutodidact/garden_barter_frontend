@@ -129,7 +129,6 @@ export const TEST_BARTERS: Barter[] = [
 ];
 
 export const INIT_STATE_NOT_AUTHENTICATED = {
-  ...rootState,
   auth: {
     ...rootState.auth,
     authLoadingStatus: "IDLE" as "IDLE",
@@ -138,7 +137,6 @@ export const INIT_STATE_NOT_AUTHENTICATED = {
 };
 
 export const INIT_STATE_AUTHENTICATED = {
-  ...rootState,
   auth: {
     ...rootState.auth,
     authLoadingStatus: "IDLE" as "IDLE",
