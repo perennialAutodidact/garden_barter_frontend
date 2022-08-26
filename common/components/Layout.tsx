@@ -11,20 +11,6 @@ function Layout({ children }) {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  // load bootstrap and initialize tool tips
-  useEffect(() => {
-    (async () => {
-      let bootstrap = await import("bootstrap/dist/js/bootstrap.bundle");
-
-      var tooltipTriggerList = [].slice.call(
-        document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      );
-      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-      });
-    })();
-  }, []);
-
   useEffect(() => {
     if (dispatch && dispatch != null && dispatch !== undefined) {
       // check the validity of the access token
