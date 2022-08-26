@@ -1,89 +1,52 @@
 import React from "react";
-import AuthForm from "../../../components/Auth/AuthForm";
 import Signup from "../../../pages/signup";
 import {
   render,
   RenderResult,
   authFormDataBuilder,
-  cleanup,
   waitFor
-} from "../../utils/utils";
+} from "../../utils";
 import { AuthFormData } from "../../../ts/interfaces/auth";
 import userEvent from "@testing-library/user-event";
-import { Provider as ReduxProvider } from "react-redux";
-import { initialState as rootState } from "../../../store/store";
 import { NextRouter } from "next/router";
 import { createMockRouter } from "../../utils/createMockRouter";
-
-let documentBody: RenderResult;
-
-jest.mock("next/router", () => ({
-  useRouter() {
-    return {
-      route: "/",
-      pathname: "",
-      query: {},
-      asPath: "",
-      push: jest.fn(),
-      scroll: true,
-      events: {
-        on: jest.fn(),
-        off: jest.fn()
-      },
-      beforePopState: jest.fn(() => null),
-      prefetch: jest.fn(() => null)
-    };
-  }
-}));
-const useRouter = jest.spyOn(require("next/router"), "useRouter");
-
-const setupSignupPage = (
-  initialState = rootState,
-  router: Partial<NextRouter> = {}
-) =>
-  render(<Signup />, {
-    initialState: {
-      ...initialState
-    },
-    router: { ...router }
-  });
+import setupElement from '../../utils/setupElement'
+import { INIT_STATE_AUTHENTICATED } from "../../testData";
 
 describe("signup page", () => {
   it("renders signup form", async () => {
-    documentBody = setupSignupPage(rootState, createMockRouter());
-    const heading = await documentBody.queryByRole("heading");
+    const {queryByRole, getByLabelText, getByTestId} = setupElement(<Signup/>)
+    const heading = await queryByRole("heading");
     expect(heading).toBeInTheDocument();
     expect(heading).toHaveTextContent("Sign Up");
 
-    const emailInput = documentBody.getByLabelText("Email");
+    const emailInput = getByLabelText("Email");
     expect(emailInput).toBeInTheDocument();
     expect(emailInput).toHaveAttribute("type", "email");
     expect(emailInput).toHaveValue("");
 
-    const password1Label = documentBody.getByLabelText("Password");
+    const password1Label = getByLabelText("Password");
     expect(password1Label).toBeInTheDocument();
 
-    const password1Input = documentBody.getByTestId("password1-input");
+    const password1Input = getByTestId("password1-input");
     expect(password1Input).toBeInTheDocument();
     expect(password1Input).toHaveAttribute("type", "password");
     expect(password1Input).toHaveValue("");
 
-    const password2Label = documentBody.getByLabelText("Confirm Password");
+    const password2Label = getByLabelText("Confirm Password");
     expect(password2Label).toBeInTheDocument();
 
-    const password2Input = documentBody.getByTestId("password2-input");
+    const password2Input = getByTestId("password2-input");
     expect(password2Input).toBeInTheDocument();
     expect(password2Input).toHaveAttribute("type", "password");
     expect(password2Input).toHaveValue("");
   });
 
   it("renders form submit button", async () => {
-    documentBody = setupSignupPage(
-      { ...rootState, auth: { ...rootState.auth, authLoadingStatus: "IDLE" } },
-      createMockRouter()
-    );
+    const {queryByRole, findByTestId} = setupElement(<Signup/>, INIT_STATE_AUTHENTICATED)
+    const heading = await queryByRole("heading");
 
-    const submitButton = await documentBody.findByTestId("submit-button");
+    const submitButton = await findByTestId("submit-button");
 
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveTextContent("Sign Up");
@@ -92,14 +55,14 @@ describe("signup page", () => {
   });
 
   it("changes form data and submits form with input data", async () => {
-    documentBody = setupSignupPage(rootState, createMockRouter());
+    const {getByTestId, getByLabelText} = setupElement(<Signup/>)
 
     const user = userEvent.setup();
     const authFormData: AuthFormData = authFormDataBuilder("signup");
 
-    const email: HTMLElement = documentBody.getByLabelText(/email/i);
-    const password: HTMLElement = documentBody.getByLabelText("Password");
-    const password2: HTMLElement = documentBody.getByLabelText(
+    const email: HTMLElement = getByLabelText(/email/i);
+    const password: HTMLElement = getByLabelText("Password");
+    const password2: HTMLElement = getByLabelText(
       "Confirm Password"
     );
 
@@ -114,8 +77,8 @@ describe("signup page", () => {
       expect(password2).toHaveValue(authFormData.password2);
 
       // mock form submit
-      const signupForm = documentBody.getByTestId("auth-form");
-      const submitButton = documentBody.getByTestId("submit-button");
+      const signupForm = getByTestId("auth-form");
+      const submitButton = getByTestId("submit-button");
       const mockSubmit = jest.fn();
       signupForm.onsubmit = mockSubmit;
       await userEvent.click(submitButton).then(() => {

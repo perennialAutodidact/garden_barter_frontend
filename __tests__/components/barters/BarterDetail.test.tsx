@@ -1,28 +1,17 @@
-import { render, RenderResult } from '../../utils/utils'
+import { render, RenderResult } from '../../utils'
 import BarterDetail from '../../../components/Barters/BarterDetail'
-import { TEST_BARTER, TEST_USER } from '../../testData'
+import { INIT_STATE_AUTHENTICATED, TEST_BARTER, TEST_USER } from '../../testData'
 import { initialState as rootState, RootState } from '../../../store/store'
 import { Barter } from '../../../ts/interfaces/barters';
 import userEvent from "@testing-library/user-event";
-
-let documentBody: RenderResult;
-
-
-const setupBarterDetail = (barter: Barter, initialState: RootState = rootState) =>
-    render(<BarterDetail barter={barter} />, {
-        initialState
-    });
+import setupElement from '../../utils/setupElement'
 
 describe('<BarterDetail/>', () => {
     it('should render with basic detail components', () => {
-        const initState = {
-            ...rootState,
-            auth: {
-                ...rootState.auth,
-                user: TEST_USER
-            }
-        }
-        const { getByTestId, getByText, getAllByText } = setupBarterDetail(TEST_BARTER, initState)
+        const { getByTestId, getByText, getAllByText } = setupElement(
+            <BarterDetail barter={TEST_BARTER} />,
+            INIT_STATE_AUTHENTICATED
+        )
 
         expect(getByTestId('BarterIcon')).toBeInTheDocument()
         expect(getByText(TEST_BARTER.title)).toBeInTheDocument()
@@ -34,14 +23,10 @@ describe('<BarterDetail/>', () => {
 
     })
     it('should navigate to send-message page when IconButton is clicked', async () => {
-        const initState = {
-            ...rootState,
-            auth: {
-                ...rootState.auth,
-                user: TEST_USER
-            }
-        }
-        const { getByTestId } = setupBarterDetail(TEST_BARTER, initState)
+        const { getByTestId } = setupElement(
+            <BarterDetail barter={TEST_BARTER} />,
+            INIT_STATE_AUTHENTICATED
+        )
 
         const user = userEvent.setup()
         const iconButton = getByTestId('IconButton')

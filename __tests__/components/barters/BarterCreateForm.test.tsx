@@ -6,56 +6,21 @@ import {
   cleanup,
   waitFor,
   screen,
-} from "../../utils/utils";
+} from "../../utils";
 import BarterCreateForm from "../../../components/Barters/BarterCreateForm";
 import { initialState as rootState, RootState } from "../../../store/store";
 import userEvent from "@testing-library/user-event";
 import { NextRouter } from "next/router";
 import { createMockRouter } from "../../utils/createMockRouter";
 import BarterCreatePage from "../../../pages/barters/create";
-
-let documentBody: RenderResult;
-// let useRouter: jest.Mock<nextRouter.NextRouter>;
-
-jest.mock("next/router", () => ({
-  useRouter() {
-    return {
-      route: "/",
-      pathname: "",
-      query: {},
-      asPath: "",
-      push: jest.fn(),
-      events: {
-        on: jest.fn(),
-        off: jest.fn()
-      },
-      beforePopState: jest.fn(() => null),
-      prefetch: jest.fn(() => null)
-    };
-  }
-}));
-const useRouter = jest.spyOn(require("next/router"), "useRouter");
-
-// jest.mock('next/dist/client/router', ()=>require('next-router-mock'))
-
-const setupBarterCreateForm = (
-  el: ReactNode,
-  initialState: RootState,
-  router: Partial<NextRouter>
-) =>
-  render(<BarterCreateForm />, {
-    initialState: {
-      ...initialState
-    },
-    router
-  });
+import setupElement from '../../utils/setupElement'
 
 describe("<BarterCreateForm/>", () => {
   afterAll(() => {
     cleanup();
   });
   it("should validate step 1 before moving to step 2", async () => {
-    setupBarterCreateForm(<BarterCreatePage />, rootState, createMockRouter());
+    setupElement(<BarterCreatePage />);
     const { getByTestId, getByText, queryByText, findAllByTestId } = screen;
     const user = userEvent.setup();
     const nextButton = getByText(/next/i);
