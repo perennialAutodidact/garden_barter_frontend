@@ -19,8 +19,7 @@ const RouteProtector = ({ children }: RouteProtectorProps) => {
     if (router && router !== null && router !== undefined) {
       if (
         !isAuthenticated &&
-        authLoadingStatus === "IDLE" &&
-        !updateTokenSuccess
+        authLoadingStatus === "IDLE" 
       ) {
         const query = { next: router.asPath };
 
@@ -32,9 +31,9 @@ const RouteProtector = ({ children }: RouteProtectorProps) => {
     }
   }, [isAuthenticated, authLoadingStatus]);
 
-  if (!isAuthenticated && authLoadingStatus === "IDLE" && !updateTokenSuccess) {
+  if (!isAuthenticated && authLoadingStatus === "IDLE") {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-75">
+      <div className="d-flex justify-content-center align-items-center min-75-vh">
         <Spinner />
       </div>
     );

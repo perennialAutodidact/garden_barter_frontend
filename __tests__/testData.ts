@@ -1,6 +1,9 @@
 import { User } from "../ts/interfaces/auth";
 import { Barter } from "../ts/interfaces/barters";
+import { Conversation } from "../ts/interfaces/inbox";
 import { initialState as rootState } from "../store/store";
+
+
 export const TEST_USER: User = {
   id: 1,
   lastLogin: "2022-08-15T04:33:32-07:00",
@@ -144,3 +147,85 @@ export const INIT_STATE_AUTHENTICATED = {
     user: TEST_USER
   },
 };
+
+export const TEST_CONVERSATION:Conversation = {
+    uuid: "f1e78e3f3ece49308b4ca091f9ef1a4e",
+    messages: [
+      {
+        sender: {
+          id: 3,
+          email: "bilbo.baggins@shire.com",
+          username: "bilbo.baggins"
+        },
+        recipient: {
+          id: 1,
+          email: "admin@gardenbarter.net",
+          username: "kg"
+        },
+        uuid: "a549afe255bc414f91de01dbffee534f",
+        dateReceived: "2022-08-24T22:20:36.297094-07:00",
+        body: "Is this still available? Would you trade for some heirloom bean seeds?",
+        conversation: "f1e78e3f3ece49308b4ca091f9ef1a4e"
+      },
+      {
+        sender: {
+          id: 1,
+          email: "admin@gardenbarter.net",
+          username: "kg"
+        },
+        recipient: {
+          id: 3,
+          email: "bilbo.baggins@shire.com",
+          username: "bilbo.baggins"
+        },
+        uuid: "e54605f3018249c5a270800be9c75b8b",
+        dateReceived: "2022-08-24T22:21:07.021385-07:00",
+        body: "Yes it is and yes I would",
+        conversation: "f1e78e3f3ece49308b4ca091f9ef1a4e"
+      },
+      {
+        sender: {
+          id: 3,
+          email: "bilbo.baggins@shire.com",
+          username: "bilbo.baggins"
+        },
+        recipient: {
+          id: 1,
+          email: "admin@gardenbarter.net",
+          username: "kg"
+        },
+        uuid: "27b531a359c04df29122fafc4ee9a4f6",
+        dateReceived: "2022-08-26T11:21:18.220158-07:00",
+        body: "Great! Are you available today at 2pm?",
+        conversation: "f1e78e3f3ece49308b4ca091f9ef1a4e"
+      },
+      {
+        sender: {
+          id: 1,
+          email: "admin@gardenbarter.net",
+          username: "kg"
+        },
+        recipient: {
+          id: 3,
+          email: "bilbo.baggins@shire.com",
+          username: "bilbo.baggins"
+        },
+        uuid: "4fcfcc3434ba42a18bbf57c8634c2a73",
+        dateReceived: "2022-08-26T11:21:18.223706-07:00",
+        body: "Yes! My address is 123 Faux St.",
+        conversation: "f1e78e3f3ece49308b4ca091f9ef1a4e"
+      }
+    ],
+    barterType: "seed",
+    barterUuid: "5c19e30615254bd6bd649b47a59020aa",
+    sender: {
+      id: 3,
+      email: "bilbo.baggins@shire.com",
+      username: "bilbo.baggins"
+    },
+    recipient: {
+      id: 1,
+      email: "admin@gardenbarter.net",
+      username: "kg"
+    }
+  }

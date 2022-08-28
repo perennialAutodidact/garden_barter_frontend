@@ -30,6 +30,7 @@ $theme-colors: (
   'primary': $custom-primary,
   'primary-dark': $custom-primary-dark,
   'secondary': $custom-secondary,
+  'secondary-light': $custom-secondary-light,
   'secondary-dark': $custom-secondary-dark,
   'success': $custom-success,
   'success-light': $custom-success-light,
@@ -37,6 +38,7 @@ $theme-colors: (
   'success-dark': $custom-success-dark,
   'info': $custom-info,
   'warning': $custom-warning,
+  'warning-light': $custom-warning-light,
   'warning-dark': $custom-warning-dark,
   'danger': $custom-danger,
   'danger-light': $custom-danger-light,
@@ -58,12 +60,51 @@ $theme-colors: (
   min-height: 100vh;
 }
 
-.vh-100 {
+.min-100-vh {
   min-height: 100vh;
 }
 
-.vh-75 {
+.h-100-vh {
+    height: 100vh;
+}
+
+.min-90-vh {
+    min-height:90vh;
+}
+
+.max-90-vh {
+    max-height:90vh;
+}
+
+.min-75-vh {
   min-height: 75vh;
+}
+
+.max-75-vh {
+    max-height: 75vh;
+}
+
+.h-75-vh {
+  height: 75vh;
+}
+
+.max-75-vh {
+    max-height: 75vh;
+}
+.h-50-vh {
+    height: 50vh;
+}
+
+.min-50-vh {
+  min-height: 50vh;
+}
+
+.max-50-vh {
+    max-height: 50vh;
+}
+
+.scroll-y {
+    overflow-y: scroll;
 }
 
 h1,

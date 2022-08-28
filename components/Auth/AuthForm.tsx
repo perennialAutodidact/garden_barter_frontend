@@ -88,7 +88,8 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
     if (isAuthenticated && authLoadingStatus !== "PENDING") {
       if (router && router.query) {
         let next = router.query.next || "/";
-        router.push(next as string);
+        console.log('next', next)
+        router.push(next.toString());
       }
     }
   }, [isAuthenticated, authLoadingStatus]);

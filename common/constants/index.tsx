@@ -4,8 +4,8 @@ import {BsWrench} from 'react-icons/bs'
 
 export const API_URL =
   process.env.NODE_ENV === "development"
-    ? process.env.API_URL_DEVELOPMENT
-    : process.env.API_URL_PRODUCTION;
+    ? process.env.NEXT_PUBLIC_API_URL_DEVELOPMENT
+    : process.env.NEXT_PUBLIC_API_URL_PRODUCTION;
 
 
     export const ACCESS_TOKEN_LIFETIME = 60 * 30 * 1000

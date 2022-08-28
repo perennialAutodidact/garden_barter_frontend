@@ -22,14 +22,16 @@ const BarterDetail = ({ barter }: BarterDetailProps) => {
 
     const conversation: Conversation = useFetchConversation(user, barter);
 
-    console.log("conversation", conversation);
-    console.log("user", user);
-
     const goToConversation = (conversation: Conversation) => {
         if (router && router !== undefined && router !== null) {
             router.push({
                 pathname: '/inbox/conversations/[[...conversationId]]/',
-                query: { conversationId: conversation ? conversation.id : 'new' }
+                query: {
+                    conversationId: conversation ? conversation.uuid : 'new',
+                    barterType: barter.barterType,
+                    barterId: barter.uuid,
+                    sender: user.id
+                }
             })
         }
     }
