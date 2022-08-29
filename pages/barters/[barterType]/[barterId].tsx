@@ -5,6 +5,9 @@ import { API_URL } from "../../../common/constants";
 import { Barter } from "../../../ts/interfaces/barters";
 import { useRouter, NextRouter } from "next/router";
 import RouteProtector from "../../../common/components/RouteProtector";
+import Layout from '../../../common/components/Layout'
+import {httpClient, setHttpClientContext } from '../../../common/utils/httpClient'
+import {titleize} from '../../../common/utils/helpers'
 interface BarterDetailPageProps {
     barter: Barter;
 }
@@ -12,18 +15,21 @@ interface BarterDetailPageProps {
 const BarterDetailPage = ({ barter }: BarterDetailPageProps) => {
     const router: NextRouter = useRouter();
     return (
-        <div className="container-fluid bg-light-lighter">
-            <BarterDetail barter={barter} />
-        </div>
+        <Layout title={`${titleize(barter.barterType)} - ${barter.title}`}>
+            <div className="container-fluid bg-light-lighter">
+                <BarterDetail barter={barter} />
+            </div>
+        </Layout>
     );
 };
 export const getServerSideProps: GetServerSideProps =
     async (context: GetServerSidePropsContext) => {
+        setHttpClientContext(context)
         let { barterType, barterId } = context.query;
         console.log(barterType, barterId)
 
         try {
-            const res = await axios.get(`${API_URL}/barters/${barterType}/${barterId}`);
+            const res = await httpClient.get(`${API_URL}/barters/${barterType}/${barterId}`);
 
             return {
                 props: {

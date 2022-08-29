@@ -1,13 +1,13 @@
 import axios from "axios";
 import { API_URL } from "../../../common/constants";
 import { setTokenCookies } from "./utils";
-
+import { httpClient, setHttpClientContext } from "../../../common/utils/httpClient";
 export default async (req, res) => {
     if (req.method === "POST") {
+        setHttpClientContext({req,res})
         const { email, password } = req.body;
-
         try {
-            const apiRes = await axios.post(
+            const apiRes = await httpClient.post(
                 `${API_URL}/token/`,
                 JSON.stringify({ email, password }),
                 {
@@ -25,8 +25,8 @@ export default async (req, res) => {
             })
             
         } catch (error) {
-            console.log(error)
             if (error.response) {
+                console.log('login error',error.response.data)
                 return res.status(error.response.status).json({
                     errors: [error.response.data.detail]
                 });

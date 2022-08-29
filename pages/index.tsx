@@ -5,15 +5,20 @@ import axios, { AxiosResponse } from "axios";
 import { BartersHomePageProps } from "../ts/interfaces/barters";
 import { API_URL } from "../common/constants";
 import { useCookie } from "next-cookie";
+import { httpClient, setHttpClientContext } from "../common/utils/httpClient";
+
+
 const Index: React.FC = ({ barters }: BartersHomePageProps) => {
   return <BartersHome barters={barters} />;
 };
 
 export const getServerSideProps = async (context) => {
     const cookie = useCookie(context)
-    console.log(cookie)
+    setHttpClientContext(context)
+    // console.log(cookie)
+    
   try {
-    const response = await axios.get(`${API_URL}/barters/`, {
+    const response = await httpClient.get(`${API_URL}/barters/`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"

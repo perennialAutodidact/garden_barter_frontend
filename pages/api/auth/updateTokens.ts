@@ -3,13 +3,25 @@ import axios from "axios";
 import { API_URL } from "../../../common/constants";
 import cookie from "cookie";
 import { deleteTokenCookies, setTokenCookies, updateTokens, verifyAccessToken, requestAccessToken } from "./utils";
+import { httpClient, setHttpClientContext, HttpContext } from "../../../common/utils/httpClient";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
     const cookies = cookie.parse(req.headers.cookie || "");
     const refresh = cookies.refresh || '';
     const access = cookies.access || '';
+    setHttpClientContext({res, req})
+    
+    try {
+        const apiRes = await httpClient.get(`${API_URL}/user/`)
+        // console.log(res.data)
+        return res.status(200).json({message: 'success'})
+    } catch (error) {
+        // console.log(error.response.data)
+        return res.status(999).json({error})
+        
+    }
 
-    return res.status(200).json({message: 'success'})
     // try {
     //     const verifyAccessTokenRes = await verifyAccessToken(access)
     //     return res.status(200).json(verifyAccessTokenRes.data)
