@@ -13,19 +13,7 @@ function Layout({ children, title, }) {
 
   useEffect(() => {
     if (dispatch && dispatch != null && dispatch !== undefined) {
-      // check the validity of the access token
-      dispatch(updateTokens())
-        .then(unwrapResult)
-        .then((res) => {
-            console.log('fetching user...')
           dispatch(fetchUser());
-        })
-        // if refresh token is also invalid...
-        .catch((err) => {
-          console.log(
-            "Something went wrong refreshing tokens in layout component"
-          );
-        });
     }
   }, [dispatch]);
 

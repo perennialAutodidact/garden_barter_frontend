@@ -2,7 +2,7 @@ import axios from "axios";
 import { API_URL } from "../../../common/constants";
 import { setTokenCookies } from "./utils";
 import { httpClient, setHttpClientContext } from "../../../common/utils/httpClient";
-export default async (req, res) => {
+const loginRoute = async (req, res) => {
     if (req.method === "POST") {
         setHttpClientContext({req,res})
         const { email, password } = req.body;
@@ -20,6 +20,8 @@ export default async (req, res) => {
             const { access, refresh } = apiRes.data
             res = setTokenCookies(res, access, refresh)
             
+                // console.log(apiRes.headers["set-cookie"])
+
             return res.status(200).json({
                 message: 'Logged in successfully!'
             })
@@ -31,6 +33,7 @@ export default async (req, res) => {
                     errors: [error.response.data.detail]
                 });
             } else {
+                console.log(error)
                 return res.status(500).json({
                     errors: ["Something went wrong trying to log in."]
                 });
@@ -41,3 +44,5 @@ export default async (req, res) => {
         return res.status(405).json({ errors: [`Method ${req.method} not allowed`] });
     }
 };
+
+export default loginRoute

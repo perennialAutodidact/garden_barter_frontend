@@ -1,11 +1,10 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import { GetServerSidePropsContext, PreviewData } from 'next'
-import Router from 'next/router'
 import { API_URL } from '../constants'
 import { NextApiRequest, NextApiResponse } from "next";
-import { ParsedUrlQuery } from 'querystring';
 import { setTokenCookies } from '../../pages/api/auth/utils';
 
+import cookie from 'cookie'
 const isServer = () => typeof window === "undefined"
 
 type ClientSideContext = {
@@ -66,13 +65,15 @@ httpClient.interceptors.response.use(
 )
 
 let fetchingToken = false;
-let subscribers: ((token: string) => any)[] = [];
+let subscribers: ((access:string, refresh:string) => any)[] = [];
 
-const onAccessTokenFetched = (token: string) => {
-    subscribers.forEach((callback) => callback(token))
+const onTokensFetched = (access: string, refresh: string) => {
+    console.log('Tokens fetched', {access,refresh})
+    subscribers.forEach((callback) => callback(access, refresh))
+    // context.res = setTokenCookies(context.res, '1234', 'zbcd')
 }
 
-const addSubscriber = (callback: (token: string) => any) => {
+const addSubscriber = (callback: (access:string, refresh:string) => any) => {
     subscribers.push(callback)
 }
 
@@ -81,35 +82,40 @@ const refreshToken = async (error: AxiosError) => {
 
         let { response } = error
 
-        console.log({ 'status': response.status })
+        // console.log({ 'status': response.status })
 
-        const retryOriginalRequest = () => new Promise(resolve => {
-            addSubscriber((token: string) => {
-                console.log('SUBSCRIBER ADDED')
-                response!.config.headers['Authorization'] = `Bearer ${token}`
-                console.log('original request config',response.config)
-                resolve(axios(response!.config))
+        const retryOriginalRequest = () => {
+            return new Promise(resolve => {
+
+            addSubscriber((access:string, refresh:string) => {
+                response!.config.headers['Authorization'] = `Bearer ${access}`
+                response!.config['data'] = JSON.stringify({
+                    ...response!.config.data,
+                   access, refresh 
+                })
+                // console.log('original request config',response.config)
+                
+                resolve(axios(response!.config).then(res=>res))
             })
-        })
+        })}
 
         if (!fetchingToken) {
             fetchingToken = true
 
-            console.log('refreshTokenContext.req.cookies', context.req.cookies)
+            // console.log('refreshTokenContext.req.cookies', context.req.cookies)
 
-            const { data } = await httpClient.post(
+            const res = await httpClient.post(
                 `${API_URL}/token/refresh/`,
                 { refresh: context?.req?.cookies?.refresh }
             )
+            setTokenCookies(res, '', '')
+            // console.log('refreshedTokens', data)
 
-            console.log('refreshedTokens', data)
-
-            onAccessTokenFetched(data.access)
+            // onTokensFetched(data.access, data.refresh)
         }
-        return retryOriginalRequest
+        return retryOriginalRequest()
     } catch (error) {
-        return Promise.reject(error.response.data)
-        console.log(error.response.data)
+        return Promise.reject(error)
     } finally {
         fetchingToken = false
     }

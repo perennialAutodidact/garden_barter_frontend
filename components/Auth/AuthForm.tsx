@@ -15,7 +15,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { isAuthenticated, authLoadingStatus, signupSuccess } = useAppSelector(
+  const { isAuthenticated, authLoadingStatus } = useAppSelector(
     (state) => state.auth
   );
   const { alerts } = useAppSelector((state) => state.alerts);
@@ -45,7 +45,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
 
   const handleSignupAction = async (formData: AuthFormData) => {
     try {
-      await dispatch(updateTokens())
+      // await dispatch(updateTokens())
       const res = await dispatch(signup(formData)).then(unwrapResult);
       dispatch(login(formData))
         .then(unwrapResult)
@@ -64,7 +64,7 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
 
   const handleLoginAction = async (formData: AuthFormData) => {
     try {
-      await dispatch(updateTokens())
+      // await dispatch(updateTokens())
       const res = await dispatch(login(formData)).then(unwrapResult);
 
       dispatch(fetchUser());
@@ -85,14 +85,15 @@ export const AuthForm = ({ formMode, formTitle }: AuthFormProps) => {
   };
 
   useEffect(() => {
-    if (isAuthenticated && authLoadingStatus !== "PENDING") {
-      if (router && router.query) {
+    if (isAuthenticated && authLoadingStatus === 'IDLE') {
+      console.log({isAuthenticated, authLoadingStatus})
+      if (router && router) {
         let next = router.query.next || "/";
         console.log('next', next)
         router.push(next.toString());
       }
     }
-  }, [isAuthenticated, authLoadingStatus]);
+  }, [isAuthenticated, authLoadingStatus, router]);
 
   return (
     <div className="row py-5">

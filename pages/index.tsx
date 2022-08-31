@@ -4,7 +4,6 @@ import { GetServerSideProps, GetServerSidePropsResult } from "next";
 import axios, { AxiosResponse } from "axios";
 import { BartersHomePageProps } from "../ts/interfaces/barters";
 import { API_URL } from "../common/constants";
-import { useCookie } from "next-cookie";
 import { httpClient, setHttpClientContext } from "../common/utils/httpClient";
 
 
@@ -13,7 +12,6 @@ const Index: React.FC = ({ barters }: BartersHomePageProps) => {
 };
 
 export const getServerSideProps = async (context) => {
-    const cookie = useCookie(context)
     setHttpClientContext(context)
     // console.log(cookie)
     
@@ -31,7 +29,7 @@ export const getServerSideProps = async (context) => {
       }
     };
   } catch (error) {
-    // console.log(error);
+    console.log(error);
 
       return {
         notFound: true

@@ -62,7 +62,9 @@ export const authSlice = createSlice({
 
       // UPDATE TOKENS
       .addCase(updateTokens.pending, (state) => {
+        state.isAuthenticated = false;
         state.authLoadingStatus = "PENDING";
+        state.user = null;
       })
       .addCase(updateTokens.fulfilled, (state, action) => {
         state.isAuthenticated = true;
@@ -76,6 +78,7 @@ export const authSlice = createSlice({
       // FETCH USER
       .addCase(fetchUser.pending, (state) => {
         state.authLoadingStatus = "PENDING";
+        state.isAuthenticated = false;
       })
       .addCase(
         fetchUser.fulfilled,
