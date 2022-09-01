@@ -74,8 +74,9 @@ const FormSection = ({
           >
             <h5 className="m-0 text-warning">
               {isLastSection
-                ? barterLoadingStatus === "PENDING" ? <Spinner/> : "Submit"
-                : "Next"}
+                ? barterLoadingStatus === "PENDING" ? <Spinner color={'warning'}/> : "Submit"
+                : "Next"
+              }
             </h5>
           </button>
         </div>

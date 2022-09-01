@@ -103,7 +103,6 @@ const BarterCreateForm = () => {
 
     if (sectionIsValid) {
       try {
-        await dispatch(updateTokens());
         const barterRes = await dispatch(
           createBarter({ formData: formData, user: user })
         ).then(unwrapResult);

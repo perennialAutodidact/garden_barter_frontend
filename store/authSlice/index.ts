@@ -12,7 +12,7 @@ import {
 export const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
-  authLoadingStatus: "PENDING",
+  authLoadingStatus: "IDLE",
   signupSuccess: false,
   fetchUserSuccess: false,
   updateTokenSuccess: false,

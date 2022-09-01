@@ -8,33 +8,32 @@ import { httpClient, setHttpClientContext } from "../common/utils/httpClient";
 
 
 const Index: React.FC = ({ barters }: BartersHomePageProps) => {
-  return <BartersHome barters={barters} />;
+    return <BartersHome barters={barters} />;
 };
 
 export const getServerSideProps = async (context) => {
     setHttpClientContext(context)
-    // console.log(cookie)
-    
-  try {
-    const response = await httpClient.get(`${API_URL}/barters/`, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    });
 
-    return {
-      props: {
-        barters: response.data.barters
-      }
-    };
-  } catch (error) {
-    console.log(error);
+    try {
+        const response = await httpClient.get(`${API_URL}/barters/`, {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            }
+        });
 
-      return {
-        notFound: true
+        return {
+            props: {
+                barters: response.data.barters
+            }
+        };
+    } catch (error) {
+        console.log(error);
+
+        return {
+            notFound: true
+        }
     }
-  }
 };
 
 export default Index;

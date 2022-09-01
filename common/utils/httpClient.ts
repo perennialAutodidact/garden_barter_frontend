@@ -4,7 +4,6 @@ import { API_URL } from '../constants'
 import { NextApiRequest, NextApiResponse } from "next";
 import { setTokenCookies } from '../../pages/api/auth/utils';
 
-import cookie from 'cookie'
 const isServer = () => typeof window === "undefined"
 
 type ClientSideContext = {
@@ -18,9 +17,7 @@ export type HttpContext = GetServerSidePropsContext | ClientSideContext
 let context = <HttpContext>{}; 
 
 
-const baseURL = process.env.NODE_ENV === 'development'
-    ? process.env.NEXT_PUBLIC_API_URL_DEVELOPEMENT
-    : process.env.NEXT_PUBLIC_API_URL_PRODUCTION
+const baseURL = API_URL
 
 export const httpClient = axios.create({
     baseURL,
@@ -49,9 +46,7 @@ httpClient.interceptors.request.use((config) => {
 })
 
 httpClient.interceptors.response.use(
-    response => {
-        // console.log('success:', response.data)
-        return response},
+    response => response,
     (error: AxiosError) => {
         if (
             error.response?.status === 401 &&
@@ -68,9 +63,8 @@ let fetchingToken = false;
 let subscribers: ((access:string, refresh:string) => any)[] = [];
 
 const onTokensFetched = (access: string, refresh: string) => {
-    console.log('Tokens fetched', {access,refresh})
+    context.res = setTokenCookies(context.res, access, refresh)
     subscribers.forEach((callback) => callback(access, refresh))
-    // context.res = setTokenCookies(context.res, '1234', 'zbcd')
 }
 
 const addSubscriber = (callback: (access:string, refresh:string) => any) => {
@@ -79,39 +73,26 @@ const addSubscriber = (callback: (access:string, refresh:string) => any) => {
 
 const refreshToken = async (error: AxiosError) => {
     try {
-
         let { response } = error
-
-        // console.log({ 'status': response.status })
 
         const retryOriginalRequest = () => {
             return new Promise(resolve => {
 
             addSubscriber((access:string, refresh:string) => {
                 response!.config.headers['Authorization'] = `Bearer ${access}`
-                response!.config['data'] = JSON.stringify({
-                    ...response!.config.data,
-                   access, refresh 
-                })
-                // console.log('original request config',response.config)
-                
-                resolve(axios(response!.config).then(res=>res))
+                resolve(axios(response!.config))
             })
         })}
 
         if (!fetchingToken) {
             fetchingToken = true
-
-            // console.log('refreshTokenContext.req.cookies', context.req.cookies)
-
-            const res = await httpClient.post(
+            // console.log('cookies',context.req)
+            const {data} = await httpClient.post(
                 `${API_URL}/token/refresh/`,
                 { refresh: context?.req?.cookies?.refresh }
             )
-            setTokenCookies(res, '', '')
-            // console.log('refreshedTokens', data)
 
-            // onTokensFetched(data.access, data.refresh)
+            onTokensFetched(data.access, data.refresh)
         }
         return retryOriginalRequest()
     } catch (error) {

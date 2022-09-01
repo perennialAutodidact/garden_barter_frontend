@@ -12,7 +12,7 @@ import { useAppSelector } from '../../../store/hooks'
 import { Barter } from "../../../ts/interfaces/barters";
 import axios from "../../../common/utils/axiosSetup";
 import { API_URL } from "../../../common/constants";
-import {useCookie} from 'next-cookie'
+import { httpClient, setHttpClientContext } from "../../../common/utils/httpClient";
 
 interface ConversationDetailProps {
     conversation: Conversation;
@@ -20,8 +20,6 @@ interface ConversationDetailProps {
 }
 
 const ConversationDetailPage = ({ conversation, barter }: ConversationDetailProps) => {
-
-
     const { user } = useAppSelector(state => state.auth)
     const [userIsBarterCreator, setUserIsBarterCreator] = useState<boolean>(false)
 
@@ -74,14 +72,14 @@ const ConversationDetailPage = ({ conversation, barter }: ConversationDetailProp
 export const getServerSideProps: GetServerSideProps = async (
     context: GetServerSidePropsContext
 ) => {
-    // const cookie = useCookie(context)
-    // console.log(cookie)
+    console.log('conversationDetail cookies', context.req.headers.cookie)
+    setHttpClientContext(context)
     const { conversationId, barterType, barterId, user } = context.query;
-    let conversation = TEST_CONVERSATION
     if (conversationId !== 'new') {
         try {
+            let conversation = TEST_CONVERSATION
 
-            const conversationRes = await axios.get(`${API_URL}/conversations/`)
+            const conversationRes = await httpClient.get(`${API_URL}/inbox/conversations/find/`)
             conversation = conversationRes.data.conversation
             const barterId = TEST_CONVERSATION.barterUuid
             const res = await axios.get(`${API_URL}/barters/${barterType}/${barterId}/`)
@@ -94,10 +92,10 @@ export const getServerSideProps: GetServerSideProps = async (
                 }
             }
         } catch (error) {
-            // console.log(error.response.data)
+            console.log('conversation detail error', error.response.data)
             return {
                 redirect: {
-                    destination: `/login?next=${context.resolvedUrl}`,
+                    destination: `/login?next=/inbox/conversations/${conversationId}`,
                     permanent: false
                 },
                 props: {}

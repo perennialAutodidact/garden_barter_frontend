@@ -2,11 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   BarterState,
   Barter,
-  SeedBarter,
-  PlantBarter,
-  ProduceBarter,
-  MaterialBarter,
-  ToolBarter
 } from "../../ts/interfaces/barters";
 import { createBarter } from "./actions";
 

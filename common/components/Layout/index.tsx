@@ -10,10 +10,13 @@ import { useRouter } from "next/router";
 function Layout({ children, title, }) {
   const dispatch = useAppDispatch();
   const router = useRouter();
-
+    const {isAuthenticated, user, authLoadingStatus } = useAppSelector(state=>state.auth)
+    
   useEffect(() => {
     if (dispatch && dispatch != null && dispatch !== undefined) {
-          dispatch(fetchUser());
+        if(!user && !isAuthenticated && authLoadingStatus === 'IDLE'){
+            dispatch(fetchUser());
+        }
     }
   }, [dispatch]);
 

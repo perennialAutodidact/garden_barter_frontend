@@ -33,7 +33,7 @@ const loginRoute = async (req, res) => {
                     errors: [error.response.data.detail]
                 });
             } else {
-                console.log(error)
+                console.log('login error', error)
                 return res.status(500).json({
                     errors: ["Something went wrong trying to log in."]
                 });

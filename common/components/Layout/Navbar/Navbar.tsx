@@ -45,7 +45,7 @@ function GBNavbar() {
             </div>
           </a>
         </Link>
-        {authLoadingStatus === "PENDING" && !isAuthenticated ? (
+        {authLoadingStatus === "PENDING" && !isAuthenticated && !user ? (
           <div
             className="navbar-nav spinner-border text-success d-lg-none"
             role="status"

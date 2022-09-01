@@ -31,7 +31,6 @@ export interface Barter {
 export interface BarterState {
   barters: Barter[];
   barterLoadingStatus: "PENDING" | "IDLE";
-  activeBarter: Barter;
   page: number;
 }
 

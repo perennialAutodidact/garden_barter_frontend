@@ -26,14 +26,15 @@ export const getServerSideProps: GetServerSideProps =
     async (context: GetServerSidePropsContext) => {
         setHttpClientContext(context)
         let { barterType, barterId } = context.query;
-        console.log(barterType, barterId)
+        console.log(barterType, barterId)   
 
         try {
-            const res = await httpClient.get(`${API_URL}/barters/${barterType}/${barterId}`);
+            const {barters} = await httpClient.get(`${API_URL}/barters/${barterType}/${barterId}`).then(res=>res.data);
+            // const {conversation} = await httpClient.get()
 
             return {
                 props: {
-                    barter: res.data.barters[0]
+                    barter: barters[0]
                 }
             };
         } catch (error) {

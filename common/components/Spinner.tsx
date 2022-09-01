@@ -1,9 +1,13 @@
 import React from "react";
 
-const Spinner = () => {
+interface SpinnerProps {
+    color?: "success" | "warning"
+}
+
+const Spinner = ({color='success'}: SpinnerProps) => {
   return (
     <div
-      className="navbar-nav spinner-border text-success d-lg-none"
+      className={`spinner-border text-${color}`}
       role="status"
     >
       <span className="visually-hidden">Loading...</span>
